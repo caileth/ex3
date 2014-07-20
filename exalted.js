@@ -2,19 +2,20 @@ $(function() {
 	var DEFAULT_NUM_DICE = 5,
 		DEFAULT_DIE_SIDE = 10,
 		DEFAULT_TARGET = 7,
-		rollButton = $("#roll"),
 		numDice = $("#numDice").val(),
-		resultsWindow = $("#results");
+		resultsWindow = $("#results"),
+		rollButton = $("#roll"),
+		targetNumber = $("#targetNumber").val();
 
 	$(rollButton).click(function() {
 		console.group("Dice roller clicked");
-		printRoll(numDice, 10);
+		printRoll(numDice, 10, targetNumber);
 		console.groupEnd();
 	});
 
-	function printRoll(numDice, sides) {
+	function printRoll(numDice, sides, targetNumber) {
 		var result = diceRoller(numDice, sides),
-			successes = successChecker(successes);
+			successes = successChecker(result, targetNumber);
 
 		resultsWindow.append("Rolled: ");
 		for (var roll in result) {
