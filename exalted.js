@@ -5,7 +5,9 @@ $(function() {
 		numDice = $("#numDice").val();
 
 	$(rollButton).click(function() {
-		diceRoller(numDice, 10);console.log("Dice roller clicked");
+		console.group("Dice roller clicked");
+		diceRoller(numDice, 10);
+		console.groupEnd();
 	});
 
 	function diceRoller(numDice, sides) {
