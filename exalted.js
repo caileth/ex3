@@ -2,10 +2,12 @@ $(function() {
 	var DEFAULT_DIE_SIDE = 10,
 		DEFAULT_NUM_DICE = 5,
 		DEFAULT_TARGET = 7,
+		combatants = new Array(),
 		dexterity = $("#dexterity"),
 		dialog, form,
 		joinBattle = $("#joinBattle"),
 		name = $("#name"),
+		numCombatants = 0,
 		resultsWindow = $("#results"),
 		rollButton = $("#roll"),
 		wits = $("#wits");
@@ -29,7 +31,7 @@ $(function() {
 		printRoll(numDice, DEFAULT_DIE_SIDE, targetNumber, doubleRule, difficulty);
 	});
 
-	function combatant(name) {
+	function Combatant(name) {
 		this.name = name;
 		this.dex = 1;
 		this.wits = 1;
@@ -106,6 +108,13 @@ $(function() {
 	}
 
 	function addCombatant() {
+		numCombatants++;
+
+		// ADD A UNIQUE NAME CHECK
+		combatants[numCombatants] =	new Combatant(name.val());
+		combatants[numCombatants].dex = dexterity.val();
+		combatants[numCombatants].wits = wits.val();
+
 		$("#combatants").append('<tr><td name="' + name.val() + '" class="player">' +
 			'<span class="initiative">0</span>' +
 			'<span class="name">' + name.val() + '</span><br/>' +
