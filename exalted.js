@@ -2,22 +2,33 @@ $(function() {
 	var DEFAULT_NUM_DICE = 5,
 		DEFAULT_DIE_SIDE = 10,
 		rollButton = $("#roll"),
-		numDice = $("#numDice").val();
+		numDice = $("#numDice").val(),
+		resultsWindow = $("#results");
 
 	$(rollButton).click(function() {
 		console.group("Dice roller clicked");
-		diceRoller(numDice, 10);
+		printRoll(numDice, 10);
 		console.groupEnd();
 	});
+
+	function printRoll(numDice, sides) {
+		var result = diceRoller(numDice, sides);
+		for (var roll in result) {
+			resultsWindow.append(result[roll] + " ");
+		}
+	}
 
 	function diceRoller(numDice, sides) {
 		if (!numDice) numDice = DEFAULT_NUM_DICE;
 		if (!sides) sides = DEFAULT_DIE_SIDE;
 		console.log("Rolling",numDice,sides,"sided dice");
+		var result = Array(numDice);
 
 		for (var i = 0; i < numDice; i++) {
-			dieRoller(sides);
+			result[i] = dieRoller(sides);
 		}
+
+		return result;
 	}
 
 	function dieRoller(sides) {
