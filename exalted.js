@@ -2,14 +2,14 @@ $(function() {
 	var DEFAULT_NUM_DICE = 5,
 		DEFAULT_DIE_SIDE = 10,
 		DEFAULT_TARGET = 7,
-		numDice = $("#numDice").val(),
+		numDice = $("#numDice"),
 		resultsWindow = $("#results"),
 		rollButton = $("#roll"),
-		targetNumber = $("#targetNumber").val();
+		targetNumber = $("#targetNumber");
 
 	$(rollButton).click(function() {
-		console.group("Dice roller clicked");
-		printRoll(numDice, 10, targetNumber);
+		console.groupCollapsed(numDice.val() + "d" + DEFAULT_DIE_SIDE + "@" + targetNumber.val());
+		printRoll(numDice.val(), DEFAULT_DIE_SIDE, targetNumber.val());
 		console.groupEnd();
 	});
 
