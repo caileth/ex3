@@ -32,7 +32,7 @@ $(function() {
 			scrollToBottom();
 			printCombatants();
 		} else {
-			resultsWindow.append("\nNot enough combatants!\n");
+			resultsWindow.append("\nNot enough combatants!");
 		}
 		console.groupEnd();
 	});
@@ -151,7 +151,7 @@ $(function() {
 		combatants.sort(sortbyInitiative);
 
 		for (current in combatants) {
-			$("#combatants").append('<tr class="player">' + 
+			$("#combatants").append('<tr>' + 
 				'<td name="' + combatants[current].name + '" id="' + current + '" class="player">' +
 				'<span class="initiative">' + combatants[current].initiative + '</span>' +
 				'<span class="name">' + combatants[current].name + '</span><br/>' +
