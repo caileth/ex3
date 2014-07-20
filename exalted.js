@@ -2,8 +2,13 @@ $(function() {
 	var DEFAULT_DIE_SIDE = 10,
 		DEFAULT_NUM_DICE = 5,
 		DEFAULT_TARGET = 7,
+		JB_DIFFICULTY = 0,
+		JB_DOUBLES = false,
+		JB_EXTRA_SUX = 3,
+		JB_TARGET = 7,
+		awareness = $("#awareness"),
+		combatantIndex = 0,
 		combatants = new Array(),
-		dexterity = $("#dexterity"),
 		dialog, form,
 		joinBattle = $("#joinBattle"),
 		name = $("#name"),
@@ -13,13 +18,31 @@ $(function() {
 		wits = $("#wits");
 
 	$(joinBattle).click(function() {
-		// figure this out later
+		console.group("join battle");
+		console.log(numCombatants,"combatants");
+		if(numCombatants > 1) {
+			resultsWindow.append("\n---\n");
+			for (i in combatants) {
+				var joinBattlePool = combatants[i].awareness + combatants[i].wits,
+					joinBattleRoll = diceRoller(joinBattlePool, DEFAULT_DIE_SIDE),
+					joinBattleSuxx = Math.max(successChecker(joinBattleRoll, JB_TARGET, JB_DOUBLES), 0);
+				combatants[i].initiative = joinBattleSuxx + JB_EXTRA_SUX;
+				resultsWindow.append(combatants[i].name + " joins battle at initiative " + combatants[i].initiative + "\n");
+			}
+			scrollToBottom();
+			printCombatants();
+		} else {
+			resultsWindow.append("\nNot enough combatants!\n");
+		}
+		console.groupEnd();
+	});
 
-		/*$("td.player").each(function(index) {
-			var name = $(this).attr("name");
-			combatant = new combatant(name);
-
-		});*/
+	$("body").on('click', '.remove', function() {
+		var id = $(this).parent().attr("id");console.log("removing id",id);
+		console.log(combatants[id].name,"removed, theoretically");
+		combatants.splice(id,1);
+		printCombatants();
+		numCombatants--;
 	});
 
 	$(rollButton).click(function() {		
@@ -33,8 +56,12 @@ $(function() {
 
 	function Combatant(name) {
 		this.name = name;
-		this.dex = 1;
+		this.awareness = 0;
 		this.wits = 1;
+	}
+
+	function scrollToBottom() {
+		resultsWindow.scrollTop(resultsWindow[0].scrollHeight - resultsWindow.height());
 	}
 
 	function printRoll(numDice, sides, targetNumber, doubleRule, difficulty) {
@@ -60,8 +87,7 @@ $(function() {
 			console.log('Success at threshold',threshold);
 		}
 
-		// scrolls results window to bottom as new results come in
-		resultsWindow.scrollTop(resultsWindow[0].scrollHeight - resultsWindow.height());
+		scrollToBottom();
 
 		console.groupEnd();
 	}
@@ -74,7 +100,7 @@ $(function() {
 
 		for (var die in roll) {
 			if (roll[die] >= target) {
-				if (roll[die] >= doubleRule) successes++;
+				if (doubleRule && roll[die] >= doubleRule) successes++;
 				successes++;
 			}
 			if (roll[die] === 1) rolledAOne = true;
@@ -108,19 +134,40 @@ $(function() {
 	}
 
 	function addCombatant() {
-		numCombatants++;
+		combatantIndex++;console.log("combatantIndex is now",combatantIndex);
+		numCombatants++;console.log("numCombatants is now",numCombatants);
 
-		// ADD A UNIQUE NAME CHECK
-		combatants[numCombatants] =	new Combatant(name.val());
-		combatants[numCombatants].dex = dexterity.val();
-		combatants[numCombatants].wits = wits.val();
+		combatants[combatantIndex] = new Combatant(name.val());
+		combatants[combatantIndex].awareness = parseInt(awareness.val());
+		combatants[combatantIndex].wits = parseInt(wits.val());
+		combatants[combatantIndex].initiative = 0;
 
-		$("#combatants").append('<tr><td name="' + name.val() + '" class="player">' +
-			'<span class="initiative">0</span>' +
-			'<span class="name">' + name.val() + '</span><br/>' +
-			'<span class="buttons">Add buttons here</span>' +
-			'</td></tr>');
-		dialog.dialog("close");
+		printCombatants();
+	}
+
+	function printCombatants() {
+		$("tr.player").remove();console.log("deleting existing player list");
+
+		combatants.sort(sortbyInitiative);
+
+		for (current in combatants) {
+			$("#combatants").append('<tr class="player">' + 
+				'<td name="' + combatants[current].name + '" id="' + current + '" class="player">' +
+				'<span class="initiative">' + combatants[current].initiative + '</span>' +
+				'<span class="name">' + combatants[current].name + '</span><br/>' +
+				'<span class="buttons">Add buttons here</span>' +
+				'<input type="button" class="remove" value="X"/>' +
+				'</td></tr>');
+			dialog.dialog("close");
+		}
+
+		console.log("done printing combatants");
+	}
+
+	function sortbyInitiative(a, b) {
+		if (a.initiative > b.initiative) return -1;
+		else if (a.initiative < b.initiative) return 1;
+		else return 0;
 	}
 
     dialog = $("#dialog-form").dialog({
