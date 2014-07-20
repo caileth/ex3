@@ -7,15 +7,16 @@ $(function() {
 		rollButton = $("#roll"),
 		targetNumber = $("#targetNumber");
 
-	$(rollButton).click(function() {
-		console.groupCollapsed(numDice.val() + "d" + DEFAULT_DIE_SIDE + "@" + targetNumber.val());
-		printRoll(numDice.val(), DEFAULT_DIE_SIDE, targetNumber.val());
-		console.groupEnd();
+	$(rollButton).click(function() {		
+		var doubleRule = $("input[name=doubleRule]:checked").val();
+		printRoll(numDice.val(), DEFAULT_DIE_SIDE, targetNumber.val(), doubleRule);
 	});
 
-	function printRoll(numDice, sides, targetNumber) {
+	function printRoll(numDice, sides, targetNumber, doubleRule) {
+		console.groupCollapsed(numDice + "d" + sides + "@" + targetNumber + "; double rule: " + doubleRule);
+
 		var result = diceRoller(numDice, sides),
-			successes = successChecker(result, targetNumber);
+			successes = successChecker(result, targetNumber, doubleRule);
 
 		resultsWindow.append("Rolled: ");
 		for (var roll in result) {
@@ -25,16 +26,21 @@ $(function() {
 
 		// scrolls results window to bottom as new results come in
 		resultsWindow.scrollTop(resultsWindow[0].scrollHeight - resultsWindow.height());
+
+		console.groupEnd();
 	}
 
-	function successChecker(roll, target) {
+	function successChecker(roll, target, doubleRule) {
 		if (!target) target = DEFAULT_TARGET;
 
 		var successes = 0,
 			rolledAOne = false;
 
 		for (var die in roll) {
-			if (roll[die] >= target) successes++;
+			if (roll[die] >= target) {
+				if (roll[die] >= doubleRule) successes++;
+				successes++;
+			}
 			if (roll[die] === 1) rolledAOne = true;
 		}
 
