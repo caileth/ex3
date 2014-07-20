@@ -2,14 +2,16 @@ $(function() {
 	var DEFAULT_NUM_DICE = 5,
 		DEFAULT_DIE_SIDE = 10,
 		DEFAULT_TARGET = 7,
-		numDice = $("#numDice"),
 		resultsWindow = $("#results"),
-		rollButton = $("#roll"),
-		targetNumber = $("#targetNumber");
+		rollButton = $("#roll");
 
 	$(rollButton).click(function() {		
-		var doubleRule = $("input[name=doubleRule]:checked").val();
-		printRoll(numDice.val(), DEFAULT_DIE_SIDE, targetNumber.val(), doubleRule);
+		var difficulty = $("#difficulty").val(),
+			doubleRule = $("input[name=doubleRule]:checked").val(),
+			numDice = $("#numDice").val(),
+			targetNumber = $("#targetNumber").val();
+
+		printRoll(numDice, DEFAULT_DIE_SIDE, targetNumber, doubleRule);
 	});
 
 	function printRoll(numDice, sides, targetNumber, doubleRule) {
@@ -19,9 +21,7 @@ $(function() {
 			successes = successChecker(result, targetNumber, doubleRule);
 
 		resultsWindow.append("Rolled: ");
-		for (var roll in result) {
-			resultsWindow.append(result[roll] + " ");
-		}
+		for (var roll in result) resultsWindow.append(result[roll] + " ");
 		if (successes < 0) {
 			resultsWindow.append("\n" + "BOTCH!" + "\n");
 			console.log('botch!');
