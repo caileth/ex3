@@ -1,6 +1,7 @@
 $(function() {
 	var DEFAULT_NUM_DICE = 5,
 		DEFAULT_DIE_SIDE = 10,
+		DEFAULT_TARGET = 7,
 		rollButton = $("#roll"),
 		numDice = $("#numDice").val(),
 		resultsWindow = $("#results");
@@ -12,16 +13,37 @@ $(function() {
 	});
 
 	function printRoll(numDice, sides) {
-		var result = diceRoller(numDice, sides);
+		var result = diceRoller(numDice, sides),
+			successes = successChecker(successes);
+
+		resultsWindow.append("Rolled: ");
 		for (var roll in result) {
 			resultsWindow.append(result[roll] + " ");
 		}
+		resultsWindow.append("\n" + successes + " successes!" + "\n");
+	}
+
+	function successChecker(roll, target) {
+		if (!target) target = DEFAULT_TARGET;
+
+		var successes = 0,
+			rolledAOne = false;
+
+		for (var die in roll) {
+			if (roll[die] >= target) successes++;
+			if (roll[die] === 1) rolledAOne = true;
+		}
+
+		if (rolledAOne && successes === 0) successes = -1;
+
+		return successes;
 	}
 
 	function diceRoller(numDice, sides) {
 		if (!numDice) numDice = DEFAULT_NUM_DICE;
 		if (!sides) sides = DEFAULT_DIE_SIDE;
 		console.log("Rolling",numDice,sides,"sided dice");
+
 		var result = Array(numDice);
 
 		for (var i = 0; i < numDice; i++) {
