@@ -2,7 +2,7 @@ $(function() {
 	var DEFAULT_NUM_DICE = 5,
 		DEFAULT_DIE_SIDE = 10,
 		rollButton = $("#roll"),
-		numDice = $("#numDice");
+		numDice = $("#numDice").val();
 
 	$(rollButton).click(function() {
 		diceRoller(numDice, 10);console.log("Dice roller clicked");
