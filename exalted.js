@@ -22,6 +22,9 @@ $(function() {
 			resultsWindow.append(result[roll] + " ");
 		}
 		resultsWindow.append("\n" + successes + " successes!" + "\n");
+
+		// scrolls results window to bottom as new results come in
+		resultsWindow.scrollTop(resultsWindow[0].scrollHeight - resultsWindow.height());
 	}
 
 	function successChecker(roll, target) {
