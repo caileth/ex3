@@ -63,13 +63,13 @@
 			<input type="text" id="name" placeholder="New Player" autofocus/><br/>
 			<label for="dexterity">Dexterity:</label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/>
 			<label for="wits">Wits:</label><input type="number" id="wits" value="1" min="1" max="5"/><br/>
-			<label for="athletics">Athletics:</label><input type="number" id="athletics" value="0" min="0" max="5"/><br/>
+			<!-- <label for="athletics">Athletics:</label><input type="number" id="athletics" value="0" min="0" max="5"/><br/>
 			<label for="awareness">Awareness:</label><input type="number" id="awareness" value="0" min="0" max="5"/><br/>
 			<label for="dodge">Dodge:</label><input type="number" id="dodge" value="0" min="0" max="5"/><br/>
 			<label for="combat">Combat Ability:</label><input type="number" id="combat" value="0" min="0" max="5"/><br/>
 			<label for="accuracy">Weapon Accuracy:</label><input type="number" id="accuracy" value="0" min="0" max="5"/><br/>
 			<label for="defense">Weapon Defense:</label><input type="number" id="defense" value="0" min="0" max="5"/><br/>
-			<label for="mobility">Mobility Penalty:</label><input type="number" id="mobility" value="0" min="-5" max="0"/>
+			<label for="mobility">Mobility Penalty:</label><input type="number" id="mobility" value="0" min="-5" max="0"/> -->
 		</form>
 	</div>
 </body>
