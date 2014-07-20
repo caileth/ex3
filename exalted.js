@@ -22,7 +22,13 @@ $(function() {
 		for (var roll in result) {
 			resultsWindow.append(result[roll] + " ");
 		}
-		resultsWindow.append("\n" + successes + " successes!" + "\n");
+		if (successes < 0) {
+			resultsWindow.append("\n" + "BOTCH!" + "\n");
+			console.log('botch!');
+		} else { 
+			resultsWindow.append("\n" + successes + " successes!" + "\n");
+			console.log(successes + ' success(es)');
+		}
 
 		// scrolls results window to bottom as new results come in
 		resultsWindow.scrollTop(resultsWindow[0].scrollHeight - resultsWindow.height());
@@ -52,7 +58,7 @@ $(function() {
 	function diceRoller(numDice, sides) {
 		if (!numDice) numDice = DEFAULT_NUM_DICE;
 		if (!sides) sides = DEFAULT_DIE_SIDE;
-		console.log("Rolling",numDice,sides,"sided dice");
+		console.groupCollapsed("Rolling",numDice,sides,"sided dice");
 
 		var result = Array(numDice);
 
@@ -60,14 +66,14 @@ $(function() {
 			result[i] = dieRoller(sides);
 		}
 
+		console.groupEnd();
 		return result;
 	}
 
 	function dieRoller(sides) {
 		if (!sides) sides = DEFAULT_DIE_SIDE;
-		console.log("Rolling a %i-sided die",sides);
-
-		var result = Math.floor((Math.random() * sides) + 1);console.log("Rolled a",result);
+		var result = Math.floor((Math.random() * sides) + 1);
+		console.log("Rolled a " + result + " on a " + sides + "-sided die");
 		return result;
 	}
 });
