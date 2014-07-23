@@ -18,7 +18,7 @@ $(function() {
 		wits = $("#wits");
 
 	$(joinBattle).click(function() {
-		console.group("join battle");
+		console.groupCollapsed("joinBattle clicked");
 		console.log(numCombatants,"combatants");
 		if(numCombatants > 1) {
 			resultsWindow.append("\n---\n");
@@ -127,13 +127,15 @@ $(function() {
 	}
 
 	function dieRoller(sides) {
+		console.groupCollapsed("dieRoller");
 		if (!sides) sides = DEFAULT_DIE_SIDE;
 		var result = Math.floor((Math.random() * sides) + 1);
 		console.log("Rolled a " + result + " on a " + sides + "-sided die");
-		return result;
+		console.groupEnd();return result;
 	}
 
 	function addCombatant() {
+		console.groupCollapsed("addCombatant");
 		combatantIndex++;console.log("combatantIndex is now",combatantIndex);
 		numCombatants++;console.log("numCombatants is now",numCombatants);
 
@@ -142,10 +144,11 @@ $(function() {
 		combatants[combatantIndex].wits = parseInt(wits.val());
 		combatants[combatantIndex].initiative = 0;
 
-		printCombatants();
+		printCombatants();console.groupEnd();
 	}
 
 	function printCombatants() {
+		console.groupCollapsed("printCombatants");
 		$("tr.player").remove();console.log("deleting existing player list");
 
 		combatants.sort(sortbyInitiative);
@@ -162,6 +165,7 @@ $(function() {
 		}
 
 		console.log("done printing combatants");
+		console.groupEnd();
 	}
 
 	function sortbyInitiative(a, b) {
