@@ -149,12 +149,12 @@ $(function() {
 
 	function printCombatants() {
 		console.groupCollapsed("printCombatants");
-		$("tr.player").remove();console.log("deleting existing player list");
+		$("tr.playerBubble").remove();console.log("deleting existing player list");
 
 		combatants.sort(sortbyInitiative);
 
 		for (current in combatants) {
-			$("#combatants").append('<tr>' + 
+			$("#combatants").append('<tr class="playerBubble">' + 
 				'<td name="' + combatants[current].name + '" id="' + current + '" class="player">' +
 				'<span class="initiative">' + combatants[current].initiative + '</span>' +
 				'<span class="name">' + combatants[current].name + '</span><br/>' +
