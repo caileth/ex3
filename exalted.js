@@ -6,7 +6,7 @@ $(function() {
 		JB_DOUBLES = false,
 		JB_EXTRA_SUX = 3,
 		JB_TARGET = 7,
-		addCombatantDialog, form,
+		addCombatantDialog, addCombatantForm,
 		awareness = $("#awareness"),
 		combatantIndex = 0,
 		combatants = new Array(),
@@ -44,6 +44,16 @@ $(function() {
 		printCombatants();
 		numCombatants--;
 	});
+ 
+    $("body").on( "click", ".witheringAttack", function() {
+    	var id = $(this).parent().attr("id");
+    	populateTargetList(id);
+		witheringAttackDialog.dialog("open");
+    });
+ 
+    $("#addCombatant").on( "click", function() {
+		addCombatantDialog.dialog("open");
+    });
 
 	$(rollButton).click(function() {		
 		var difficulty = $("#difficulty").val(),
@@ -53,6 +63,16 @@ $(function() {
 
 		printRoll(numDice, DEFAULT_DIE_SIDE, targetNumber, doubleRule, difficulty);
 	});
+
+    function populateTargetList(id) {
+    	for (current in combatants)
+    		if (current != id)
+    			$("#opponents").append('<option value="' + current + '">' + combatants[current].name + '</option>');
+    }
+
+	function witheringAttack() {
+		// stuff happens
+	}
 
 	function Combatant(name) {
 		this.name = name;
@@ -180,7 +200,13 @@ $(function() {
 		else return 0;
 	}
 
-    addCombatantDialog = $("#dialog-form").dialog({
+	function sortbyName(a, b) {
+		if (a.name > b.name) return 1;
+		else if (a.name < b.name) return -1;
+		else return 0;
+	}
+
+    addCombatantDialog = $("#addCombatantForm").dialog({
 		autoOpen: false,
 		height: 300,
 		width: 350,
@@ -192,16 +218,37 @@ $(function() {
 			}
 		},
 		close: function() {
-			form[0].reset();
+			addCombatantForm[0].reset();
       	}
     });
  
-    form = addCombatantDialog.find("form").on("submit", function( event ) {
+    addCombatantForm = addCombatantDialog.find("form").on("submit", function( event ) {
 		event.preventDefault();
 		addCombatant();
     });
+
+    witheringAttackDialog = $("#witheringAttackForm").dialog({
+		autoOpen: false,
+		height: 300,
+		width: 350,
+		modal: true,
+		buttons: {
+			"Withering Attack": witheringAttack,
+			Cancel: function() {
+				witheringAttackDialog.dialog("close");
+			}
+		},
+		close: function() {
+			witheringAttackForm[0].reset();
+      	}
+    });
  
-    $("#addCombatant").on( "click", function() {
-		addCombatantDialog.dialog("open");
+    witheringAttackForm = witheringAttackDialog.find("form").on("submit", function( event ) {
+		event.preventDefault();
+		witheringAttack();
+    });
+ 
+    $("#witheringAttack").on( "click", function() {
+		witheringAttackDialog.dialog("open");
     });
 });

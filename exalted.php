@@ -51,13 +51,13 @@
 
 	<div id="combatants">
 		<h3>Combatants</h3><br/>
-					<input type="button" id="joinBattle" value="Join Battle"/>
-					<input type="button" id="addCombatant" value="Add Combatant"/>
+			<input type="button" id="joinBattle" value="Join Battle"/>
+			<input type="button" id="addCombatant" value="Add Combatant"/>
 		<table id="combatants"><tbody></tbody></table>
 	</div>
 
-	<div id="dialog-form" title="Add new combatant">
-		<form id="newPlayerForm">
+	<div id="addCombatantForm" title="Add new combatant">
+		<form>
 			<input type="text" id="name" placeholder="New Player" autofocus/><br/>
 			<!-- <label for="dexterity">Dexterity:</label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/> -->
 			<label for="wits">Wits:</label><input type="number" id="wits" value="1" min="1" max="5"/><br/>
@@ -68,6 +68,17 @@
 			<label for="accuracy">Weapon Accuracy:</label><input type="number" id="accuracy" value="0" min="0" max="5"/><br/>
 			<label for="defense">Weapon Defense:</label><input type="number" id="defense" value="0" min="0" max="5"/><br/>
 			<label for="mobility">Mobility Penalty:</label><input type="number" id="mobility" value="0" min="-5" max="0"/> -->
+		</form>
+	</div>
+
+	<div id="witheringAttackForm" title="Withering Attack">
+		<form>
+			<label for="opponents">Target:</label><select id="opponents"></select><br/>
+			<label for="witheringStunt">Stunt:</label>
+				<input type="radio" name="witheringStunt" value="0"/>None
+				<input type="radio" name="witheringStunt" value="1"/>1-point
+				<input type="radio" name="witheringStunt" value="2"/>2-point
+				<input type="radio" name="witheringStunt" value="3"/>3-point<br/>			
 		</form>
 	</div>
 </body>
