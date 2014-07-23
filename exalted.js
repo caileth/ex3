@@ -6,10 +6,10 @@ $(function() {
 		JB_DOUBLES = false,
 		JB_EXTRA_SUX = 3,
 		JB_TARGET = 7,
+		addCombatantDialog, form,
 		awareness = $("#awareness"),
 		combatantIndex = 0,
 		combatants = new Array(),
-		dialog, form,
 		joinBattle = $("#joinBattle"),
 		name = $("#name"),
 		numCombatants = 0,
@@ -23,7 +23,7 @@ $(function() {
 		if(numCombatants > 1) {
 			resultsWindow.append("\n---\n");
 			for (i in combatants) {
-				var joinBattlePool = combatants[i].awareness + combatants[i].wits,
+				var joinBattlePool = combatants[i].getJoinBattle(),
 					joinBattleRoll = diceRoller(joinBattlePool, DEFAULT_DIE_SIDE),
 					joinBattleSuxx = Math.max(successChecker(joinBattleRoll, JB_TARGET, JB_DOUBLES), 0);
 				combatants[i].initiative = joinBattleSuxx + JB_EXTRA_SUX;
@@ -58,6 +58,11 @@ $(function() {
 		this.name = name;
 		this.awareness = 0;
 		this.wits = 1;
+		this.getJoinBattle = getJoinBattle;
+	}
+
+	function getJoinBattle() {
+		return this.awareness + this.wits;
 	}
 
 	function scrollToBottom() {
@@ -154,14 +159,15 @@ $(function() {
 		combatants.sort(sortbyInitiative);
 
 		for (current in combatants) {
-			$("#combatants").append('<tr class="playerBubble">' + 
+			$("#combatants > tbody:last").append('<tr class="playerBubble">' + 
 				'<td name="' + combatants[current].name + '" id="' + current + '" class="player">' +
 				'<span class="initiative">' + combatants[current].initiative + '</span>' +
 				'<span class="name">' + combatants[current].name + '</span><br/>' +
-				'<span class="buttons">Add buttons here</span>' +
+				'<input type="button" class="witheringAttack" value="Withering Attack"/>' +
+				'<input type="button" class="decisiveAttack" value="Decisive Attack"/>' +
 				'<input type="button" class="remove" value="X"/>' +
 				'</td></tr>');
-			dialog.dialog("close");
+			addCombatantDialog.dialog("close");
 		}
 
 		console.log("done printing combatants");
@@ -174,7 +180,7 @@ $(function() {
 		else return 0;
 	}
 
-    dialog = $("#dialog-form").dialog({
+    addCombatantDialog = $("#dialog-form").dialog({
 		autoOpen: false,
 		height: 300,
 		width: 350,
@@ -182,7 +188,7 @@ $(function() {
 		buttons: {
 			"Add combatant": addCombatant,
 			Cancel: function() {
-				dialog.dialog("close");
+				addCombatantDialog.dialog("close");
 			}
 		},
 		close: function() {
@@ -190,12 +196,12 @@ $(function() {
       	}
     });
  
-    form = dialog.find( "form" ).on( "submit", function( event ) {
+    form = addCombatantDialog.find("form").on("submit", function( event ) {
 		event.preventDefault();
 		addCombatant();
     });
  
     $("#addCombatant").on( "click", function() {
-		dialog.dialog( "open" );
+		addCombatantDialog.dialog("open");
     });
 });

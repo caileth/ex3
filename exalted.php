@@ -15,11 +15,14 @@
 	h3{font-size:150%;}
 	html{height:100%;border-left:solid crimson 50px;}
 	body,textarea,input[type=button]{font-family:Goudy;}
+	table{width:600px;}
 	textarea{width:71em;height:10em;}
 	input[type=number]{width:2.5em;}
 
+	#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
+
 	.initiative{font:375% Missive;float:left;}
-	.player{border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;}
+	.player{border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
 	.remove{float:right;position:relative;top:50%;transform:translateY(-50%);-moz-transform:translateY(-50%);-webkit-transform:translateY(-75%);}
 	.ui-widget{font-size:.75em;}
 </style>
@@ -38,25 +41,20 @@
 	<div id="roller">	
 		<h3>How many times have I coded a die roller, seriously</h3><br/>
 		<input type="number" id="numDice" value="10" min="1" max="25"/>
-			<input type="button" id="roll" value="d10"/>@ <input type="number" id="targetNumber" value="7" min="1" max="10"/>,
-			Difficulty <input type="number" id="difficulty" value="1" min="0" max="5"/><br/>		
+		<input type="button" id="roll" value="d10"/>@ <input type="number" id="targetNumber" value="7" min="1" max="10"/>,
+		Difficulty <input type="number" id="difficulty" value="1" min="0" max="5"/><br/>		
 		Double Rule: <input type="radio" name="doubleRule" value="10" checked/>10s
-			<input type="radio" name="doubleRule" value="9"/>9s
-			<input type="radio" name="doubleRule" value="8"/>8s
-			<input type="radio" name="doubleRule" value="false"/>None
+		<input type="radio" name="doubleRule" value="9"/>9s
+		<input type="radio" name="doubleRule" value="8"/>8s
+		<input type="radio" name="doubleRule" value="false"/>None
 	</div>
 
-	<table id="combatants">
-		<tr>
-			<th colspan="9">Combatants</th>
-		</tr>
-		<tr>
-			<th colspan="9">
-				<input type="button" id="joinBattle" value="Join Battle"/>
-				<input type="button" id="addCombatant" value="Add Combatant"/>
-			</td>
-		</tr>
-	</table>
+	<div id="combatants">
+		<h3>Combatants</h3><br/>
+					<input type="button" id="joinBattle" value="Join Battle"/>
+					<input type="button" id="addCombatant" value="Add Combatant"/>
+		<table id="combatants"><tbody></tbody></table>
+	</div>
 
 	<div id="dialog-form" title="Add new combatant">
 		<form id="newPlayerForm">
