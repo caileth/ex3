@@ -56,6 +56,6 @@
 		<table id="combatants"><tbody></tbody></table>
 	</div>
 
-	<div id="dialog" title="Add new combatant"><form id="dialog-form"></form></div>
+	<div id="dialog"><form id="dialog-form"></form></div>
 </body>
 </html>

@@ -11,7 +11,17 @@ $(function() {
 		joinBattleButton = $("#joinBattle"),
 		numCombatants = 0,
 		resultsWindow = $("#results"),
-		rollButton = $("#roll");
+		rollButton = $("#roll"),
+		statsWindow = '<input type="text" id="name" placeholder="New Player" autofocus/><br/>' +
+			'<!-- <label for="dexterity">Dexterity:</label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/> -->' +
+			'<label for="wits">Wits:</label><input type="number" id="wits" value="1" min="1" max="5"/><br/>' +
+			'<!-- <label for="athletics">Athletics:</label><input type="number" id="athletics" value="0" min="0" max="5"/><br/> -->' +
+			'<label for="awareness">Awareness:</label><input type="number" id="awareness" value="0" min="0" max="5"/><br/>' +
+			'<!-- <label for="dodge">Dodge:</label><input type="number" id="dodge" value="0" min="0" max="5"/><br/>' +
+			'<label for="combat">Combat Ability:</label><input type="number" id="combat" value="0" min="0" max="5"/><br/>' +
+			'<label for="accuracy">Weapon Accuracy:</label><input type="number" id="accuracy" value="0" min="0" max="5"/><br/>' +
+			'<label for="defense">Weapon Defense:</label><input type="number" id="defense" value="0" min="0" max="5"/><br/>' +
+			'<label for="mobility">Mobility Penalty:</label><input type="number" id="mobility" value="0" min="-5" max="0"/> -->';
 
 	$(joinBattleButton).click(function() {
 		console.groupCollapsed("joinBattle clicked");
@@ -63,12 +73,12 @@ $(function() {
 
 		$("#dialog-form").html(
 			'<label for="attackType">Attack Type:</label>' +
-				'<input type="radio" name="attackType" value="0" selected>Withering' +
+				'<input type="radio" name="attackType" value="0">Withering' +
 				'<input type="radio" name="attackType" value="1">Decisive<br/>' +
 			'<label for="opponents">Target:</label>' +
 				'<select id="opponents"></select><br/>' +
 			'<label for="witheringStunt">Stunt:</label>' +
-				'<input type="radio" name="witheringStunt" value="0" selected/>None' +
+				'<input type="radio" name="witheringStunt" value="0"/>None' +
 				'<input type="radio" name="witheringStunt" value="1"/>1-point' +
 				'<input type="radio" name="witheringStunt" value="2"/>2-point' +
 				'<input type="radio" name="witheringStunt" value="3"/>3-point<br/>');
@@ -101,6 +111,7 @@ $(function() {
 
 	function attack() {
 		// stuff happens
+		$("#dialog").dialog("close");
 	}
 
     function populateTargetList(id) {
@@ -126,21 +137,14 @@ $(function() {
 
  
 	$("#addCombatant").on( "click", function() {
-		$("#dialog").attr("title", "Add Combatant");
+		$("#dialog-form").html(statsWindow);
 
-		$("#dialog-form").html(
-			'<input type="text" id="name" placeholder="New Player" autofocus/><br/>' +
-			'<!-- <label for="dexterity">Dexterity:</label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/> -->' +
-			'<label for="wits">Wits:</label><input type="number" id="wits" value="1" min="1" max="5"/><br/>' +
-			'<!-- <label for="athletics">Athletics:</label><input type="number" id="athletics" value="0" min="0" max="5"/><br/> -->' +
-			'<label for="awareness">Awareness:</label><input type="number" id="awareness" value="0" min="0" max="5"/><br/>' +
-			'<!-- <label for="dodge">Dodge:</label><input type="number" id="dodge" value="0" min="0" max="5"/><br/>' +
-			'<label for="combat">Combat Ability:</label><input type="number" id="combat" value="0" min="0" max="5"/><br/>' +
-			'<label for="accuracy">Weapon Accuracy:</label><input type="number" id="accuracy" value="0" min="0" max="5"/><br/>' +
-			'<label for="defense">Weapon Defense:</label><input type="number" id="defense" value="0" min="0" max="5"/><br/>' +
-			'<label for="mobility">Mobility Penalty:</label><input type="number" id="mobility" value="0" min="-5" max="0"/> -->');
+		var name = $("#name"),
+			awareness = $("#awareness"),
+			wits = $("#wits");
 
 		$("#dialog").dialog({
+			title: "Add Combatant",
 			autoOpen: false,
 			height: 300,
 			width: 350,
@@ -162,29 +166,87 @@ $(function() {
 		});
 
 		$("#dialog").dialog("open");
+
+		function addCombatant() {
+			console.groupCollapsed("Adding Combatant");
+			combatantIndex++;console.log("combatantIndex is now",combatantIndex);
+			numCombatants++;console.log("numCombatants is now",numCombatants);
+
+			combatants[combatantIndex] = new Combatant(name.val());
+			recordStats(combatantIndex);
+			combatants[combatantIndex].initiative = combatants[combatantIndex].joinBattle();
+
+			printCombatants();console.groupEnd();
+
+			$("#dialog").dialog("close");
+		}
+
+		function recordStats(i) {
+			combatants[i].awareness = parseInt(awareness.val());
+			combatants[i].wits = parseInt(wits.val());
+		}
 	});
 
-	function addCombatant() {
-		console.groupCollapsed("Adding Combatant");
-		var name = $("#name").val();console.log("Name:",name),
-			awareness = $("#awareness").val();console.log("Awareness:",awareness),
-			wits = $("#wits").val();console.log("Wits:",wits);
-		combatantIndex++;console.log("combatantIndex is now",combatantIndex);
-		numCombatants++;console.log("numCombatants is now",numCombatants);
 
-		combatants[combatantIndex] = new Combatant(name);
-		recordStats(combatantIndex);
 
-		printCombatants();console.groupEnd();
 
-		$("#dialog").dialog("close");
-	}
 
-	function recordStats(i) {
-		combatants[i].awareness = parseInt(awareness);
-		combatants[i].wits = parseInt(wits);
-		combatants[i].initiative = combatants[i].joinBattle();
-	}
+
+
+
+
+	$("body").on('click', '.edit', function() {
+		var id = $(this).parent().attr("id");console.groupCollapsed("editing id",id);
+
+		$("#dialog-form").html(statsWindow);
+
+		var name = $("#name"),
+			awareness = $("#awareness"),
+			wits = $("#wits");
+
+		name.val(combatants[id].name);
+		awareness.val(combatants[id].awareness);
+		wits.val(combatants[id].wits);
+
+		$("#dialog").dialog({
+			title: "Edit Combatant",
+			autoOpen: false,
+			height: 300,
+			width: 350,
+			modal: true,
+			buttons: {
+				"Edit combatant": editCombatant,
+				Cancel: function() {
+					$("#dialog").dialog("close");
+				}
+			},
+			close: function() {
+				editCombatantForm[0].reset();
+			}
+		});
+
+		var editCombatantForm = $("#dialog-form").on("submit", function(event) {
+			event.preventDefault();
+			editCombatant();
+		});
+
+		$("#dialog").dialog("open");
+
+		console.groupEnd();
+
+		function editCombatant() {
+			recordStats(id);
+
+			printCombatants();
+
+			$("#dialog").dialog("close");
+		}
+
+		function recordStats(i) {
+			combatants[i].awareness = parseInt(awareness.val());
+			combatants[i].wits = parseInt(wits.val());
+		}
+	});
 
 
 
@@ -314,8 +376,12 @@ $(function() {
 				'<td name="' + combatants[current].name + '" id="' + current + '" class="player">' +
 				'<span class="initiative">' + combatants[current].initiative + '</span>' +
 				'<span class="name">' + combatants[current].name + '</span><br/>' +
+				'<span class="stats">' +
+				'Wits: ' + combatants[current].wits + ' ' +
+				'Awareness: ' + combatants[current].awareness + ' ' +
+				'</span><br/>' +
 				'<input type="button" class="attack" value="Attack"/>' +
-				'<input type="button" class="edit" value="Edit Combatant"/>' +
+				'<input type="button" class="edit" value="Edit"/>' +
 				'<input type="button" class="remove" value="X"/>' +
 				'</td></tr>');
 		}
