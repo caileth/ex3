@@ -1,34 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>exalted 3 stuff</title>
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
-<style>
-	@font-face{font-family:Albertus;src:url(includes/AlbertusMTStd.otf);}
-	@font-face{font-family:Missive;src:url(includes/Missive.ttf);}
-	@font-face{font-family:Goudy;src:url(includes/GoudyStd.otf);}
+	<title>exalted 3 stuff</title>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+	<style>
+		@font-face{font-family:Albertus;src:url(includes/AlbertusMTStd.otf);}
+		@font-face{font-family:Missive;src:url(includes/Missive.ttf);}
+		@font-face{font-family:Goudy;src:url(includes/GoudyStd.otf);}
 
-	h1,h2,h3{display:inline;}
-	h1{font:300% Albertus;text-transform:uppercase;}
-	h2,h3,.name{font-family:Missive;}
-	h2,.name{font-size:200%;}
-	h3{font-size:150%;}
-	html{height:100%;border-left:solid crimson 50px;}
-	body,textarea,input[type=button]{font-family:Goudy;}
-	table{width:600px;}
-	textarea{width:71em;height:10em;}
-	input[type=number]{width:2.5em;}
+		h1,h2,h3{display:inline;}
+		h1{font:300% Albertus;text-transform:uppercase;}
+		h2,h3,.name{font-family:Missive;}
+		h2,.name{font-size:200%;}
+		h3{font-size:150%;}
+		html{height:100%;border-left:solid crimson 50px;}
+		body,textarea,input[type=button]{font-family:Goudy;}
+		table{width:600px;}
+		textarea{width:71em;height:10em;}
+		input[type=number]{width:2.5em;}
 
-	#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
+		#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
 
-	.initiative{font:375% Missive;float:left;}
-	.player{border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
-	.remove{float:right;position:relative;top:50%;transform:translateY(-50%);-moz-transform:translateY(-50%);-webkit-transform:translateY(-75%);}
-	.ui-widget{font-size:.75em;}
-</style>
-<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
-<script src="./exalted.js"></script>
+		.initiative{font:375% Missive;float:left;}
+		.player{border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
+		.remove{float:right;position:relative;top:50%;transform:translateY(-50%);-moz-transform:translateY(-50%);-webkit-transform:translateY(-75%);}
+		.ui-widget{font-size:.75em;}
+	</style>
+	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+	<script src="./exalted.js"></script>
 </head>
 <body>
 	<h1>Ex3e Toolkit</h1><br/>
@@ -56,34 +56,6 @@
 		<table id="combatants"><tbody></tbody></table>
 	</div>
 
-	<div id="combatantForm" title="Add new combatant">
-		<form>
-			<input type="text" id="name" placeholder="New Player" autofocus/><br/>
-			<!-- <label for="dexterity">Dexterity:</label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/> -->
-			<label for="wits">Wits:</label><input type="number" id="wits" value="1" min="1" max="5"/><br/>
-			<!-- <label for="athletics">Athletics:</label><input type="number" id="athletics" value="0" min="0" max="5"/><br/> -->
-			<label for="awareness">Awareness:</label><input type="number" id="awareness" value="0" min="0" max="5"/><br/>
-			<!-- <label for="dodge">Dodge:</label><input type="number" id="dodge" value="0" min="0" max="5"/><br/>
-			<label for="combat">Combat Ability:</label><input type="number" id="combat" value="0" min="0" max="5"/><br/>
-			<label for="accuracy">Weapon Accuracy:</label><input type="number" id="accuracy" value="0" min="0" max="5"/><br/>
-			<label for="defense">Weapon Defense:</label><input type="number" id="defense" value="0" min="0" max="5"/><br/>
-			<label for="mobility">Mobility Penalty:</label><input type="number" id="mobility" value="0" min="-5" max="0"/> -->
-		</form>
-	</div>
-
-	<div id="attackForm" title="Attack">
-		<form>
-			<label for="attackType">Attack Type:</label>
-				<input type="radio" name="attackType" value="0" selected>Withering
-				<input type="radio" name="attackType" value="1">Decisive<br/>
-			<label for="opponents">Target:</label>
-				<select id="opponents"></select><br/>
-			<label for="witheringStunt">Stunt:</label>
-				<input type="radio" name="witheringStunt" value="0" selected/>None
-				<input type="radio" name="witheringStunt" value="1"/>1-point
-				<input type="radio" name="witheringStunt" value="2"/>2-point
-				<input type="radio" name="witheringStunt" value="3"/>3-point<br/>			
-		</form>
-	</div>
+	<div id="dialog" title="Add new combatant"><form id="dialog-form"></form></div>
 </body>
 </html>
