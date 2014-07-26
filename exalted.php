@@ -56,7 +56,7 @@
 		<table id="combatants"><tbody></tbody></table>
 	</div>
 
-	<div id="addCombatantForm" title="Add new combatant">
+	<div id="combatantForm" title="Add new combatant">
 		<form>
 			<input type="text" id="name" placeholder="New Player" autofocus/><br/>
 			<!-- <label for="dexterity">Dexterity:</label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/> -->
@@ -71,11 +71,15 @@
 		</form>
 	</div>
 
-	<div id="witheringAttackForm" title="Withering Attack">
+	<div id="attackForm" title="Attack">
 		<form>
-			<label for="opponents">Target:</label><select id="opponents"></select><br/>
+			<label for="attackType">Attack Type:</label>
+				<input type="radio" name="attackType" value="0" selected>Withering
+				<input type="radio" name="attackType" value="1">Decisive<br/>
+			<label for="opponents">Target:</label>
+				<select id="opponents"></select><br/>
 			<label for="witheringStunt">Stunt:</label>
-				<input type="radio" name="witheringStunt" value="0"/>None
+				<input type="radio" name="witheringStunt" value="0" selected/>None
 				<input type="radio" name="witheringStunt" value="1"/>1-point
 				<input type="radio" name="witheringStunt" value="2"/>2-point
 				<input type="radio" name="witheringStunt" value="3"/>3-point<br/>			

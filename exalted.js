@@ -45,10 +45,10 @@ $(function() {
 		numCombatants--;
 	});
  
-    $("body").on( "click", ".witheringAttack", function() {
+    $("body").on( "click", ".attack", function() {
     	var id = $(this).parent().attr("id");
     	populateTargetList(id);
-		witheringAttackDialog.dialog("open");
+		attackDialog.dialog("open");
     });
  
     $("#addCombatant").on( "click", function() {
@@ -66,6 +66,7 @@ $(function() {
 
     function populateTargetList(id) {
     	console.groupCollapsed("populating target list");
+    	$("#opponents").empty();console.log("clearing out existing entries");
     	for (current in combatants) {
     		if (current != id) {
     			console.log("adding id",current);
@@ -77,7 +78,7 @@ $(function() {
     	console.groupEnd();
     }
 
-	function witheringAttack() {
+	function attack() {
 		// stuff happens
 	}
 
@@ -176,7 +177,7 @@ $(function() {
 	}
 
 	function addCombatant() {
-		console.groupCollapsed("addCombatant");
+		console.groupCollapsed("Adding Combatant");
 		combatantIndex++;console.log("combatantIndex is now",combatantIndex);
 		numCombatants++;console.log("numCombatants is now",numCombatants);
 
@@ -186,6 +187,12 @@ $(function() {
 		combatants[combatantIndex].initiative = combatants[combatantIndex].joinBattle();
 
 		printCombatants();console.groupEnd();
+	}
+
+	function editCombatant() {
+		console.groupCollapsed("Editing Combatant");
+    	var id = $(this).parent().attr("id");		
+		console.groupEnd();
 	}
 
 	function printCombatants() {
@@ -199,8 +206,8 @@ $(function() {
 				'<td name="' + combatants[current].name + '" id="' + current + '" class="player">' +
 				'<span class="initiative">' + combatants[current].initiative + '</span>' +
 				'<span class="name">' + combatants[current].name + '</span><br/>' +
-				'<input type="button" class="witheringAttack" value="Withering Attack"/>' +
-				'<input type="button" class="decisiveAttack" value="Decisive Attack"/>' +
+				'<input type="button" class="attack" value="Attack"/>' +
+				'<input type="button" class="edit" value="Edit Combatant"/>' +
 				'<input type="button" class="remove" value="X"/>' +
 				'</td></tr>');
 			addCombatantDialog.dialog("close");
@@ -222,7 +229,7 @@ $(function() {
 		else return 0;
 	}
 
-    addCombatantDialog = $("#addCombatantForm").dialog({
+    addCombatantDialog = $("#combatantForm").dialog({
 		autoOpen: false,
 		height: 300,
 		width: 350,
@@ -243,28 +250,28 @@ $(function() {
 		addCombatant();
     });
 
-    witheringAttackDialog = $("#witheringAttackForm").dialog({
+    attackDialog = $("#attackForm").dialog({
 		autoOpen: false,
 		height: 300,
 		width: 350,
 		modal: true,
 		buttons: {
-			"Withering Attack": witheringAttack,
+			"Attack": attack,
 			Cancel: function() {
-				witheringAttackDialog.dialog("close");
+				attackDialog.dialog("close");
 			}
 		},
 		close: function() {
-			witheringAttackForm[0].reset();
+			attackForm[0].reset();
       	}
     });
  
-    witheringAttackForm = witheringAttackDialog.find("form").on("submit", function( event ) {
+    attackForm = attackDialog.find("form").on("submit", function( event ) {
 		event.preventDefault();
-		witheringAttack();
+		attack();
     });
  
-    $("#witheringAttack").on( "click", function() {
-		witheringAttackDialog.dialog("open");
+    $("#attack").on( "click", function() {
+		attackDialog.dialog("open");
     });
 });
