@@ -135,37 +135,52 @@ $(function() {
 
 
 
- 
-	$("#addCombatant").on( "click", function() {
-		$("#dialog-form").html(statsWindow);
 
-		var name = $("#name"),
+	$("body").on("click", ".edit, #addCombatant", function() {
+		console.groupCollapsed("Adding or editing");
+
+		$("#dialog-form").html(statsWindow);console.log("Populating dialogbox");
+
+		var addButtons, editButtons,
+			edit = false,
+			name = $("#name"),
 			awareness = $("#awareness"),
 			wits = $("#wits");
 
+		if ($(this).attr("class")) edit = true;console.log("Edit?",edit);
+
+		if (edit) {
+			var id = $(this).parent().attr("id");
+			name.val(combatants[id].name);
+			awareness.val(combatants[id].awareness);
+			wits.val(combatants[id].wits);
+		}
+
 		$("#dialog").dialog({
-			title: "Add Combatant",
+			title: (edit ? "Edit combatant" : "Add combatant"),
 			autoOpen: false,
-			height: 300,
+			height: "auto",
 			width: 350,
 			modal: true,
-			buttons: {
-				"Add combatant": addCombatant,
-				Cancel: function() {
-					$("#dialog").dialog("close");
-				}
-			},
-			close: function() {
-				addCombatantForm[0].reset();
-			}
-		});
+			close: (edit ? editClose : addClose)});
 
-		var addCombatantForm = $("#dialog-form").on("submit", function(event) {
-			event.preventDefault();
-			addCombatant();
-		});
+		if (edit) {
+			$("#dialog").dialog("option", "buttons", [
+				{ text: "Edit combatant", click: editCombatant },
+				{ text: "Cancel", click: function() {
+					$("#dialog").dialog("close");
+				}}]);
+		} else {
+			$("#dialog").dialog("option", "buttons", [
+				{ text: "Add combatant", click: addCombatant },
+				{ text: "Cancel", click: function() {
+					$("#dialog").dialog("close");
+				}}]);
+		}
 
 		$("#dialog").dialog("open");
+
+		console.groupEnd();
 
 		function addCombatant() {
 			console.groupCollapsed("Adding Combatant");
@@ -181,65 +196,30 @@ $(function() {
 			$("#dialog").dialog("close");
 		}
 
-		function recordStats(i) {
-			combatants[i].awareness = parseInt(awareness.val());
-			combatants[i].wits = parseInt(wits.val());
-		}
-	});
-
-
-
-
-
-
-
-
-
-	$("body").on('click', '.edit', function() {
-		var id = $(this).parent().attr("id");console.groupCollapsed("editing id",id);
-
-		$("#dialog-form").html(statsWindow);
-
-		var name = $("#name"),
-			awareness = $("#awareness"),
-			wits = $("#wits");
-
-		name.val(combatants[id].name);
-		awareness.val(combatants[id].awareness);
-		wits.val(combatants[id].wits);
-
-		$("#dialog").dialog({
-			title: "Edit Combatant",
-			autoOpen: false,
-			height: 300,
-			width: 350,
-			modal: true,
-			buttons: {
-				"Edit combatant": editCombatant,
-				Cancel: function() {
-					$("#dialog").dialog("close");
-				}
-			},
-			close: function() {
-				editCombatantForm[0].reset();
-			}
-		});
-
-		var editCombatantForm = $("#dialog-form").on("submit", function(event) {
-			event.preventDefault();
-			editCombatant();
-		});
-
-		$("#dialog").dialog("open");
-
-		console.groupEnd();
-
 		function editCombatant() {
 			recordStats(id);
 
 			printCombatants();
 
 			$("#dialog").dialog("close");
+		}
+
+		function editClose() {
+			var editCombatantForm = $("#dialog-form").on("submit", function(event) {
+				event.preventDefault();
+				editCombatant();
+			});
+
+			editCombatantForm[0].reset();
+		}
+
+		function addClose() {
+			var addCombatantForm = $("#dialog-form").on("submit", function(event) {
+				event.preventDefault();
+				addCombatant();
+			});
+
+			addCombatantForm[0].reset();
 		}
 
 		function recordStats(i) {
@@ -356,13 +336,6 @@ $(function() {
 		var result = Math.floor((Math.random() * sides) + 1);
 		console.log("Rolled a " + result + " on a " + sides + "-sided die");
 		console.groupEnd();return result;
-	}
-
-	function editCombatant() {
-		console.groupCollapsed("Editing Combatant");
-    	var id = $(this).parent().attr("id");
-    	// stuff happens
-		console.groupEnd();
 	}
 
 	function printCombatants() {
