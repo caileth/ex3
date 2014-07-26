@@ -51,8 +51,8 @@
 
 	<div id="combatants">
 		<h3>Combatants</h3><br/>
-			<input type="button" id="joinBattle" value="Join Battle"/>
 			<input type="button" id="addCombatant" value="Add Combatant"/>
+			<input type="button" id="joinBattle" value="Reroll Join Battle"/>
 		<table id="combatants"><tbody></tbody></table>
 	</div>
 

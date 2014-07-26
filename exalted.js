@@ -10,20 +10,20 @@ $(function() {
 		awareness = $("#awareness"),
 		combatantIndex = 0,
 		combatants = new Array(),
-		joinBattle = $("#joinBattle"),
+		joinBattleButton = $("#joinBattle"),
 		name = $("#name"),
 		numCombatants = 0,
 		resultsWindow = $("#results"),
 		rollButton = $("#roll"),
 		wits = $("#wits");
 
-	$(joinBattle).click(function() {
+	$(joinBattleButton).click(function() {
 		console.groupCollapsed("joinBattle clicked");
 		console.log(numCombatants,"combatants");
 		if(numCombatants > 1) {
 			resultsWindow.append("\n---\n");
 			for (i in combatants) {
-				var joinBattlePool = combatants[i].getJoinBattle(),
+				var joinBattlePool = combatants[i].getJoinBattlePool(),
 					joinBattleRoll = diceRoller(joinBattlePool, DEFAULT_DIE_SIDE),
 					joinBattleSuxx = Math.max(successChecker(joinBattleRoll, JB_TARGET, JB_DOUBLES), 0);
 				combatants[i].initiative = joinBattleSuxx + JB_EXTRA_SUX;
@@ -65,9 +65,16 @@ $(function() {
 	});
 
     function populateTargetList(id) {
-    	for (current in combatants)
-    		if (current != id)
+    	console.groupCollapsed("populating target list");
+    	for (current in combatants) {
+    		if (current != id) {
+    			console.log("adding id",current);
     			$("#opponents").append('<option value="' + current + '">' + combatants[current].name + '</option>');
+    		} else {
+    			console.log("skipping",current);
+    		}
+    	}
+    	console.groupEnd();
     }
 
 	function witheringAttack() {
@@ -76,12 +83,21 @@ $(function() {
 
 	function Combatant(name) {
 		this.name = name;
-		this.awareness = 0;
-		this.wits = 1;
-		this.getJoinBattle = getJoinBattle;
+		this.initiative = 0;
+		this.getJoinBattlePool = getJoinBattlePool;
+		this.joinBattle = joinBattle;
 	}
 
-	function getJoinBattle() {
+	function joinBattle() {
+		console.groupCollapsed(this.name,"joins battle");
+		var pool = this.getJoinBattlePool();console.log("JB pool:",pool);
+		var roll = diceRoller(pool, DEFAULT_DIE_SIDE);console.log("JB roll:",pool);
+		var suxx = Math.max(successChecker(roll, JB_TARGET, JB_DOUBLES), 0);console.log("JB sux:",suxx);
+		var initiative = suxx + JB_EXTRA_SUX;console.log("JB initiative:",initiative);
+		console.groupEnd();return initiative;
+	}
+
+	function getJoinBattlePool() {
 		return this.awareness + this.wits;
 	}
 
@@ -167,7 +183,7 @@ $(function() {
 		combatants[combatantIndex] = new Combatant(name.val());
 		combatants[combatantIndex].awareness = parseInt(awareness.val());
 		combatants[combatantIndex].wits = parseInt(wits.val());
-		combatants[combatantIndex].initiative = 0;
+		combatants[combatantIndex].initiative = combatants[combatantIndex].joinBattle();
 
 		printCombatants();console.groupEnd();
 	}
