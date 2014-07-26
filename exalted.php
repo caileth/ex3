@@ -22,8 +22,8 @@
 		#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
 
 		.initiative{font:375% Missive;float:left;}
-		.player{border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
-		.remove{float:right;position:relative;top:50%;transform:translateY(-50%);-moz-transform:translateY(-50%);-webkit-transform:translateY(-75%);}
+		.player{position:relative;border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
+		.remove{position:absolute;top:50%;right:1em;transform:translateY(-50%);-moz-transform:translateY(-50%);-webkit-transform:translateY(-50%);}
 		.ui-widget{font-size:.75em;}
 	</style>
 	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>

@@ -69,8 +69,6 @@ $(function() {
 
  
     $("body").on( "click", ".attack", function() {
-		$("#dialog").attr("title", "Attack");
-
 		$("#dialog-form").html(
 			'<label for="attackType">Attack Type:</label>' +
 				'<input type="radio" name="attackType" value="0">Withering' +
@@ -84,6 +82,7 @@ $(function() {
 				'<input type="radio" name="witheringStunt" value="3"/>3-point<br/>');
 
 		$("#dialog").dialog({
+			title: "Attack",
 			autoOpen: false,
 			height: 300,
 			width: 350,
@@ -147,7 +146,7 @@ $(function() {
 			awareness = $("#awareness"),
 			wits = $("#wits");
 
-		if ($(this).attr("class")) edit = true;console.log("Edit?",edit);
+		if ($(this).attr("class") === "edit") edit = true;console.log("Edit?",edit);
 
 		if (edit) {
 			var id = $(this).parent().attr("id");
@@ -350,8 +349,7 @@ $(function() {
 				'<span class="initiative">' + combatants[current].initiative + '</span>' +
 				'<span class="name">' + combatants[current].name + '</span><br/>' +
 				'<span class="stats">' +
-				'Wits: ' + combatants[current].wits + ' ' +
-				'Awareness: ' + combatants[current].awareness + ' ' +
+				'JB: ' + combatants[current].getJoinBattlePool() +
 				'</span><br/>' +
 				'<input type="button" class="attack" value="Attack"/>' +
 				'<input type="button" class="edit" value="Edit"/>' +
