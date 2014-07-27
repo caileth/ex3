@@ -12,7 +12,8 @@ $(function() {
 		numCombatants = 0,
 		resultsWindow = $("#results"),
 		rollButton = $("#roll"),
-		statsWindow = '<input type="text" id="name" placeholder="New Player" autofocus/><br/>' +
+		statsWindow = '<input type="text" id="name" placeholder="New Player" autofocus/>' +
+			'<input type="button" class="randomize"/><br/>' +
 			'<label for="dexterity">Dexterity: </label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/>' +
 			'<label for="wits">Wits: </label><input type="number" id="wits" value="1" min="1" max="5"/><br/>' +
 			'<label for="athletics">Athletics: </label><input type="number" id="athletics" value="0" min="0" max="5"/><br/>' +
@@ -41,6 +42,10 @@ $(function() {
 			resultsWindow.append("\nNot enough combatants!");
 		}
 		console.groupEnd();
+	});
+
+	$("body").on('click', '.randomize', function() {
+		// do stuff
 	});
 
 	$("body").on('click', '.remove', function() {
@@ -186,7 +191,6 @@ $(function() {
 				}}]);
 		} else {
 			$("#dialog").dialog("option", "buttons", [
-				{ click: randomizeCombatant, icons: { primary: "ui-icon-shuffle" } },
 				{ text: "Add combatant", click: addCombatant },
 				{ text: "Cancel", click: function() {
 					$("#dialog").dialog("close");

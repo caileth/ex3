@@ -23,6 +23,7 @@
 
 		.initiative{font:375% Missive;float:left;}
 		.player{position:relative;border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
+		.randomize{background-image:url('/img/ten_sided_die_12.png');background-repeat:no-repeat;background-position:top left;width:16px;height:16px;}
 		.remove{position:absolute;top:50%;right:1em;transform:translateY(-50%);-moz-transform:translateY(-50%);-webkit-transform:translateY(-50%);}
 		.ui-widget{font-size:.75em;}
 	</style>

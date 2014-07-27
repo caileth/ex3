@@ -1,0 +1,1259 @@
+{
+  "rolllists": {
+    "rolllist": [
+      {
+        "-id": "div0:exaltedname",
+        "name": "Exalted Name",
+        "author": "Voidstate",
+        "url": "http://www.dbserve.co.uk/test/names/gen3.php",
+        "dice": "d100",
+        "comment": "Based on Voidstate's Exalted name generator",
+        "items": {
+          "item": [
+            {
+              "-roll": "1",
+              "-end": "15",
+              "sub": "div0:exname-adjectivenoun"
+            },
+            {
+              "-roll": "16",
+              "-end": "30",
+              "sub": "div0:exname-noungerundnoun"
+            },
+            {
+              "-roll": "31",
+              "-end": "45",
+              "sub": "div0:exname-adjectivenounnoun"
+            },
+            {
+              "-roll": "46",
+              "-end": "55",
+              "sub": "div0:exname-numbered"
+            },
+            {
+              "-roll": "56",
+              "-end": "60",
+              "sub": "div0:exname-nounnounnoun"
+            },
+            {
+              "-roll": "61",
+              "-end": "65",
+              "sub": "div0:exname-adjectivenounnounnoun"
+            },
+            {
+              "-roll": "66",
+              "-end": "75",
+              "sub": "div0:exname-nounofthenoun"
+            },
+            {
+              "-roll": "76",
+              "-end": "85",
+              "sub": "div0:exname-conjuctive"
+            },
+            {
+              "-roll": "86",
+              "-end": "90",
+              "sub": "div0:exname-adjectivenounofthenoun"
+            },
+            {
+              "-roll": "91",
+              "-end": "95",
+              "sub": "div0:exname-nounoftheadjectivenoun"
+            },
+            {
+              "-roll": "96",
+              "-end": "98",
+              "sub": "div0:exname-adjectivenounoftheadjectivenoun"
+            },
+            {
+              "-roll": "99",
+              "-end": "100",
+              "sub": "div0:exname-misc"
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-adjectivenoun",
+        "-visible": "false",
+        "name": "Exalted Name: Adjective-Noun",
+        "dice": "d18",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-mineral",
+                "div0:exname-animal"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-mineral",
+                "div0:exname-natural"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-color",
+                "div0:exname-natural"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-emotion-negative",
+                "div0:exname-precious"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-color",
+                "div0:exname-animal"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-heroic",
+                "div0:exname-celestial"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-emotion-positive",
+                "div0:exname-natural"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-movement",
+                "div0:exname-celestial"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-movement",
+                "div0:exname-animal"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-condition",
+                "div0:exname-animal"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-condition",
+                "div0:exname-celestial"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-condition",
+                "div0:exname-natural"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-mineral",
+                "div0:exname-anatomy"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-condition",
+                "div0:exname-negative"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-emotion-positive",
+                "div0:exname-animal"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-natural",
+                "div0:exname-animal"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-precious",
+                "div0:exname-weapon"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-precious",
+                "div0:exname-natural"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-noungerundnoun",
+        "-visible": "false",
+        "name": "Exalted Name: Noun-Gerund-Noun",
+        "dice": "d3",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-natural",
+                "div0:exname-gerund",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-celestial",
+                "div0:exname-gerund",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-mineral",
+                "div0:exname-gerund",
+                "div0:exname-person"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-adjectivenounnoun",
+        "-visible": "false",
+        "name": "Exalted Name: Adjective-Noun-Noun",
+        "dice": "d9",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-emotion-positive",
+                "div0:exname-precious",
+                "div0:exname-relation"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-emotion-negative",
+                "div0:exname-natural",
+                "div0:exname-relation"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-heroic",
+                "div0:exname-natural",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-color",
+                "div0:exname-negative",
+                "div0:exname-animal"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-emotion-negative",
+                "div0:exname-negative",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-precious",
+                "div0:exname-building",
+                "div0:exname-relation"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-color",
+                "div0:exname-anatomy",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-condition",
+                "div0:exname-animal",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-movement",
+                "div0:exname-precious",
+                "div0:exname-person"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-numbered",
+        "-visible": "false",
+        "name": "Exalted Name: Numbered",
+        "dice": "d3",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-emotion-positive",
+                "div0:exname-number",
+                "div0:exname-relation",
+                "div0:exname-location"
+              ],
+              "#text": " of the "
+            },
+            {
+              "#text": [
+                "The ",
+                " of the "
+              ],
+              "sub": [
+                "div0:exname-number",
+                "div0:exname-person",
+                "div0:exname-celestial"
+              ]
+            },
+            {
+              "#text": "The ",
+              "sub": [
+                "div0:exname-number",
+                "div0:exname-person"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-nounnounnoun",
+        "-visible": "false",
+        "name": "Exalted Name: Noun-Noun-Noun",
+        "dice": "d3",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-natural",
+                "div0:exname-celestial",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-precious",
+                "div0:exname-weapon",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-animal",
+                "div0:exname-anatomy",
+                "div0:exname-person"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-adjectivenounnounnoun",
+        "-visible": "false",
+        "name": "Exalted Name: Adjective-Noun-Noun-Noun",
+        "dice": "d6",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-emotion-positive",
+                "div0:exname-precious",
+                "div0:exname-weapon",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-emotion-negative",
+                "div0:exname-precious",
+                "div0:exname-weapon",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-heroic",
+                "div0:exname-precious",
+                "div0:exname-anatomy",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-emotion-positive",
+                "div0:exname-animal",
+                "div0:exname-anatomy",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-heroic",
+                "div0:exname-mineral",
+                "div0:exname-animal",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-emotion-positive",
+                "div0:exname-precious",
+                "div0:exname-natural",
+                "div0:exname-relation"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-nounofthenoun",
+        "-visible": "false",
+        "name": "Exalted Name: Noun-of the-Noun",
+        "dice": "d3",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-animal",
+                "div0:exname-celestial"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-weapon",
+                "div0:exname-location"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-animal",
+                "div0:exname-location"
+              ],
+              "#text": " of the "
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-conjuctive",
+        "-visible": "false",
+        "name": "Exalted Name: Conjunctive",
+        "dice": "d6",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-animal",
+                "div0:exname-celestial",
+                "div0:exname-relation"
+              ],
+              "#text": " and "
+            },
+            {
+              "sub": [
+                "div0:exname-negative",
+                "div0:exname-mineral",
+                "div0:exname-person"
+              ],
+              "#text": " and "
+            },
+            {
+              "sub": [
+                "div0:exname-anatomy",
+                "div0:exname-animal",
+                "div0:exname-location"
+              ],
+              "#text": [
+                " of the ",
+                " and the "
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-precious",
+                "div0:exname-mineral",
+                "div0:exname-person"
+              ],
+              "#text": " and "
+            },
+            {
+              "sub": [
+                "div0:exname-relation",
+                "div0:exname-mineral",
+                "div0:exname-precious"
+              ],
+              "#text": [
+                " of ",
+                " and "
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-condition",
+                "div0:exname-negative",
+                "div0:exname-natural",
+                "div0:exname-anatomy",
+                "div0:exname-person"
+              ],
+              "#text": " and "
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-adjectivenounofthenoun",
+        "-visible": "false",
+        "name": "Exalted Name: Adjective-Noun-of the-Noun",
+        "dice": "d3",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-color",
+                "div0:exname-anatomy",
+                "div0:exname-celestial"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-color",
+                "div0:exname-person",
+                "div0:exname-natural"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-precious",
+                "div0:exname-anatomy",
+                "div0:exname-animal"
+              ],
+              "#text": " of the "
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-nounoftheadjectivenoun",
+        "-visible": "false",
+        "name": "Exalted Name: Noun-of the-Adjective-Noun",
+        "dice": "d6",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-animal",
+                "div0:exname-emotion-positive",
+                "div0:exname-celestial"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-relation",
+                "div0:exname-heroic",
+                "div0:exname-celestial"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-person",
+                "div0:exname-color",
+                "div0:exname-building"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-relation",
+                "div0:exname-condition",
+                "div0:exname-anatomy"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-relation",
+                "div0:exname-condition",
+                "div0:exname-location"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-relation",
+                "div0:exname-color",
+                "div0:exname-celestial"
+              ],
+              "#text": " of the "
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-adjectivenounoftheadjectivenoun",
+        "-visible": "false",
+        "name": "Exalted Name: Adjective-Noun-of the-Adjective Noun",
+        "dice": "d3",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-heroic",
+                "div0:exname-animal",
+                "div0:exname-emotion-negative",
+                "div0:exname-location"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-heroic",
+                "div0:exname-animal",
+                "div0:exname-emotion-positive",
+                "div0:exname-natural"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-movement",
+                "div0:exname-weapon",
+                "div0:exname-emotion-negative",
+                "div0:exname-building"
+              ],
+              "#text": " of the "
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-misc",
+        "-visible": "false",
+        "name": "Exalted Name: Misc",
+        "dice": "d3",
+        "items": {
+          "item": [
+            {
+              "sub": [
+                "div0:exname-emotion-positive",
+                "div0:exname-weapon",
+                "div0:exname-gerund",
+                "div0:exname-person"
+              ]
+            },
+            {
+              "sub": [
+                "div0:exname-heroic",
+                "div0:exname-precious",
+                "div0:exname-animal",
+                "div0:exname-relation",
+                "div0:exname-condition",
+                "div0:exname-location"
+              ],
+              "#text": " of the "
+            },
+            {
+              "sub": [
+                "div0:exname-weapon",
+                "div0:exname-gerund",
+                "div0:exname-precious",
+                "div0:exname-person"
+              ]
+            }
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-color",
+        "-visible": "false",
+        "name": "Exalted Name: Color",
+        "dice": "d19",
+        "items": {
+          "item": [
+            "Amber",
+            "Azure",
+            "Black",
+            "Bright",
+            "Brilliant",
+            "Cerulean",
+            "Crimson",
+            "Ebon",
+            "Flaxen",
+            "Golden",
+            "Grey",
+            "Pale",
+            "Saffron",
+            "Scarlet",
+            "Shadowy",
+            "Silver",
+            "Vermillion",
+            "White"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-condition",
+        "-visible": "false",
+        "name": "Exalted Name: Condition",
+        "dice": "d28",
+        "items": {
+          "item": [
+            "Adamant",
+            "Aroused",
+            "Blind",
+            "Celestial",
+            "Cursed",
+            "Diminished",
+            "Drunken",
+            "Elder",
+            "Empty",
+            "Enlarged",
+            "Eyeless",
+            "Final",
+            "First and Forsaken",
+            "Flaming",
+            "Hidden",
+            "Hungry",
+            "Icy",
+            "Invisible",
+            "Last",
+            "Mad",
+            "Masked",
+            "Naked",
+            "Ravenous",
+            "Satiated",
+            "Sharpened",
+            "Silent",
+            "Unlamented",
+            "Whispering"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-emotion-negative",
+        "-visible": "false",
+        "name": "Exalted Name: Emotion Negative",
+        "dice": "d17",
+        "items": {
+          "item": [
+            "Bitter",
+            "Discordant",
+            "Envious",
+            "Ferocious",
+            "Grieving",
+            "Grievous",
+            "Hateful",
+            "Poison",
+            "Rancorous",
+            "Sad",
+            "Savage",
+            "Sorrowful",
+            "Sour",
+            "Unrepentant",
+            "Vengeful",
+            "Venomous",
+            "Wrathful"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-emotion-positive",
+        "-visible": "false",
+        "name": "Exalted Name: Emotion Positive",
+        "dice": "d18",
+        "items": {
+          "item": [
+            "Auspicious",
+            "Beneficent",
+            "Blessed",
+            "Bounteous",
+            "Compassionate",
+            "Exultant",
+            "Excellent",
+            "Flawless",
+            "Harmonious",
+            "Heavenly",
+            "Incomparable",
+            "Joyous",
+            "Jubilant",
+            "Perfect",
+            "Pious",
+            "Righteous",
+            "Sagacious",
+            "Virtuous"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-heroic",
+        "-visible": "false",
+        "name": "Exalted Name: Heroic",
+        "dice": "d11",
+        "items": {
+          "item": [
+            "Battleworn",
+            "Glorious",
+            "Great",
+            "Invincible",
+            "Mighty",
+            "Stalwart",
+            "Triumphal",
+            "Triumphant",
+            "Unconquered",
+            "Undefeated",
+            "Victorious"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-movement",
+        "-visible": "false",
+        "name": "Exalted Name: Movement",
+        "dice": "d14",
+        "items": {
+          "item": [
+            "Ascending",
+            "Descending",
+            "Falling",
+            "Flickering",
+            "Flowing",
+            "Fluttering",
+            "Leaping",
+            "Plummeting",
+            "Running",
+            "Soaring",
+            "Still",
+            "Towering",
+            "Unfettered",
+            "Wandering"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-number",
+        "-visible": "false",
+        "name": "Exalted Name: Number",
+        "dice": "d18",
+        "items": {
+          "item": [
+            "Eighth",
+            "Eleventh",
+            "Fifth",
+            "First",
+            "Fourth",
+            "Last",
+            "Ninth",
+            "Number One",
+            "Number Ten",
+            "One Hundredth",
+            "One Thousandth",
+            "Second",
+            "Seventh",
+            "Sixth",
+            "Ten Thousandth",
+            "Tenth",
+            "Third",
+            "Twentieth"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-animal",
+        "-visible": "false",
+        "name": "Exalted Name: Animal",
+        "dice": "d28",
+        "items": {
+          "item": [
+            "Beetle",
+            "Boar",
+            "Bull",
+            "Butterfly",
+            "Carp",
+            "Crane",
+            "Cricket",
+            "Dragon",
+            "Eagle",
+            "Elk",
+            "Ghost",
+            "Horse",
+            "Leopard",
+            "Lion",
+            "Mantis",
+            "Monkey",
+            "Owl",
+            "Ox",
+            "Phoenix",
+            "Rat",
+            "Serpent",
+            "Shark",
+            "Spider",
+            "Stallion",
+            "Tiger",
+            "Turtle",
+            "Viper",
+            "Wolf"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-anatomy",
+        "-visible": "false",
+        "name": "Exalted Name: Anatomy",
+        "dice": "d19",
+        "items": {
+          "item": [
+            "Bile",
+            "Blood",
+            "Claw",
+            "Eyes",
+            "Face",
+            "Fang",
+            "Finger",
+            "Fist",
+            "Hand",
+            "Heart",
+            "Hoof",
+            "Mind",
+            "Shoulder",
+            "Silhouette",
+            "Soul",
+            "Stance",
+            "Tail",
+            "Tooth",
+            "Wing"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-building",
+        "-visible": "false",
+        "name": "Exalted Name: Building",
+        "dice": "d21",
+        "items": {
+          "item": [
+            "Catacomb",
+            "Citadel",
+            "Edifice",
+            "Facade",
+            "Fortress",
+            "Gate",
+            "Kingdom",
+            "Labyrinth",
+            "Monastery",
+            "Monolith",
+            "Obelisk",
+            "Pillar",
+            "Prison",
+            "Redoubt",
+            "Refuge",
+            "Ruin",
+            "Spire",
+            "Temple",
+            "Tomb",
+            "Tower",
+            "Vault"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-celestial",
+        "-visible": "false",
+        "name": "Exalted Name: Celestial",
+        "dice": "d9",
+        "items": {
+          "item": [
+            "Cloud",
+            "Heavens",
+            "Moon",
+            "Rainbow",
+            "Sky",
+            "Star",
+            "Sun",
+            "Sunrise",
+            "Void"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-location",
+        "-visible": "false",
+        "name": "Exalted Name: Location",
+        "dice": "d15",
+        "items": {
+          "item": [
+            "City",
+            "Depths",
+            "East",
+            "Forests",
+            "Land",
+            "Mountains",
+            "North",
+            "Oceans",
+            "Seas",
+            "South",
+            "Underworld",
+            "Wasteland",
+            "Waves",
+            "West",
+            "Woods"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-mineral",
+        "-visible": "false",
+        "name": "Exalted Name: Mineral",
+        "dice": "d17",
+        "items": {
+          "item": [
+            "Alabaster",
+            "Amethyst",
+            "Brass",
+            "Bronze",
+            "Chalcedony",
+            "Copper",
+            "Granite",
+            "Iron",
+            "Marble",
+            "Malachite",
+            "Metal",
+            "Obsidian",
+            "Onyx",
+            "Ore",
+            "Rust",
+            "Steel",
+            "Stone"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-natural",
+        "-visible": "false",
+        "name": "Exalted Name: Natural",
+        "dice": "d39",
+        "items": {
+          "item": [
+            "Blossom",
+            "Boulder",
+            "Cliff",
+            "Dawn",
+            "Dream",
+            "Elm",
+            "Forest",
+            "Garden",
+            "Hill",
+            "Ice",
+            "Iceflow",
+            "Lotus",
+            "Maple",
+            "Midnight",
+            "Mist",
+            "Monsoon",
+            "Mountain",
+            "Oak",
+            "Ocean",
+            "Orchid",
+            "Paradise",
+            "Petal",
+            "Pollen",
+            "Rain",
+            "Reed",
+            "River",
+            "Rose",
+            "Skies",
+            "Sky",
+            "Snow",
+            "Song",
+            "Stream",
+            "Thunder",
+            "Tsunami",
+            "Typhoon",
+            "Waterfall",
+            "Wave",
+            "Willow",
+            "Wind"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-negative",
+        "-visible": "false",
+        "name": "Exalted Name: Negative",
+        "dice": "d18",
+        "items": {
+          "item": [
+            "Anger",
+            "Annihilation",
+            "Ash",
+            "Bitterness",
+            "Dust",
+            "Ennui",
+            "Envy",
+            "Hate",
+            "Loss",
+            "Misery",
+            "Murder",
+            "Oblivion",
+            "Pain",
+            "Plague",
+            "Sadness",
+            "Tyranny",
+            "Venom",
+            "Wrath"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-person",
+        "-visible": "false",
+        "name": "Exalted Name: Person",
+        "dice": "d19",
+        "items": {
+          "item": [
+            "Assassin",
+            "Bodhisattva",
+            "Bureaucrat",
+            "Farmer",
+            "Guardian",
+            "Hero",
+            "Hunter",
+            "Killer",
+            "Lover",
+            "Lord",
+            "Maiden",
+            "Master",
+            "Prince(ss)",
+            "Sage",
+            "Scholar",
+            "Shepherd",
+            "Singer",
+            "Tyrant",
+            "Warrior"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-precious",
+        "-visible": "false",
+        "name": "Exalted Name: Precious Material",
+        "dice": "d16",
+        "items": {
+          "item": [
+            "Crystal",
+            "Diamond",
+            "Emerald",
+            "Gemstone",
+            "Ivory",
+            "Jade",
+            "Jewel",
+            "Moonsilver",
+            "Moonstone",
+            "Oricalchum",
+            "Pearl",
+            "Platinum",
+            "Ruby",
+            "Sapphire",
+            "Soulsteel",
+            "Starmetal"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-relation",
+        "-visible": "false",
+        "name": "Exalted Name: Relation",
+        "dice": "d13",
+        "items": {
+          "item": [
+            "Ally",
+            "Child",
+            "Daimyo",
+            "Daughter",
+            "Father",
+            "Lord",
+            "Master",
+            "Mother",
+            "Odalisque",
+            "Serf",
+            "Servant",
+            "Slave",
+            "Son"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-weapon",
+        "-visible": "false",
+        "name": "Exalted Name: Weapon",
+        "dice": "d12",
+        "items": {
+          "item": [
+            "Axe",
+            "Blade",
+            "Fist",
+            "Gauntlet",
+            "Hammer",
+            "Helmet",
+            "Knife",
+            "Lance",
+            "Net",
+            "Shield",
+            "Spear",
+            "Sword"
+          ]
+        }
+      },
+      {
+        "-id": "div0:exname-gerund",
+        "-visible": "false",
+        "name": "Exalted Name: gerund",
+        "dice": "d20",
+        "items": {
+          "item": [
+            "Breaking",
+            "Consuming",
+            "Crushing",
+            "Destroying",
+            "Devouring",
+            "Piercing",
+            "Scorning",
+            "Smashing",
+            "Smiting",
+            "Stealing",
+            "Sundering",
+            "Tearing",
+            "Thrashing",
+            "Esteeming",
+            "Glorifying",
+            "Kissing",
+            "Loving",
+            "Praising",
+            "Treasuring",
+            "Worshipping"
+          ]
+        }
+      }
+    ]
+  }
+}
