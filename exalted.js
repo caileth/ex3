@@ -13,15 +13,15 @@ $(function() {
 		resultsWindow = $("#results"),
 		rollButton = $("#roll"),
 		statsWindow = '<input type="text" id="name" placeholder="New Player" autofocus/><br/>' +
-			'<!-- <label for="dexterity">Dexterity:</label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/> -->' +
-			'<label for="wits">Wits:</label><input type="number" id="wits" value="1" min="1" max="5"/><br/>' +
-			'<!-- <label for="athletics">Athletics:</label><input type="number" id="athletics" value="0" min="0" max="5"/><br/> -->' +
-			'<label for="awareness">Awareness:</label><input type="number" id="awareness" value="0" min="0" max="5"/><br/>' +
-			'<!-- <label for="dodge">Dodge:</label><input type="number" id="dodge" value="0" min="0" max="5"/><br/>' +
-			'<label for="combat">Combat Ability:</label><input type="number" id="combat" value="0" min="0" max="5"/><br/>' +
-			'<label for="accuracy">Weapon Accuracy:</label><input type="number" id="accuracy" value="0" min="0" max="5"/><br/>' +
-			'<label for="defense">Weapon Defense:</label><input type="number" id="defense" value="0" min="0" max="5"/><br/>' +
-			'<label for="mobility">Mobility Penalty:</label><input type="number" id="mobility" value="0" min="-5" max="0"/> -->';
+			'<label for="dexterity">Dexterity: </label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/>' +
+			'<label for="wits">Wits: </label><input type="number" id="wits" value="1" min="1" max="5"/><br/>' +
+			'<label for="athletics">Athletics: </label><input type="number" id="athletics" value="0" min="0" max="5"/><br/>' +
+			'<label for="awareness">Awareness: </label><input type="number" id="awareness" value="0" min="0" max="5"/><br/>' +
+			'<label for="dodge">Dodge: </label><input type="number" id="dodge" value="0" min="0" max="5"/><br/>' +
+			'<label for="combat">Combat Ability: </label><input type="number" id="combat" value="0" min="0" max="5"/><br/>' +
+			'<label for="accuracy">Weapon Accuracy: </label><input type="number" id="accuracy" value="0" min="0" max="5"/><br/>' +
+			'<label for="defense">Weapon Defense: </label><input type="number" id="defense" value="0" min="0" max="5"/><br/>' +
+			'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-5" max="0"/>';
 
 	$(joinBattleButton).click(function() {
 		console.groupCollapsed("joinBattle clicked");
@@ -70,11 +70,11 @@ $(function() {
  
     $("body").on( "click", ".attack", function() {
 		$("#dialog-form").html(
+			'<label for="opponents">Target:</label>' +
+				'<select id="opponents"></select><br/>' +
 			'<label for="attackType">Attack Type:</label>' +
 				'<input type="radio" name="attackType" value="0">Withering' +
 				'<input type="radio" name="attackType" value="1">Decisive<br/>' +
-			'<label for="opponents">Target:</label>' +
-				'<select id="opponents"></select><br/>' +
 			'<label for="witheringStunt">Stunt:</label>' +
 				'<input type="radio" name="witheringStunt" value="0"/>None' +
 				'<input type="radio" name="witheringStunt" value="1"/>1-point' +
@@ -143,16 +143,31 @@ $(function() {
 		var addButtons, editButtons,
 			edit = false,
 			name = $("#name"),
+			dexterity = $("dexterity"),
+			wits = $("#wits"),
 			awareness = $("#awareness"),
-			wits = $("#wits");
+			athletics = $("athletics"),
+			dodge = $("dodge"),
+			combat = $("combat"),
+			accuracy = $("accuracy"),
+			defense = $("defense"),
+			mobility = $("mobility");
 
 		if ($(this).attr("class") === "edit") edit = true;console.log("Edit?",edit);
 
 		if (edit) {
 			var id = $(this).parent().attr("id");
+
 			name.val(combatants[id].name);
-			awareness.val(combatants[id].awareness);
+			dexterity.val(combatants[id].dexterity);
 			wits.val(combatants[id].wits);
+			awareness.val(combatants[id].awareness);
+			athletics.val(combatants[id].athletics);
+			dodge.val(combatants[id].dodge);
+			combat.val(combatants[id].combat);
+			accuracy.val(combatants[id].accuracy);
+			defense.val(combatants[id].defense);
+			mobility.val(combatants[id].mobility);
 		}
 
 		$("#dialog").dialog({
@@ -171,6 +186,7 @@ $(function() {
 				}}]);
 		} else {
 			$("#dialog").dialog("option", "buttons", [
+				{ click: randomizeCombatant, icons: { primary: "ui-icon-shuffle" } },
 				{ text: "Add combatant", click: addCombatant },
 				{ text: "Cancel", click: function() {
 					$("#dialog").dialog("close");
@@ -180,6 +196,10 @@ $(function() {
 		$("#dialog").dialog("open");
 
 		console.groupEnd();
+
+		function randomizeCombatant() {
+			// stuff happens
+		}
 
 		function addCombatant() {
 			console.groupCollapsed("Adding Combatant");
@@ -197,9 +217,7 @@ $(function() {
 
 		function editCombatant() {
 			recordStats(id);
-
 			printCombatants();
-
 			$("#dialog").dialog("close");
 		}
 
@@ -222,8 +240,15 @@ $(function() {
 		}
 
 		function recordStats(i) {
-			combatants[i].awareness = parseInt(awareness.val());
+			combatants[i].dexterity = parseInt(dexterity.val());
 			combatants[i].wits = parseInt(wits.val());
+			combatants[i].awareness = parseInt(awareness.val());
+			combatants[i].athletics = parseInt(athletics.val());
+			combatants[i].dodge = parseInt(dodge.val());
+			combatants[i].combat = parseInt(combat.val());
+			combatants[i].accuracy = parseInt(accuracy.val());
+			combatants[i].defense = parseInt(defense.val());
+			combatants[i].mobility = parseInt(mobility.val());
 		}
 	});
 
