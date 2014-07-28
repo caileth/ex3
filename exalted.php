@@ -20,6 +20,7 @@
 		input[type=number]{width:2.5em;}
 
 		#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
+		#name {width:25em;}
 
 		.initiative{font:375% Missive;float:left;}
 		.player{position:relative;border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
@@ -40,7 +41,7 @@
 	</div>
 
 	<div id="roller">	
-		<h3>How many times have I coded a die roller, seriously</h3><br/>
+		<h3>Basic Die Roller</h3><br/>
 		<input type="number" id="numDice" value="10" min="1" max="25"/>
 		<input type="button" id="roll" value="d10"/>@ <input type="number" id="targetNumber" value="7" min="1" max="10"/>,
 		Difficulty <input type="number" id="difficulty" value="1" min="0" max="5"/><br/>		

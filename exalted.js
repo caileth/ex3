@@ -44,10 +44,6 @@ $(function() {
 		console.groupEnd();
 	});
 
-	$("body").on('click', '.randomize', function() {
-		// do stuff
-	});
-
 	$("body").on('click', '.remove', function() {
 		var id = $(this).parent().attr("id");console.log("removing id",id);
 		console.log(combatants[id].name,"removed, theoretically");
@@ -63,6 +59,42 @@ $(function() {
 			targetNumber = $("#targetNumber").val();
 
 		printRoll(numDice, DEFAULT_DIE_SIDE, targetNumber, doubleRule, difficulty);
+	});
+
+	$("body").on('click', '.randomize', function() {
+		$.getJSON('./includes/exaltedname.json', function(data) {
+			console.groupCollapsed("Name generator");
+			var localeCount = Object.keys(data).length,
+				localeID = Math.floor((Math.random() * localeCount)),
+				locale = Object.keys(data)[localeID],
+				templateGroupCount = eval("Object.keys(data." + locale + ".templates).length"),
+				templateGroupID = Math.floor((Math.random() * templateGroupCount)),
+				templateGroup = eval("Object.keys(data." + locale + ".templates)[templateGroupID]"),
+				wordGroupsCount = eval("Object.keys(data." + locale + ".words).length"),
+				templateCount = eval("Object.keys(data." + locale + ".templates." + templateGroup + ").length"),
+				templateID = Math.floor((Math.random() * templateCount)),
+				template = eval("data." + locale + ".templates."+templateGroup+"["+templateID+"]"),
+				output = "";
+
+			console.log("Locale:",locale);
+			console.log("# Template groups:",templateGroupCount);
+			console.log("# Word groups:",wordGroupsCount);
+			console.log("Template group: #" + templateGroupID + " " + templateGroup);
+			console.log("Template:",templateID,template);
+
+			for (var i in template) {
+				var wordGroup = eval("data." + locale + ".words."+template[i]),
+					numWords = wordGroup.length,
+					word = Math.floor((Math.random() * numWords));
+				output += wordGroup[word];
+			}
+			console.log("Result:",output);
+
+			output = output.trim();
+
+			$("#name").val(output);
+			console.groupEnd();
+		});
 	});
 
 

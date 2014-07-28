@@ -1,116 +1,141 @@
 {
-  "templates" : {
-    "adjectivenoun" : [
-      ["mineral","animal"],
-      ["mineral","natural"],
-      ["color","natural"],
-      ["emotion","precious"],
-      ["color","animal"],
-      ["heroic","celestial"],
-      ["emotion","natural"],
-      ["movement","celestial"],
-      ["movement","animal"],
-      ["condition","animal"],
-      ["condition","celestial"],
-      ["condition","natural"],
-      ["mineral","anatomy"],
-      ["condition","negative"],
-      ["emotion","animal"],
-      ["natural","animal"],
-      ["precious","weapon"],
-      ["precious","natural"]
-    ],
-    "noungerundnoun" : [
-      ["natural","gerund","person"],
-      ["celestial","gerund","person"],
-      ["mineral","gerund","person"]
-    ],
-    "adjectivenonunoun" : [
-      ["emotion-positive","precious","relation"],
-      ["emotion-negative","natural","relation"],
-      ["heroic","natural","person"],
-      ["color","negative","animal"],
-      ["emotion","negative","person"],
-      ["precious","building","relation"],
-      ["color","anatomy","person"],
-      ["condition","animal","person"],
-      ["movement","precious","person"]
-    ],
-    "numbered" : [
-      ["emotion-positive","number","relation","of the","location"],
-      ["The","number","person","of the","celestial"],
-      ["The","number","person"]
-    ],
-    "nounnounnoun" : [
-      ["natural","celestial","person"],
-      ["precious","weapon","person"],
-      ["animal","anatomy","person"]
-    ],
-    "adjectivenounnounnoun" : [
-      ["emotion-positive","precious","weapon","person"],
-      ["emotion-negative","precious","weapon","person"],
-      ["heroic","precious","anatomy","person"],
-      ["emotion-positive","animal","anatomy","person"],
-      ["heroic","mineral","animal","person"],
-      ["emotion-positive","precious","natural","relation"]
-    ],
-    "nounofthenoun" : [
-      ["animal","of the","celestial"],
-      ["weapon","of the","location"],
-      ["animal","of the","location"]
-    ],
-    "conjuctive" : [
-      ["animal","and","celestial","relation"],
-      ["negative","and","mineral","person"],
-      ["anatomy","of the","animal","and the","location"],
-      ["precious","and","mineral","person"],
-      ["relation","of","mineral","and","precious"],
-      ["condition","negative","and","natural","anatomy","person"]
-    ],
-    "adjectivenounofthenoun" : [
-      ["color","anatomy","of the","celestial"],
-      ["color","person","of the","natural"],
-      ["precious","anatomy","of the","animal"]
-    ],
-    "nounoftheadjectivenoun" : [
-      ["animal","of the","emotion-positive","celestial"],
-      ["relation","of the","heroic","celestial"],
-      ["person","of the","color","building"],
-      ["relation","of the","condition","anatomy"],
-      ["relation","of the","condition","location"],
-      ["relation","of the","color","celestial"]
-    ],
-    "adjectivenounoftheadjectivenoun" : [
-      ["heroic","animal","of the","emotion-negative","location"],
-      ["heroic","animal","of the","emotion-positive","natural"],
-      ["movement","weapon","of the","emotion-negative","building"]
-    ],
-    "misc" : [
-      ["emotion-positive","weapon","gerund","person"],
-      ["heroic","precious","animal","relation","of the","condition","location"],
-      ["weapon","gerund","precious","person"]
-    ]
+  "threshold" : {
+    "templates" : {
+      "adjectivenoun" : [
+        ["mineral","SPACE","animal"],
+        ["mineral","SPACE","natural"],
+        ["color","SPACE","natural"],
+        ["emotion","SPACE","precious"],
+        ["color","SPACE","animal"],
+        ["heroic","SPACE","celestial"],
+        ["emotion","SPACE","natural"],
+        ["movement","SPACE","celestial"],
+        ["movement","SPACE","animal"],
+        ["condition","SPACE","animal"],
+        ["condition","SPACE","celestial"],
+        ["condition","SPACE","natural"],
+        ["mineral","SPACE","anatomy"],
+        ["condition","SPACE","negative"],
+        ["emotion","SPACE","animal"],
+        ["natural","SPACE","animal"],
+        ["precious","SPACE","weapon"],
+        ["precious","SPACE","natural"]
+      ],
+      "noungerundnoun" : [
+        ["natural","SPACE","gerund","SPACE","person"],
+        ["celestial","SPACE","gerund","SPACE","person"],
+        ["mineral","SPACE","gerund","SPACE","person"]
+      ],
+      "adjectivenounnoun" : [
+        ["emoPositive","SPACE","precious","SPACE","relation"],
+        ["emoNegative","SPACE","natural","SPACE","relation"],
+        ["heroic","SPACE","natural","SPACE","person"],
+        ["color","SPACE","negative","SPACE","animal"],
+        ["emotion","SPACE","negative","SPACE","person"],
+        ["precious","SPACE","building","SPACE","relation"],
+        ["color","SPACE","anatomy","SPACE","person"],
+        ["condition","SPACE","animal","SPACE","person"],
+        ["movement","SPACE","precious","SPACE","person"]
+      ],
+      "numbered" : [
+        ["emoPositive","SPACE","number","SPACE","relation","SPACE","OF_THE","SPACE","location"],
+        ["THE","SPACE","number","SPACE","person","SPACE","OF_THE","SPACE","celestial"],
+        ["THE","SPACE","number","SPACE","person"]
+      ],
+      "nounnounnoun" : [
+        ["natural","SPACE","celestial","SPACE","person"],
+        ["precious","SPACE","weapon","SPACE","person"],
+        ["animal","SPACE","anatomy","SPACE","person"]
+      ],
+      "adjectivenounnounnoun" : [
+        ["emoPositive","SPACE","precious","SPACE","weapon","SPACE","person"],
+        ["emoNegative","SPACE","precious","SPACE","weapon","SPACE","person"],
+        ["heroic","SPACE","precious","SPACE","anatomy","SPACE","person"],
+        ["emoPositive","SPACE","animal","SPACE","anatomy","SPACE","person"],
+        ["heroic","SPACE","mineral","SPACE","animal","SPACE","person"],
+        ["emoPositive","SPACE","precious","SPACE","natural","SPACE","relation"]
+      ],
+      "nounofthenoun" : [
+        ["animal","SPACE","OF_THE","SPACE","celestial"],
+        ["weapon","SPACE","OF_THE","SPACE","location"],
+        ["animal","SPACE","OF_THE","SPACE","location"]
+      ],
+      "conjuctive" : [
+        ["animal","SPACE","AND","SPACE","celestial","SPACE","relation"],
+        ["negative","SPACE","AND","SPACE","mineral","SPACE","person"],
+        ["anatomy","SPACE","OF_THE","SPACE","animal","SPACE","AND_THE","SPACE","location"],
+        ["precious","SPACE","AND","SPACE","mineral","SPACE","person"],
+        ["relation","SPACE","OF","SPACE","mineral","SPACE","AND","SPACE","precious"],
+        ["condition","SPACE","negative","SPACE","AND","SPACE","natural","SPACE","anatomy","SPACE","person"]
+      ],
+      "adjectivenounofthenoun" : [
+        ["color","SPACE","anatomy","SPACE","OF_THE","SPACE","celestial"],
+        ["color","SPACE","person","SPACE","OF_THE","SPACE","natural"],
+        ["precious","SPACE","anatomy","SPACE","OF_THE","SPACE","animal"]
+      ],
+      "nounoftheadjectivenoun" : [
+        ["animal","SPACE","OF_THE","SPACE","emoPositive","SPACE","celestial"],
+        ["relation","SPACE","OF_THE","SPACE","heroic","SPACE","celestial"],
+        ["person","SPACE","OF_THE","SPACE","color","SPACE","building"],
+        ["relation","SPACE","OF_THE","SPACE","condition","SPACE","anatomy"],
+        ["relation","SPACE","OF_THE","SPACE","condition","SPACE","location"],
+        ["relation","SPACE","OF_THE","SPACE","color","SPACE","celestial"]
+      ],
+      "adjectivenounoftheadjectivenoun" : [
+        ["heroic","SPACE","animal","SPACE","OF_THE","SPACE","emoNegative","SPACE","location"],
+        ["heroic","SPACE","animal","SPACE","OF_THE","SPACE","emoPositive","SPACE","natural"],
+        ["movement","SPACE","weapon","SPACE","OF_THE","SPACE","emoNegative","SPACE","building"]
+      ],
+      "misc" : [
+        ["emoPositive","SPACE","weapon","SPACE","gerund","SPACE","person"],
+        ["heroic","SPACE","precious","SPACE","animal","SPACE","relation","SPACE","OF_THE","SPACE","condition","SPACE","location"],
+        ["weapon","SPACE","gerund","SPACE","precious","SPACE","person"]
+      ]
+    },
+    "words" : {
+      "AND" : ["and"],
+      "AND_THE" : ["and the"],
+      "OF" : ["of"],
+      "OF_THE" : ["of the"],
+      "THE" : ["The"],
+      "SPACE" : [" "],
+      "color" : ["Amber","Azure","Black","Bright","Brilliant","Cerulean","Crimson","Ebon","Flaxen","Golden","Grey","Pale","Saffron","Scarlet","Shadowy","Silver","Vermillion","White"],
+      "condition" : ["Adamant","Aroused","Blind","Celestial","Cursed","Diminished","Drunken","Elder","Empty","Enlarged","Eyeless","Final","First and Forsaken","Flaming","Hidden","Hungry","Icy","Invisible","Last","Mad","Masked","Naked","Ravenous","Satiated","Sharpened","Silent","Unlamented","Whispering"],
+      "emoNegative" : ["Bitter","Discordant","Envious","Ferocious","Grieving","Grievous","Hateful","Poison","Rancorous","Sad","Savage","Sorrowful","Sour","Unrepentant","Vengeful","Venomous","Wrathful"],
+      "emoPositive" : ["Auspicious","Beneficent","Blessed","Bounteous","Compassionate","Exultant","Excellent","Flawless","Harmonious","Heavenly","Incomparable","Joyous","Jubilant","Perfect","Pious","Righteous","Sagacious","Virtuous"],
+      "heroic" : ["Battleworn","Glorious","Great","Invincible","Mighty","Stalwart","Triumphal","Triumphant","Unconquered","Undefeated","Victorious"],
+      "movement" : ["Ascending","Descending","Falling","Flickering","Flowing","Fluttering","Leaping","Plummeting","Running","Soaring","Still","Towering","Unfettered","Wandering"],
+      "number" : ["Eighth","Eleventh","Fifth","First","Fourth","Last","Ninth","Number One","Number Ten","One Hundredth","One Thousandth","Second","Seventh","Sixth","Ten Thousandth","Tenth","Third","Twentieth"],
+      "animal" : ["Beetle","Boar","Bull","Butterfly","Carp","Crane","Cricket","Dragon","Eagle","Elk","Ghost","Horse","Leopard","Lion","Mantis","Monkey","Owl","Ox","Phoenix","Rat","Serpent","Shark","Spider","Stallion","Tiger","Turtle","Viper","Wolf"],
+      "anatomy" : ["Bile","Blood","Claw","Eyes","Face","Fang","Finger","Fist","Hand","Heart","Hoof","Mind","Shoulder","Silhouette","Soul","Stance","Tail","Tooth","Wing"],
+      "building" : ["Catacomb","Citadel","Edifice","Facade","Fortress","Gate","Kingdom","Labyrinth","Monastery","Monolith","Obelisk","Pillar","Prison","Redoubt","Refuge","Ruin","Spire","Temple","Tomb","Tower","Vault"],
+      "celestial" : ["Cloud","Heavens","Moon","Rainbow","Sky","Star","Sun","Sunrise","Void"],
+      "location" : ["City","Depths","East","Forests","Land","Mountains","North","Oceans","Seas","South","Underworld","Wasteland","Waves","West","Woods"],
+      "mineral" : ["Alabaster","Amethyst","Brass","Bronze","Chalcedony","Copper","Granite","Iron","Marble","Malachite","Metal","Obsidian","Onyx","Ore","Rust","Steel","Stone"],
+      "natural" : ["Blossom","Boulder","Cliff","Dawn","Dream","Elm","Forest","Garden","Hill","Ice","Iceflow","Lotus","Maple","Midnight","Mist","Monsoon","Mountain","Oak","Ocean","Orchid","Paradise","Petal","Pollen","Rain","Reed","River","Rose","Skies","Sky","Snow","Song","Stream","Thunder","Tsunami","Typhoon","Waterfall","Wave","Willow","Wind"],
+      "negative" : ["Anger","Annihilation","Ash","Bitterness","Dust","Ennui","Envy","Hate","Loss","Misery","Murder","Oblivion","Pain","Plague","Sadness","Tyranny","Venom","Wrath"],
+      "person" : ["Assassin","Bodhisattva","Bureaucrat","Farmer","Guardian","Hero","Hunter","Killer","Lover","Lord","Maiden","Master","Prince(ss)","Sage","Scholar","Shepherd","Singer","Tyrant","Warrior"],
+      "precious" : ["Crystal","Diamond","Emerald","Gemstone","Ivory","Jade","Jewel","Moonsilver","Moonstone","Oricalchum","Pearl","Platinum","Ruby","Sapphire","Soulsteel","Starmetal"],
+      "relation" : ["Ally","Child","Daimyo","Daughter","Father","Lord","Master","Mother","Odalisque","Serf","Servant","Slave","Son"],
+      "weapon" : ["Axe","Blade","Fist","Gauntlet","Hammer","Helmet","Knife","Lance","Net","Shield","Spear","Sword"],
+      "gerund" : ["Breaking","Consuming","Crushing","Destroying","Devouring","Piercing","Scorning","Smashing","Smiting","Stealing","Sundering","Tearing","Thrashing","Esteeming","Glorifying","Kissing","Loving","Praising","Treasuring","Worshipping"]
+    }
   },
-  "words" : {
-    "color" : ["Amber","Azure","Black","Bright","Brilliant","Cerulean","Crimson","Ebon","Flaxen","Golden","Grey","Pale","Saffron","Scarlet","Shadowy","Silver","Vermillion","White"],
-    "condition" : ["Adamant",  "Aroused",  "Blind",  "Celestial",  "Cursed",  "Diminished",  "Drunken",  "Elder",  "Empty",  "Enlarged",  "Eyeless",  "Final",  "First and Forsaken",  "Flaming",  "Hidden",  "Hungry",  "Icy",  "Invisible",  "Last",  "Mad",  "Masked",  "Naked",  "Ravenous",  "Satiated",  "Sharpened",  "Silent",  "Unlamented",  "Whispering"],
-    "emotion-negative" : ["Bitter",  "Discordant",  "Envious",  "Ferocious",  "Grieving",  "Grievous",  "Hateful",  "Poison",  "Rancorous",  "Sad",  "Savage",  "Sorrowful",  "Sour",  "Unrepentant",  "Vengeful",  "Venomous",  "Wrathful"],
-    "emotion-positive" : ["Auspicious",  "Beneficent",  "Blessed",  "Bounteous",  "Compassionate",  "Exultant",  "Excellent",  "Flawless",  "Harmonious",  "Heavenly",  "Incomparable",  "Joyous",  "Jubilant",  "Perfect",  "Pious",  "Righteous",  "Sagacious",  "Virtuous"],
-    "heroic" : ["Battleworn",  "Glorious",  "Great",  "Invincible",  "Mighty",  "Stalwart",  "Triumphal",  "Triumphant",  "Unconquered",  "Undefeated",  "Victorious"],
-    "movement" : ["Ascending",  "Descending",  "Falling",  "Flickering",  "Flowing",  "Fluttering",  "Leaping",  "Plummeting",  "Running",  "Soaring",  "Still",  "Towering",  "Unfettered",  "Wandering"],
-    "number" : ["Eighth",  "Eleventh",  "Fifth",  "First",  "Fourth",  "Last",  "Ninth",  "Number One",  "Number Ten",  "One Hundredth",  "One Thousandth",  "Second",  "Seventh",  "Sixth",  "Ten Thousandth",  "Tenth",  "Third",  "Twentieth"],
-    "animal" : ["Beetle",  "Boar",  "Bull",  "Butterfly",  "Carp",  "Crane",  "Cricket",  "Dragon",  "Eagle",  "Elk",  "Ghost",  "Horse",  "Leopard",  "Lion",  "Mantis",  "Monkey",  "Owl",  "Ox",  "Phoenix",  "Rat",  "Serpent",  "Shark",  "Spider",  "Stallion",  "Tiger",  "Turtle",  "Viper",  "Wolf"],
-    "anatomy" : ["Bile",  "Blood",  "Claw",  "Eyes",  "Face",  "Fang",  "Finger",  "Fist",  "Hand",  "Heart",  "Hoof",  "Mind",  "Shoulder",  "Silhouette",  "Soul",  "Stance",  "Tail",  "Tooth",  "Wing"],
-    "building" : ["Catacomb",  "Citadel",  "Edifice",  "Facade",  "Fortress",  "Gate",  "Kingdom",  "Labyrinth",  "Monastery",  "Monolith",  "Obelisk",  "Pillar",  "Prison",  "Redoubt",  "Refuge",  "Ruin",  "Spire",  "Temple",  "Tomb",  "Tower",  "Vault"],
-    "celestial" : ["Cloud",  "Heavens",  "Moon",  "Rainbow",  "Sky",  "Star",  "Sun",  "Sunrise",  "Void"],
-    "location" : ["City",  "Depths",  "East",  "Forests",  "Land",  "Mountains",  "North",  "Oceans",  "Seas",  "South",  "Underworld",  "Wasteland",  "Waves",  "West",  "Woods"],
-    "mineral" : ["Alabaster",  "Amethyst",  "Brass",  "Bronze",  "Chalcedony",  "Copper",  "Granite",  "Iron",  "Marble",  "Malachite",  "Metal",  "Obsidian",  "Onyx",  "Ore",  "Rust",  "Steel",  "Stone"],
-    "natural" : ["Blossom",  "Boulder",  "Cliff",  "Dawn",  "Dream",  "Elm",  "Forest",  "Garden",  "Hill",  "Ice",  "Iceflow",  "Lotus",  "Maple",  "Midnight",  "Mist",  "Monsoon",  "Mountain",  "Oak",  "Ocean",  "Orchid",  "Paradise",  "Petal",  "Pollen",  "Rain",  "Reed",  "River",  "Rose",  "Skies",  "Sky",  "Snow",  "Song",  "Stream",  "Thunder",  "Tsunami",  "Typhoon",  "Waterfall",  "Wave",  "Willow",  "Wind"],
-    "negative" : ["Anger",  "Annihilation",  "Ash",  "Bitterness",  "Dust",  "Ennui",  "Envy",  "Hate",  "Loss",  "Misery",  "Murder",  "Oblivion",  "Pain",  "Plague",  "Sadness",  "Tyranny",  "Venom",  "Wrath"],
-    "person" : ["Assassin",  "Bodhisattva",  "Bureaucrat",  "Farmer",  "Guardian",  "Hero",  "Hunter",  "Killer",  "Lover",  "Lord",  "Maiden",  "Master",  "Prince(ss)",  "Sage",  "Scholar",  "Shepherd",  "Singer",  "Tyrant",  "Warrior"],
-    "precious" : ["Crystal",  "Diamond",  "Emerald",  "Gemstone",  "Ivory",  "Jade",  "Jewel",  "Moonsilver",  "Moonstone",  "Oricalchum",  "Pearl",  "Platinum",  "Ruby",  "Sapphire",  "Soulsteel",  "Starmetal"],
-    "relation" : ["Ally",  "Child",  "Daimyo",  "Daughter",  "Father",  "Lord",  "Master",  "Mother",  "Odalisque",  "Serf",  "Servant",  "Slave",  "Son"],
-    "weapon" : ["Axe",  "Blade",  "Fist",  "Gauntlet",  "Hammer",  "Helmet",  "Knife",  "Lance",  "Net",  "Shield",  "Spear",  "Sword"],
-    "gerund" : ["Breaking",  "Consuming",  "Crushing",  "Destroying",  "Devouring",  "Piercing",  "Scorning",  "Smashing",  "Smiting",  "Stealing",  "Sundering",  "Tearing",  "Thrashing",  "Esteeming",  "Glorifying",  "Kissing",  "Loving",  "Praising",  "Treasuring",  "Worshipping"]
+  "imperial" : {
+    "templates" : {
+      "dynastic" : [
+        ["housename","SPACE","single"],
+        ["housename","SPACE","firstsyl","lastsyl"],
+        ["housename","SPACE","firstsyl","midsyl","lastsyl"]
+      ]
+    },
+    "words" : {
+      "SPACE" : [" "],      
+      "housename" : ["V'neef","Ragara","Ragara Soras","Ragara Calel","Cynis","Cynis Wisel","Cynis Belar","Cynis Falen","Cathak","Cathak Garel","Cathak Cacek","Nellens","Nellens Kepel","Nellens Chenault","Tepet","Tepet Marek","Tepet Vergus","Tepet Nerigus","Tepet Berel","Tepet Tilis","Tepet Deramol","Mnemon","Mnemon Caras","Mnemon Darow","Sesus","Sesus Kajak","Sesus Alon","Sesus Magel","Sesus Chenow","Sesus Denerid","Iselsi","Ledaal","Ledaal Catala","Ledaal Kebok","Peleps","Peleps Nalin","Peleps Danic"],
+      "firstsyl" : ["A","Al","Ar","Ba","Be","Bi","Ca","Chi","Co","Cor","Cy","Da","De", "E","El","Fa","Fe","Ga","Ge","Gi","Gu","Ha","He","How","Ja","Jo","Ka","Ke","Ken","La","Le","Li","Lo","Ma","Me","Mi","Mo","Myr","Ne","Od","Om","Pa","Pe","Po","Ra","Ri","Sa","Si","Sul","Sza","Ta","Tak","Te","Ti","Ty","Vi","Vo","Wi","Ya"],
+      "midsyl" : ["a","bar","de","des","e","eg","fa","ga","i","ja","ko","l","la","ma","manch","na","ni","no","o","ra","re","ro","ru","ta","te","va","ve"],
+      "lastsyl" : ["as","ba","bos","cel","co","cot","cus","da","den","do","dus","e","er","ham","hor","ina","is","it","jar","kai","kar","ku","lan","lan","lar","las","led","len","les","let","lin","lis","lit","lon","lor","lut","mah","mam","mida","mo","na","na","na","nan","nd","nis","nus","or","pel","phen","pis","ra","ra","ra","ra","ral","ral","rar","rel","ren","req","ret","rik","rin","rin","ro","roc","ros","run","sa","sal","sel","set","sif","sil","sim","sir","ska","su","tar","tar","ten","ten","tis","ton","tris","va","var","ves","xin","ya","yo"],
+      "single" : ["Kes","Tai"]
+    }
   }
 }
