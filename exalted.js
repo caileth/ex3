@@ -35,72 +35,8 @@ $(function() {
 			'<label for="defense">Weapon Defense: </label><input type="number" id="defense" value="0" min="0" max="5"/><br/>' +
 			'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-5" max="0"/>';
 
-
-
-
-
-
-
-
-
 	$.getJSON('./includes/exaltedname.json', function(data) {
 		NAMES_DATABASE = data;
-	});
-
-
-
-
-
-
-
-
-
-	$("body").on('click', '.activeToggle', function() {		
-		var id = $(this).parent().attr("id");
-		if (combatants[id].active) combatants[id].active = false;
-		else combatants[id].active = true;
-		printCombatants();
-	});
-
-	$("body").on('click', '.randomize', function() {
-		randomNameGenerator(NAMES_DATABASE);
-		randomStatsGenerator();
-	});
-
-	$("body").on('click', '.remove', function() {
-		var id = $(this).parent().attr("id");console.log(combatants[id].name,"removed");
-		combatants.splice(id,1);
-		printCombatants();
-		numCombatants--;
-	});
-
-	$(joinBattleButton).click(function() {
-		console.groupCollapsed("joinBattle clicked");
-		console.log(numCombatants,"combatants");
-		if(numCombatants > 1) {
-			resultsWindow.append("\n---\n");
-			for (i in combatants) {
-				var joinBattlePool = combatants[i].getJoinBattlePool(),
-					joinBattleRoll = diceRoller(joinBattlePool, DEFAULT_DIE_SIDE),
-					joinBattleSuxx = Math.max(successChecker(joinBattleRoll, JB_TARGET, JB_DOUBLES), 0);
-				combatants[i].initiative = joinBattleSuxx + JB_EXTRA_SUX;
-				resultsWindow.append(combatants[i].name + " joins battle at initiative " + combatants[i].initiative + "\n");
-			}
-			scrollToBottom();
-			printCombatants();
-		} else {
-			resultsWindow.append("\nNot enough combatants!");
-		}
-		console.groupEnd();
-	});
-
-	$(rollButton).click(function() {		
-		var difficulty = $("#difficulty").val(),
-			doubleRule = $("input[name=doubleRule]:checked").val(),
-			numDice = $("#numDice").val(),
-			targetNumber = $("#targetNumber").val();
-
-		printRoll(numDice, DEFAULT_DIE_SIDE, targetNumber, doubleRule, difficulty);
 	});
 
 
@@ -154,8 +90,15 @@ $(function() {
 
 
 
- 
-    $("body").on( "click", ".attack", function() {
+
+	$("body").on('click', '.activeToggle', function() {		
+		var id = $(this).parent().attr("id");
+		if (combatants[id].active) combatants[id].active = false;
+		else combatants[id].active = true;
+		printCombatants();
+	});
+
+	$("body").on( "click", ".attack", function() {
 		$("#dialog-form").html(attackWindow);
 
 		$("#dialog").dialog({
@@ -185,7 +128,56 @@ $(function() {
 		$("#dialog").dialog("open");
     });
 
-	function attack() {
+	$("body").on('click', '.randomize', function() {
+		randomNameGenerator(NAMES_DATABASE);
+		randomStatsGenerator();
+	});
+
+	$("body").on('click', '.remove', function() {
+		var id = $(this).parent().attr("id");console.log(combatants[id].name,"removed");
+		combatants.splice(id,1);
+		printCombatants();
+		numCombatants--;
+	});
+
+	$(joinBattleButton).click(function() {
+		console.groupCollapsed("joinBattle clicked");
+		console.log(numCombatants,"combatants");
+		if(numCombatants > 1) {
+			resultsWindow.append("\n---\n");
+			for (i in combatants) {
+				var joinBattlePool = combatants[i].getJoinBattlePool(),
+					joinBattleRoll = diceRoller(joinBattlePool, DEFAULT_DIE_SIDE),
+					joinBattleSuxx = Math.max(successChecker(joinBattleRoll, JB_TARGET, JB_DOUBLES), 0);
+				combatants[i].initiative = joinBattleSuxx + JB_EXTRA_SUX;
+				resultsWindow.append(combatants[i].name + " joins battle at initiative " + combatants[i].initiative + "\n");
+			}
+			scrollToBottom();
+			printCombatants();
+		} else {
+			resultsWindow.append("\nNot enough combatants!");
+		}
+		console.groupEnd();
+	});
+
+	$(rollButton).click(function() {		
+		var difficulty = $("#difficulty").val(),
+			doubleRule = $("input[name=doubleRule]:checked").val(),
+			numDice = $("#numDice").val(),
+			targetNumber = $("#targetNumber").val();
+
+		printRoll(numDice, DEFAULT_DIE_SIDE, targetNumber, doubleRule, difficulty);
+	});
+
+
+
+
+
+
+
+
+ 
+    function attack() {
 		// stuff happens
 		$("#dialog").dialog("close");
 	}
@@ -414,6 +406,7 @@ $(function() {
 				' &bull; Evade: ' + combatants[current].getEvasionPool() +
 				' &bull; Rush: ' + combatants[current].getRushPool() +
 				' &bull; Disengage: ' + combatants[current].getDisengagePool() +
+				' &bull; Active: ' + combatants[current].active +
 				'</span><br/>' +
 				'<input type="button" class="attack" value="Attack"/>' +
 				'<input type="button" class="edit" value="Edit"/>' +
@@ -440,6 +433,27 @@ $(function() {
 		if (a.name > b.name) return 1;
 		else if (a.name < b.name) return -1;
 		else return 0;
+	}
+
+
+
+
+
+
+
+
+
+	function whoseTurnIsIt() {
+		var highestInitiative, currentInitiative;
+
+		for (current in combatants) {
+			if (combatants[current].active) {
+				currentInitiative = combatants[current].initiative;
+				if (currentInitiative > highestInitiative) highestInitiative = currentInitiative;
+			}
+		}
+
+		return highestInitiative;
 	}
 
 
