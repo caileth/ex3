@@ -62,6 +62,29 @@ $(function() {
 	});
 
 	$("body").on('click', '.randomize', function() {
+		randomNameGenerator();
+		randomStatsGenerator();
+	});
+
+	function randomStatsGenerator() {
+		console.groupCollapsed("Stats generator");
+		$("#dialog-form :input[type=number]").each(function(){
+			var min = parseInt($(this).attr("min")),
+				max = parseInt($(this).attr("max")),
+				diff = max - min,
+				randomVal = Math.floor(Math.random() * diff) + min;
+
+			console.log("min:",min);
+			console.log("max:",max);
+			console.log("diff:",diff);
+			console.log("new value:",randomVal);
+
+			$(this).val(randomVal);
+		});
+		console.groupEnd();
+	}
+
+	function randomNameGenerator() {
 		$.getJSON('./includes/exaltedname.json', function(data) {
 			console.groupCollapsed("Name generator");
 			var localeCount = Object.keys(data).length,
@@ -92,10 +115,9 @@ $(function() {
 
 			output = output.trim();
 
-			$("#name").val(output);
-			console.groupEnd();
+			$("#name").val(output);console.groupEnd();
 		});
-	});
+	}
 
 
 
@@ -232,10 +254,6 @@ $(function() {
 		$("#dialog").dialog("open");
 
 		console.groupEnd();
-
-		function randomizeCombatant() {
-			// stuff happens
-		}
 
 		function addCombatant() {
 			console.groupCollapsed("Adding Combatant");
