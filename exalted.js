@@ -70,6 +70,13 @@ $(function() {
 		randomStatsGenerator();
 	});
 
+	$("body").on('click', '.activeToggle', function() {		
+		var id = $(this).parent().attr("id");
+		if (combatants[id].active) combatants[id].active = false;
+		else combatants[id].active = true;
+		printCombatants();
+	});
+
 
 
 
@@ -81,6 +88,8 @@ $(function() {
 	function Combatant(name) {
 		this.name = name;
 		this.initiative = 0;
+		this.active = true;
+
 		this.getJoinBattlePool = getJoinBattle;
 		this.getWitheringPool = getWithering;
 		this.getDecisivePool = getDecisive;
@@ -465,7 +474,9 @@ $(function() {
 		combatants.sort(sortbyInitiative);
 
 		for (current in combatants) {
-			$("#combatants > tbody:last").append('<tr class="playerBubble">' + 
+			$("#combatants > tbody:last").append('<tr class="' + 
+				(combatants[current].active ? '' : 'inactive ') +
+				'playerBubble">' + 
 				'<td name="' + combatants[current].name + '" id="' + current + '" class="player">' +
 				'<span class="initiative">' + combatants[current].initiative + '</span>' +
 				'<span class="name">' + combatants[current].name + '</span><br/>' +
@@ -480,6 +491,7 @@ $(function() {
 				'</span><br/>' +
 				'<input type="button" class="attack" value="Attack"/>' +
 				'<input type="button" class="edit" value="Edit"/>' +
+				'<input type="button" class="activeToggle" value="Toggle Active"/>' +
 				'<input type="button" class="remove" value="X"/>' +
 				'</td></tr>');
 		}
@@ -489,9 +501,13 @@ $(function() {
 	}
 
 	function sortbyInitiative(a, b) {
-		if (a.initiative > b.initiative) return -1;
-		else if (a.initiative < b.initiative) return 1;
-		else return 0;
+		if (a.active && !b.active) return -1;
+		else if (!a.active && b.active) return 1;
+		else {
+			if (a.initiative > b.initiative) return -1;
+			else if (a.initiative < b.initiative) return 1;
+			else return 0;
+		}
 	}
 
 	function sortbyName(a, b) {

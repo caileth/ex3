@@ -29,6 +29,7 @@
 		.randomize{background-image:url('/img/ten_sided_die_12.png');background-repeat:no-repeat;background-position:top left;width:16px;height:16px;}
 		.remove{position:absolute;top:50%;right:1em;transform:translateY(-50%);-moz-transform:translateY(-50%);-webkit-transform:translateY(-50%);}
 		.ui-widget{font-size:.75em;}
+		.inactive{font-style:italic;background-color:#333;width:75%;height:75%;}
 	</style>
 	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
