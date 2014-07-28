@@ -17,7 +17,12 @@ $(function() {
 			'<input type="radio" name="attackStunt" value="0"/>None' +
 			'<input type="radio" name="attackStunt" value="1"/>1-point' +
 			'<input type="radio" name="attackStunt" value="2"/>2-point' +
-			'<input type="radio" name="attackStunt" value="3"/>3-point<br/>',
+			'<input type="radio" name="attackStunt" value="3"/>3-point<br/>' +
+			'<label for="defendStunt">Defending Stunt:</label>' +
+			'<input type="radio" name="defendStunt" value="0"/>None' +
+			'<input type="radio" name="defendStunt" value="1"/>1-point' +
+			'<input type="radio" name="defendStunt" value="2"/>2-point' +
+			'<input type="radio" name="defendStunt" value="3"/>3-point<br/>',
 		combatantIndex = 0,
 		combatants = new Array(),
 		dialog = $("#dialog"),
@@ -213,14 +218,15 @@ $(function() {
 	});
 
 	function attack(id) {
-		console.groupCollapsed("attack("+id+")");
+		console.groupCollapsed("attack!");
 		console.log(id);
 
-		var attackModifiers, attackPool, attackRoll, attackSuccesses, attackThreshold, damage, damageRoll,
-			attackStunt = $("#attackStunt").val(),
+		var attackModifiers, attackAuto, attackPool, attackRoll, attackSuccesses, attackThreshold, damage, damageRoll,
+			attackStunt = $("input[name=attackStunt]:checked").val(),
 			attackIsDecisive = $("#attackIsDecisive").val(),
 			damageDoubles = 10,
 			damagePool = combatants[id].getDamage(),
+			defendStunt = $("input[name=defendStunt]:checked").val(),
 			target = $("#opponents option:selected").val(),
 			targetDodge = combatants[target].getEvasionPool(),
 			targetParry = combatants[target].getParryPool(),
@@ -237,12 +243,23 @@ $(function() {
 				" dice) against " + combatants[target].name + " (" + targetDefense + " defense)!\n");
 		}
 
-		// stunt stuff
+		if (attackStunt > 0) {
+			resultsWindow.append(combatants[id].name + " uses a " + attackStunt + "-point stunt!\n");
+			attackPool += 2;
+			attackAuto = attackStunt - 1;
+			// combatants[id].willpower += attackStunt - 1;
+		}
+
+		if (defendStunt > 0) {
+			resultsWindow.append(combatants[target].name + " uses a " + defendStunt + "-point stunt!\n");
+			targetDefense += defendStunt;
+			// combatants[target].willpower += attackStunt - 1;
+		}
 
 		/*attackPool += attackModifiers;*/
 
 		attackRoll = diceRoller(attackPool, DEFAULT_DIE_SIDE);
-		attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, DEFAULT_DOUBLES);
+		attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, DEFAULT_DOUBLES, attackAuto);console.log("attack roll:",attackRoll);
 		attackThreshold = attackSuccesses - targetDefense;
 		resultsWindow.append(combatants[id].name + " rolls: " + attackRoll + "\n");
 		if (attackSuccesses < 0) resultsWindow.append("BOTCH!\n");
@@ -633,11 +650,16 @@ $(function() {
 		console.groupEnd();
 	}
 
-	function successChecker(roll, target, doubleRule) {
-		if (!target) target = DEFAULT_TARGET;
+	function successChecker(roll, target, doubleRule, auto) {
+		console.groupCollapsed("success checker");
+		var successes, rolledAOne = false;
 
-		var successes = 0,
-			rolledAOne = false;
+		if (!target) target = DEFAULT_TARGET;
+		if (!auto) auto = 0;
+		
+		successes = auto;
+
+		console.log("Automatic successes:",auto);
 
 		for (var die in roll) {
 			if (roll[die] >= target) {
@@ -649,6 +671,8 @@ $(function() {
 
 		if (rolledAOne && successes === 0) successes = -1;
 
+		console.log("Total successes:",successes);
+		console.groupEnd();
 		return successes;
 	}
 
