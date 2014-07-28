@@ -152,7 +152,7 @@ $(function() {
 		$("#dialog").dialog({
 			title: "Attack",
 			autoOpen: false,
-			height: 300,
+			height: "auto",
 			width: 350,
 			modal: true,
 			buttons: {
