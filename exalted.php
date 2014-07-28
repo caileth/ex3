@@ -15,14 +15,15 @@
 		h3{font-size:150%;}
 		html{height:100%;border-left:solid crimson 50px;}
 		body,textarea,input[type=button]{font-family:Goudy;}
-		table{width:600px;}
-		textarea{width:71em;height:10em;}
+		table{width:600px;padding:1em;}
+		textarea{width:85em;height:10em;}
 		input[type=number]{width:2.5em;}
 
+		#combatants{width:71em;}
 		#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
 		#name {width:25em;}
 
-		.initiative{font:375% Missive;float:left;}
+		.initiative{font:500% Albertus;float:left;margin-right:.1em;}
 		.player{position:relative;border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
 		.randomize{background-image:url('/img/ten_sided_die_12.png');background-repeat:no-repeat;background-position:top left;width:16px;height:16px;}
 		.remove{position:absolute;top:50%;right:1em;transform:translateY(-50%);-moz-transform:translateY(-50%);-webkit-transform:translateY(-50%);}

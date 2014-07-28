@@ -6,6 +6,7 @@ $(function() {
 		JB_DOUBLES = false,
 		JB_EXTRA_SUX = 3,
 		JB_TARGET = 7,
+		NAMES_DATABASE,
 		combatantIndex = 0,
 		combatants = new Array(),
 		joinBattleButton = $("#joinBattle"),
@@ -23,6 +24,10 @@ $(function() {
 			'<label for="accuracy">Weapon Accuracy: </label><input type="number" id="accuracy" value="0" min="0" max="5"/><br/>' +
 			'<label for="defense">Weapon Defense: </label><input type="number" id="defense" value="0" min="0" max="5"/><br/>' +
 			'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-5" max="0"/>';
+
+	$.getJSON('./includes/exaltedname.json', function(data) {
+		NAMES_DATABASE = data;
+	});
 
 	$(joinBattleButton).click(function() {
 		console.groupCollapsed("joinBattle clicked");
@@ -45,8 +50,7 @@ $(function() {
 	});
 
 	$("body").on('click', '.remove', function() {
-		var id = $(this).parent().attr("id");console.log("removing id",id);
-		console.log(combatants[id].name,"removed, theoretically");
+		var id = $(this).parent().attr("id");console.log(combatants[id].name,"removed");
 		combatants.splice(id,1);
 		printCombatants();
 		numCombatants--;
@@ -62,61 +66,66 @@ $(function() {
 	});
 
 	$("body").on('click', '.randomize', function() {
-		randomNameGenerator();
+		randomNameGenerator(NAMES_DATABASE);
 		randomStatsGenerator();
 	});
 
-	function randomStatsGenerator() {
-		console.groupCollapsed("Stats generator");
-		$("#dialog-form :input[type=number]").each(function(){
-			var min = parseInt($(this).attr("min")),
-				max = parseInt($(this).attr("max")),
-				diff = max - min,
-				randomVal = Math.floor(Math.random() * diff) + min;
 
-			console.log("min:",min);
-			console.log("max:",max);
-			console.log("diff:",diff);
-			console.log("new value:",randomVal);
 
-			$(this).val(randomVal);
-		});
-		console.groupEnd();
-	}
 
-	function randomNameGenerator() {
-		$.getJSON('./includes/exaltedname.json', function(data) {
-			console.groupCollapsed("Name generator");
-			var localeCount = Object.keys(data).length,
-				localeID = Math.floor((Math.random() * localeCount)),
-				locale = Object.keys(data)[localeID],
-				templateGroupCount = eval("Object.keys(data." + locale + ".templates).length"),
-				templateGroupID = Math.floor((Math.random() * templateGroupCount)),
-				templateGroup = eval("Object.keys(data." + locale + ".templates)[templateGroupID]"),
-				wordGroupsCount = eval("Object.keys(data." + locale + ".words).length"),
-				templateCount = eval("Object.keys(data." + locale + ".templates." + templateGroup + ").length"),
-				templateID = Math.floor((Math.random() * templateCount)),
-				template = eval("data." + locale + ".templates."+templateGroup+"["+templateID+"]"),
-				output = "";
 
-			console.log("Locale:",locale);
-			console.log("# Template groups:",templateGroupCount);
-			console.log("# Word groups:",wordGroupsCount);
-			console.log("Template group: #" + templateGroupID + " " + templateGroup);
-			console.log("Template:",templateID,template);
 
-			for (var i in template) {
-				var wordGroup = eval("data." + locale + ".words."+template[i]),
-					numWords = wordGroup.length,
-					word = Math.floor((Math.random() * numWords));
-				output += wordGroup[word];
-			}
-			console.log("Result:",output);
 
-			output = output.trim();
 
-			$("#name").val(output);console.groupEnd();
-		});
+
+	function Combatant(name) {
+		this.name = name;
+		this.initiative = 0;
+		this.getJoinBattlePool = getJoinBattle;
+		this.getWitheringPool = getWithering;
+		this.getDecisivePool = getDecisive;
+		this.getParryPool = getParry;
+		this.getEvasionPool = getEvasion;
+		this.getRushPool = getRush;
+		this.getDisengagePool = getDisengage;
+		this.joinBattle = joinBattle;
+
+		function getJoinBattle() {
+			return this.awareness + this.wits;
+		}
+
+		function getWithering() {
+			return this.dexterity + this.combat + this.accuracy;
+		}
+
+		function getDecisive() {
+			return this.dexterity + this.combat;
+		}
+
+		function getParry() {
+			return Math.ceil((this.dexterity + this.combat) / 2) + this.defense;
+		}
+
+		function getEvasion() {
+			return Math.ceil((this.dexterity + this.dodge) / 2) + this.mobility;
+		}
+
+		function getRush() {
+			return this.dexterity + this.athletics;
+		}
+
+		function getDisengage() {
+			return this.dexterity + this.dodge;
+		}
+
+		function joinBattle() {
+			console.groupCollapsed(this.name,"joins battle");
+			var pool = this.getJoinBattlePool();console.log("JB pool:",pool);
+			var roll = diceRoller(pool, DEFAULT_DIE_SIDE);console.log("JB roll:",pool);
+			var suxx = Math.max(successChecker(roll, JB_TARGET, JB_DOUBLES), 0);console.log("JB sux:",suxx);
+			var initiative = suxx + JB_EXTRA_SUX;console.log("JB initiative:",initiative);
+			console.groupEnd();return initiative;
+		}
 	}
 
 
@@ -202,15 +211,15 @@ $(function() {
 		var addButtons, editButtons,
 			edit = false,
 			name = $("#name"),
-			dexterity = $("dexterity"),
+			dexterity = $("#dexterity"),
 			wits = $("#wits"),
 			awareness = $("#awareness"),
-			athletics = $("athletics"),
-			dodge = $("dodge"),
-			combat = $("combat"),
-			accuracy = $("accuracy"),
-			defense = $("defense"),
-			mobility = $("mobility");
+			athletics = $("#athletics"),
+			dodge = $("#dodge"),
+			combat = $("#combat"),
+			accuracy = $("#accuracy"),
+			defense = $("#defense"),
+			mobility = $("#mobility");
 
 		if ($(this).attr("class") === "edit") edit = true;console.log("Edit?",edit);
 
@@ -314,24 +323,57 @@ $(function() {
 
 
 
-	function Combatant(name) {
-		this.name = name;
-		this.initiative = 0;
-		this.getJoinBattlePool = getJoinBattlePool;
-		this.joinBattle = joinBattle;
+	function randomStatsGenerator() {
+		console.groupCollapsed("Stats generator");
+		$("#dialog-form :input[type=number]").each(function(){
+			var min = parseInt($(this).attr("min")),
+				max = parseInt($(this).attr("max")),
+				diff = max - min,
+				randomVal = Math.floor(Math.random() * diff) + min;
+
+			console.log("min:",min);
+			console.log("max:",max);
+			console.log("diff:",diff);
+			console.log("new value:",randomVal);
+
+			$(this).val(randomVal);
+		});
+		console.groupEnd();
 	}
 
-	function getJoinBattlePool() {
-		return this.awareness + this.wits;
-	}
+	function randomNameGenerator(data) {
+		console.groupCollapsed("Name generator");
+		var localeCount = Object.keys(data).length,
+			localeID = Math.floor((Math.random() * localeCount)),
+			locale = Object.keys(data)[localeID],
+			templateGroupCount = eval("Object.keys(data." + locale + ".templates).length"),
+			templateGroupID = Math.floor((Math.random() * templateGroupCount)),
+			templateGroup = eval("Object.keys(data." + locale + ".templates)[templateGroupID]"),
+			wordGroupsCount = eval("Object.keys(data." + locale + ".words).length"),
+			templateCount = eval("Object.keys(data." + locale + ".templates." + templateGroup + ").length"),
+			templateID = Math.floor((Math.random() * templateCount)),
+			template = eval("data." + locale + ".templates."+templateGroup+"["+templateID+"]"),
+			output = "";
 
-	function joinBattle() {
-		console.groupCollapsed(this.name,"joins battle");
-		var pool = this.getJoinBattlePool();console.log("JB pool:",pool);
-		var roll = diceRoller(pool, DEFAULT_DIE_SIDE);console.log("JB roll:",pool);
-		var suxx = Math.max(successChecker(roll, JB_TARGET, JB_DOUBLES), 0);console.log("JB sux:",suxx);
-		var initiative = suxx + JB_EXTRA_SUX;console.log("JB initiative:",initiative);
-		console.groupEnd();return initiative;
+		console.log("Locale:",locale);
+		console.log("# Template groups:",templateGroupCount);
+		console.log("# Word groups:",wordGroupsCount);
+		console.log("Template group: #" + templateGroupID + " " + templateGroup);
+		console.log("Template:",templateID,template);
+
+		for (var i in template) {
+			var wordGroup = eval("data." + locale + ".words."+template[i]),
+				numWords = wordGroup.length,
+				word = Math.floor((Math.random() * numWords));
+			output += wordGroup[word];
+		}
+		console.log("Result:",output);
+
+		output = output.trim();
+
+		$("#name").val(output);
+
+		console.groupEnd();
 	}
 
 
@@ -428,7 +470,13 @@ $(function() {
 				'<span class="initiative">' + combatants[current].initiative + '</span>' +
 				'<span class="name">' + combatants[current].name + '</span><br/>' +
 				'<span class="stats">' +
-				'JB: ' + combatants[current].getJoinBattlePool() +
+				'Join Battle: ' + combatants[current].getJoinBattlePool() +
+				' &bull; Withering Attack: ' + combatants[current].getWitheringPool() +
+				' &bull; Decisive Attack: ' + combatants[current].getDecisivePool() +
+				' &bull; Parry: ' + combatants[current].getParryPool() +
+				' &bull; Evade: ' + combatants[current].getEvasionPool() +
+				' &bull; Rush: ' + combatants[current].getRushPool() +
+				' &bull; Disengage: ' + combatants[current].getDisengagePool() +
 				'</span><br/>' +
 				'<input type="button" class="attack" value="Attack"/>' +
 				'<input type="button" class="edit" value="Edit"/>' +
