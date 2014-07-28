@@ -1,14 +1,12 @@
 $(function() {
-	var DEFAULT_DIE_SIDE = 10,
+	var NAMES_DATABASE,
+		DEFAULT_DIE_SIDE = 10,
 		DEFAULT_NUM_DICE = 5,
 		DEFAULT_TARGET = 7,
-		DA_DOUBLES = false,
 		JB_DIFFICULTY = 0,
 		JB_DOUBLES = false,
 		JB_EXTRA_SUX = 3,
 		JB_TARGET = 7,
-		WA_DOUBLES = 10,
-		NAMES_DATABASE,
 		attackWindow = '<label for="opponents">Target:</label>' +
 			'<select id="opponents"></select><br/>' +
 			'<label for="attackIsDecisive">Attack Type:</label>' +
@@ -38,9 +36,13 @@ $(function() {
 			'<label for="awareness">Awareness: </label><input type="number" id="awareness" value="0" min="0" max="5"/><br/>' +
 			'<label for="dodge">Dodge: </label><input type="number" id="dodge" value="0" min="0" max="5"/><br/>' +
 			'<label for="combat">Combat Ability: </label><input type="number" id="combat" value="0" min="0" max="5"/><br/>' +
-			'<label for="accuracy">Weapon Accuracy: </label><input type="number" id="accuracy" value="0" min="0" max="5"/><br/>' +
-			'<label for="defense">Weapon Defense: </label><input type="number" id="defense" value="0" min="0" max="5"/><br/>' +
-			'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-5" max="0"/>';
+			'<label for="accuracy">Weapon Accuracy: </label><input type="number" id="accuracy" value="4" min="0" max="5"/><br/>' +
+			'<label for="damage">Weapon Damage: </label><input type="number" id="damage" value="7" min="7" max="14"/><br/>' +
+			'<label for="overwhelming">Weapon Overwhelming: </label><input type="number" id="overwhelming" value="0" min="-1" max="4"/><br/>' +
+			'<label for="defense">Weapon Defense: </label><input type="number" id="defense" value="0" min="-1" max="1"/><br/>' +
+			'<label for="armor">Armor Soak: </label><input type="number" id="armor" value="0" min="0" max="12"/><br/>' +
+			'<label for="hardness">Armor Hardness: </label><input type="number" id="hardness" value="0" min="0" max="10"/><br/>' +
+			'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-2" max="0"/>';
 
 	$.getJSON('./includes/exaltedname.json', function(data) {
 		NAMES_DATABASE = data;
@@ -193,20 +195,28 @@ $(function() {
 	});
 
 	function attack(id) {
-		var attackModifiers, attackPool, attackRoll,
+		var attackModifiers, attackPool, attackRoll, attackSuccesses, attackThreshold,
+			attackDoubles = 10,
 			attackStunt = $("#attackStunt").val(),
 			attackIsDecisive = $("#attackIsDecisive").val(),
 			target = $("#opponents option:selected").val(),
 			targetDodge = combatants[target].getEvasionPool(),
 			targetParry = combatants[target].getParryPool(),
-			targetDefense = Math.max(targetDodge, targetParry);
+			targetDefense = Math.max(targetDodge, targetParry),
+			targetSoak;
 
-		if (attackIsDecisive) attackPool = combatants[id].getDecisivePool();
-		else attackPool = combatants[id].getWitheringPool();
+		if (attackIsDecisive) {
+			attackPool = combatants[id].getDecisivePool();
+			attackDoubles = false;
+		} else {
+			attackPool = combatants[id].getWitheringPool();
+		}
 
 		/*attackPool += attackModifiers;*/
 
-
+		attackRoll = diceRoller(attackPool, DEFAULT_DIE_SIDE);
+		attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, attackDoubles);
+		attackThreshold = attackSuccesses - targetDefense;
 
 		dialog.dialog("close");
 	}
