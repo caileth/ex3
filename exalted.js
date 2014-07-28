@@ -7,6 +7,16 @@ $(function() {
 		JB_EXTRA_SUX = 3,
 		JB_TARGET = 7,
 		NAMES_DATABASE,
+		attackWindow = '<label for="opponents">Target:</label>' +
+			'<select id="opponents"></select><br/>' +
+			'<label for="attackType">Attack Type:</label>' +
+			'<input type="radio" name="attackType" value="0">Withering' +
+			'<input type="radio" name="attackType" value="1">Decisive<br/>' +
+			'<label for="witheringStunt">Stunt:</label>' +
+			'<input type="radio" name="witheringStunt" value="0"/>None' +
+			'<input type="radio" name="witheringStunt" value="1"/>1-point' +
+			'<input type="radio" name="witheringStunt" value="2"/>2-point' +
+			'<input type="radio" name="witheringStunt" value="3"/>3-point<br/>',
 		combatantIndex = 0,
 		combatants = new Array(),
 		joinBattleButton = $("#joinBattle"),
@@ -25,8 +35,43 @@ $(function() {
 			'<label for="defense">Weapon Defense: </label><input type="number" id="defense" value="0" min="0" max="5"/><br/>' +
 			'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-5" max="0"/>';
 
+
+
+
+
+
+
+
+
 	$.getJSON('./includes/exaltedname.json', function(data) {
 		NAMES_DATABASE = data;
+	});
+
+
+
+
+
+
+
+
+
+	$("body").on('click', '.activeToggle', function() {		
+		var id = $(this).parent().attr("id");
+		if (combatants[id].active) combatants[id].active = false;
+		else combatants[id].active = true;
+		printCombatants();
+	});
+
+	$("body").on('click', '.randomize', function() {
+		randomNameGenerator(NAMES_DATABASE);
+		randomStatsGenerator();
+	});
+
+	$("body").on('click', '.remove', function() {
+		var id = $(this).parent().attr("id");console.log(combatants[id].name,"removed");
+		combatants.splice(id,1);
+		printCombatants();
+		numCombatants--;
 	});
 
 	$(joinBattleButton).click(function() {
@@ -49,13 +94,6 @@ $(function() {
 		console.groupEnd();
 	});
 
-	$("body").on('click', '.remove', function() {
-		var id = $(this).parent().attr("id");console.log(combatants[id].name,"removed");
-		combatants.splice(id,1);
-		printCombatants();
-		numCombatants--;
-	});
-
 	$(rollButton).click(function() {		
 		var difficulty = $("#difficulty").val(),
 			doubleRule = $("input[name=doubleRule]:checked").val(),
@@ -63,18 +101,6 @@ $(function() {
 			targetNumber = $("#targetNumber").val();
 
 		printRoll(numDice, DEFAULT_DIE_SIDE, targetNumber, doubleRule, difficulty);
-	});
-
-	$("body").on('click', '.randomize', function() {
-		randomNameGenerator(NAMES_DATABASE);
-		randomStatsGenerator();
-	});
-
-	$("body").on('click', '.activeToggle', function() {		
-		var id = $(this).parent().attr("id");
-		if (combatants[id].active) combatants[id].active = false;
-		else combatants[id].active = true;
-		printCombatants();
 	});
 
 
@@ -90,51 +116,35 @@ $(function() {
 		this.initiative = 0;
 		this.active = true;
 
-		this.getJoinBattlePool = getJoinBattle;
-		this.getWitheringPool = getWithering;
-		this.getDecisivePool = getDecisive;
-		this.getParryPool = getParry;
-		this.getEvasionPool = getEvasion;
-		this.getRushPool = getRush;
-		this.getDisengagePool = getDisengage;
-		this.joinBattle = joinBattle;
-
-		function getJoinBattle() {
+		this.getJoinBattlePool = function() {
 			return this.awareness + this.wits;
-		}
-
-		function getWithering() {
+		};
+		this.getWitheringPool = function() {
 			return this.dexterity + this.combat + this.accuracy;
-		}
-
-		function getDecisive() {
+		};
+		this.getDecisivePool = function() {
 			return this.dexterity + this.combat;
-		}
-
-		function getParry() {
+		};
+		this.getParryPool = function() {
 			return Math.ceil((this.dexterity + this.combat) / 2) + this.defense;
-		}
-
-		function getEvasion() {
+		};
+		this.getEvasionPool = function() {
 			return Math.ceil((this.dexterity + this.dodge) / 2) + this.mobility;
-		}
-
-		function getRush() {
+		};
+		this.getRushPool = function() {
 			return this.dexterity + this.athletics;
-		}
-
-		function getDisengage() {
+		};
+		this.getDisengagePool = function() {
 			return this.dexterity + this.dodge;
-		}
-
-		function joinBattle() {
+		};
+		this.joinBattle = function() {
 			console.groupCollapsed(this.name,"joins battle");
 			var pool = this.getJoinBattlePool();console.log("JB pool:",pool);
 			var roll = diceRoller(pool, DEFAULT_DIE_SIDE);console.log("JB roll:",pool);
 			var suxx = Math.max(successChecker(roll, JB_TARGET, JB_DOUBLES), 0);console.log("JB sux:",suxx);
 			var initiative = suxx + JB_EXTRA_SUX;console.log("JB initiative:",initiative);
 			console.groupEnd();return initiative;
-		}
+		};		
 	}
 
 
@@ -146,17 +156,7 @@ $(function() {
 
  
     $("body").on( "click", ".attack", function() {
-		$("#dialog-form").html(
-			'<label for="opponents">Target:</label>' +
-				'<select id="opponents"></select><br/>' +
-			'<label for="attackType">Attack Type:</label>' +
-				'<input type="radio" name="attackType" value="0">Withering' +
-				'<input type="radio" name="attackType" value="1">Decisive<br/>' +
-			'<label for="witheringStunt">Stunt:</label>' +
-				'<input type="radio" name="witheringStunt" value="0"/>None' +
-				'<input type="radio" name="witheringStunt" value="1"/>1-point' +
-				'<input type="radio" name="witheringStunt" value="2"/>2-point' +
-				'<input type="radio" name="witheringStunt" value="3"/>3-point<br/>');
+		$("#dialog-form").html(attackWindow);
 
 		$("#dialog").dialog({
 			title: "Attack",
@@ -393,6 +393,63 @@ $(function() {
 
 
 
+	function printCombatants() {
+		console.groupCollapsed("printCombatants");
+		$("tr.playerBubble").remove();console.log("deleting existing player list");
+
+		combatants.sort(sortbyInitiative);
+
+		for (current in combatants) {
+			$("#combatants > tbody:last").append('<tr class="' + 
+				(combatants[current].active ? '' : 'inactive ') +
+				'playerBubble">' + 
+				'<td name="' + combatants[current].name + '" id="' + current + '" class="player">' +
+				'<span class="initiative">' + combatants[current].initiative + '</span>' +
+				'<span class="name">' + combatants[current].name + '</span><br/>' +
+				'<span class="stats">' +
+				'Join Battle: ' + combatants[current].getJoinBattlePool() +
+				' &bull; Withering Attack: ' + combatants[current].getWitheringPool() +
+				' &bull; Decisive Attack: ' + combatants[current].getDecisivePool() +
+				' &bull; Parry: ' + combatants[current].getParryPool() +
+				' &bull; Evade: ' + combatants[current].getEvasionPool() +
+				' &bull; Rush: ' + combatants[current].getRushPool() +
+				' &bull; Disengage: ' + combatants[current].getDisengagePool() +
+				'</span><br/>' +
+				'<input type="button" class="attack" value="Attack"/>' +
+				'<input type="button" class="edit" value="Edit"/>' +
+				'<input type="button" class="activeToggle" value="Toggle Active"/>' +
+				'<input type="button" class="remove" value="X"/>' +
+				'</td></tr>');
+		}
+
+		console.log("done printing combatants");
+		console.groupEnd();
+	}
+
+	function sortbyInitiative(a, b) {
+		if (a.active && !b.active) return -1;
+		else if (!a.active && b.active) return 1;
+		else {
+			if (a.initiative > b.initiative) return -1;
+			else if (a.initiative < b.initiative) return 1;
+			else return 0;
+		}
+	}
+
+	function sortbyName(a, b) {
+		if (a.name > b.name) return 1;
+		else if (a.name < b.name) return -1;
+		else return 0;
+	}
+
+
+
+
+
+
+
+
+
 	function scrollToBottom() {
 		resultsWindow.scrollTop(resultsWindow[0].scrollHeight - resultsWindow.height());
 	}
@@ -465,54 +522,5 @@ $(function() {
 		var result = Math.floor((Math.random() * sides) + 1);
 		console.log("Rolled a " + result + " on a " + sides + "-sided die");
 		console.groupEnd();return result;
-	}
-
-	function printCombatants() {
-		console.groupCollapsed("printCombatants");
-		$("tr.playerBubble").remove();console.log("deleting existing player list");
-
-		combatants.sort(sortbyInitiative);
-
-		for (current in combatants) {
-			$("#combatants > tbody:last").append('<tr class="' + 
-				(combatants[current].active ? '' : 'inactive ') +
-				'playerBubble">' + 
-				'<td name="' + combatants[current].name + '" id="' + current + '" class="player">' +
-				'<span class="initiative">' + combatants[current].initiative + '</span>' +
-				'<span class="name">' + combatants[current].name + '</span><br/>' +
-				'<span class="stats">' +
-				'Join Battle: ' + combatants[current].getJoinBattlePool() +
-				' &bull; Withering Attack: ' + combatants[current].getWitheringPool() +
-				' &bull; Decisive Attack: ' + combatants[current].getDecisivePool() +
-				' &bull; Parry: ' + combatants[current].getParryPool() +
-				' &bull; Evade: ' + combatants[current].getEvasionPool() +
-				' &bull; Rush: ' + combatants[current].getRushPool() +
-				' &bull; Disengage: ' + combatants[current].getDisengagePool() +
-				'</span><br/>' +
-				'<input type="button" class="attack" value="Attack"/>' +
-				'<input type="button" class="edit" value="Edit"/>' +
-				'<input type="button" class="activeToggle" value="Toggle Active"/>' +
-				'<input type="button" class="remove" value="X"/>' +
-				'</td></tr>');
-		}
-
-		console.log("done printing combatants");
-		console.groupEnd();
-	}
-
-	function sortbyInitiative(a, b) {
-		if (a.active && !b.active) return -1;
-		else if (!a.active && b.active) return 1;
-		else {
-			if (a.initiative > b.initiative) return -1;
-			else if (a.initiative < b.initiative) return 1;
-			else return 0;
-		}
-	}
-
-	function sortbyName(a, b) {
-		if (a.name > b.name) return 1;
-		else if (a.name < b.name) return -1;
-		else return 0;
 	}
 });
