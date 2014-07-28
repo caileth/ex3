@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>exalted 3 stuff</title>
+	<title>exalted stuff</title>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 	<style>
 		@font-face{font-family:Albertus;src:url(includes/AlbertusMTStd.otf);}
@@ -9,7 +9,7 @@
 		@font-face{font-family:Goudy;src:url(includes/GoudyStd.otf);}
 
 		h1,h2,h3{display:inline;}
-		h1{font:300% Albertus;text-transform:uppercase;}
+		h1{font:500% Albertus;text-transform:uppercase;}
 		h2,h3,.name{font-family:Missive;}
 		h2,.name{font-size:200%;}
 		h3{font-size:150%;}
@@ -18,6 +18,7 @@
 		table{width:600px;padding:1em;}
 		textarea{width:85em;height:10em;}
 		input[type=number]{width:2.5em;}
+		body > div{margin:1em;}
 
 		#combatants{width:71em;}
 		#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
@@ -34,7 +35,7 @@
 	<script src="./exalted.js"></script>
 </head>
 <body>
-	<h1>Ex3e Toolkit</h1><br/>
+	<h1>Exalted Toolkit</h1><br/>
 
 	<div>
 		<h2>Results</h2><br/>
