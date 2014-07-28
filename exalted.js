@@ -1,6 +1,7 @@
 $(function() {
 	var NAMES_DATABASE,
 		DEFAULT_DIE_SIDE = 10,
+		DEFAULT_DOUBLES = 10,
 		DEFAULT_NUM_DICE = 5,
 		DEFAULT_TARGET = 7,
 		JB_DIFFICULTY = 0,
@@ -67,8 +68,15 @@ $(function() {
 
 	function Combatant() {
 		this.initiative = 0;
+		this.initiativePending = 0;
 		this.active = true;
 
+		this.getName = function() {
+			return this.name;
+		}
+		this.getDamage = function() {
+			return this.strength + this.damage;
+		}
 		this.getJoinBattlePool = function() {
 			return this.awareness + this.wits;
 		};
@@ -90,6 +98,9 @@ $(function() {
 		this.getDisengagePool = function() {
 			return this.dexterity + this.dodge;
 		};
+		this.getSoak = function() {
+			return this.stamina + this.armor;
+		}
 		this.joinBattle = function() {
 			console.groupCollapsed(this.name,"joins battle");
 			var pool = this.getJoinBattlePool();console.log("JB pool:",pool);
@@ -112,7 +123,7 @@ $(function() {
 		var id = $(this).parent().attr("id");
 		if (combatants[id].active) combatants[id].active = false;
 		else combatants[id].active = true;
-		printCombatants();
+		doRound();
 	});
 
 	$("body").on('click', '.randomize', function() {
@@ -123,7 +134,7 @@ $(function() {
 	$("body").on('click', '.remove', function() {
 		var id = $(this).parent().attr("id");console.log(combatants[id].name,"removed");
 		combatants.splice(id,1);
-		printCombatants();
+		doRound();
 		numCombatants--;
 	});
 
@@ -140,7 +151,7 @@ $(function() {
 				resultsWindow.append(combatants[i].name + " joins battle at initiative " + combatants[i].initiative + "\n");
 			}
 			scrollToBottom();
-			printCombatants();
+			doRound();
 		} else {
 			resultsWindow.append("\nNot enough combatants!");
 		}
@@ -165,7 +176,10 @@ $(function() {
 
 
 	$("body").on( "click", ".attack", function() {
-		var attackForm, id = $(this).parent().attr("id");
+		var attackForm,
+			id = $(this).parent().attr("id");
+		
+		console.groupCollapsed("Attack clicked, id",id);
 
 		attackForm = dialogForm.on("submit", function(event) {
 			event.preventDefault();
@@ -181,7 +195,9 @@ $(function() {
 			width: "auto",
 			modal: true,
 			buttons: {
-				"Attack": attack,
+				Attack: function() {
+					attack(id);
+				},
 				Cancel: function() {
 					dialog.dialog("close");
 				}
@@ -193,33 +209,81 @@ $(function() {
 
 		populateTargetList(id);
 		dialog.dialog("open");
+		console.groupEnd();
 	});
 
 	function attack(id) {
-		var attackModifiers, attackPool, attackRoll, attackSuccesses, attackThreshold,
-			attackDoubles = 10,
+		console.groupCollapsed("attack("+id+")");
+		console.log(id);
+
+		var attackModifiers, attackPool, attackRoll, attackSuccesses, attackThreshold, damage, damageRoll,
 			attackStunt = $("#attackStunt").val(),
 			attackIsDecisive = $("#attackIsDecisive").val(),
+			damageDoubles = 10,
+			damagePool = combatants[id].getDamage(),
 			target = $("#opponents option:selected").val(),
 			targetDodge = combatants[target].getEvasionPool(),
 			targetParry = combatants[target].getParryPool(),
-			targetDefense = Math.max(targetDodge, targetParry),
-			targetSoak;
+			targetSoak = combatants[target].getSoak(),
+			targetDefense = Math.max(targetDodge, targetParry);
 
 		if (attackIsDecisive) {
 			attackPool = combatants[id].getDecisivePool();
-			attackDoubles = false;
+			damageDoubles = false;
+			resultsWindow.append(combatants[id].name + " attempts a DECISIVE ATTACK against " + combatants[target].name + "!\n");
 		} else {
 			attackPool = combatants[id].getWitheringPool();
+			resultsWindow.append(combatants[id].name + " attempts a Withering Attack (" + attackPool +
+				" dice) against " + combatants[target].name + " (" + targetDefense + " defense)!\n");
 		}
+
+		// stunt stuff
 
 		/*attackPool += attackModifiers;*/
 
 		attackRoll = diceRoller(attackPool, DEFAULT_DIE_SIDE);
-		attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, attackDoubles);
+		attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, DEFAULT_DOUBLES);
 		attackThreshold = attackSuccesses - targetDefense;
+		resultsWindow.append(combatants[id].name + " rolls: " + attackRoll + "\n");
+		if (attackSuccesses < 0) resultsWindow.append("BOTCH!\n");
+		else if (attackThreshold >= 0) resultsWindow.append("Success! " + attackThreshold + " net successes!\n");
+		else resultsWindow.append("Failure!\n");
+
+		if (attackSuccesses > 0 && attackThreshold >= 0) {
+			damagePool += (attackThreshold - targetSoak);
+			damagePool = Math.max(damagePool, combatants[id].overwhelming, 1);
+			damageRoll = diceRoller(damagePool, DEFAULT_DIE_SIDE);
+			damage = successChecker(damageRoll, DEFAULT_TARGET, damageDoubles);
+
+			resultsWindow.append(combatants[id].name + " rolls damage: " + damageRoll + "\n");
+			resultsWindow.append(damage + " damage!\n");
+		}
+
+		if (damage > 0) {
+			if (combatants[id].initiative != combatants[target].initiative) {
+				if (attackIsDecisive) {
+					// stuff happens
+				} else {
+					combatants[id].initiative += damage + 1;
+					combatants[target].initiative -= damage;
+				}
+			} else {
+				resultsWindow.append("Combatants at same initiative, holding resolution until end of tick\n");
+
+				if (attackIsDecisive) {
+					// stuff happens
+				} else {
+					combatants[id].initiativePending += damage + 1;
+					combatants[target].initiativePending -= damage;
+				}
+			}
+		}
+
+		combatants[id].active = false;
 
 		dialog.dialog("close");
+		doRound();
+		console.groupEnd();
 	}
 
 	function populateTargetList(id) {
@@ -292,14 +356,17 @@ $(function() {
 			recordStats(combatantIndex);
 			combatants[combatantIndex].initiative = combatants[combatantIndex].joinBattle();
 
-			printCombatants();console.groupEnd();
+			resultsWindow.append(combatants[combatantIndex].getName() + " joins battle at tick " + combatants[combatantIndex].initiative + "\n");
+			scrollToBottom();
+
+			doRound();console.groupEnd();
 
 			dialog.dialog("close");
 		}
 
 		function editCombatant() {
 			recordStats(id);
-			printCombatants();
+			doRound();
 			dialog.dialog("close");
 		}
 
@@ -429,21 +496,38 @@ $(function() {
 
 	function doRound() {
 		var whoseTurn = whoseTurnIsIt();
+
+		// set tick to highest active initiative
+		// resolve all pending damage at higher initiative than current tick
+		// if no actives, resolve all pending damage and reset active status
+
 		if (whoseTurn) {
-			$(resultsWindow).append("Highest active initiative is " + whoseTurnIsIt() + "\n");
-		}
-		else {
-			$(resultsWindow).append("Turn is over!\n");
+			resolvePendingDamage(whoseTurn);
+			$(resultsWindow).append("Tick " + whoseTurn + "\n");
+		} else {
 			resetActiveStatus();
+			$(resultsWindow).append("Round is over!\n");
 		}
 		scrollToBottom();
+		printCombatants();
+	}
+
+	function resolvePendingDamage(tick) {
+		for (i in combatants) {
+			if ((combatants[i].initiative > tick || !tick) && combatants[i].initiativePending != 0) {
+				$(resultsWindow).append("Resolving " + combatants[i].name + " pending initiative change of " + combatants[i].initiativePending + "\n");
+				combatants[i].initiative += combatants[i].initiativePending;
+				combatants[i].initiativePending = 0;
+			}
+		}
 	}
 
 	function resetActiveStatus() {
+		resolvePendingDamage();
+
 		for (i in combatants) {
 			combatants[i].active = true;
 		}
-		printCombatants();
 	}
 
 	function whoseTurnIsIt() {
@@ -458,14 +542,6 @@ $(function() {
 
 		return highestInitiative;
 	}
-
-
-
-
-
-
-
-
 
 	function printCombatants() {
 		console.groupCollapsed("printCombatants");
@@ -482,8 +558,8 @@ $(function() {
 				'<span class="name">' + combatants[current].name + '</span><br/>' +
 				'<span class="stats">' +
 				'Join Battle: ' + combatants[current].getJoinBattlePool() +
-				' &bull; Withering Attack: ' + combatants[current].getWitheringPool() +
-				' &bull; Decisive Attack: ' + combatants[current].getDecisivePool() +
+				' &bull; Withering: ' + combatants[current].getWitheringPool() +
+				' &bull; Decisive: ' + combatants[current].getDecisivePool() +
 				' &bull; Parry: ' + combatants[current].getParryPool() +
 				' &bull; Evade: ' + combatants[current].getEvasionPool() +
 				' &bull; Rush: ' + combatants[current].getRushPool() +
@@ -497,8 +573,6 @@ $(function() {
 		}
 
 		console.log("done printing combatants");
-
-		doRound();
 
 		console.groupEnd();
 	}
