@@ -2,29 +2,36 @@ $(function() {
 	var DEFAULT_DIE_SIDE = 10,
 		DEFAULT_NUM_DICE = 5,
 		DEFAULT_TARGET = 7,
+		DA_DOUBLES = false,
 		JB_DIFFICULTY = 0,
 		JB_DOUBLES = false,
 		JB_EXTRA_SUX = 3,
 		JB_TARGET = 7,
+		WA_DOUBLES = 10,
 		NAMES_DATABASE,
 		attackWindow = '<label for="opponents">Target:</label>' +
 			'<select id="opponents"></select><br/>' +
-			'<label for="attackType">Attack Type:</label>' +
-			'<input type="radio" name="attackType" value="0">Withering' +
-			'<input type="radio" name="attackType" value="1">Decisive<br/>' +
-			'<label for="witheringStunt">Stunt:</label>' +
-			'<input type="radio" name="witheringStunt" value="0"/>None' +
-			'<input type="radio" name="witheringStunt" value="1"/>1-point' +
-			'<input type="radio" name="witheringStunt" value="2"/>2-point' +
-			'<input type="radio" name="witheringStunt" value="3"/>3-point<br/>',
+			'<label for="attackIsDecisive">Attack Type:</label>' +
+			'<input type="radio" name="attackIsDecisive" value="false">Withering' +
+			'<input type="radio" name="attackIsDecisive" value="true">Decisive<br/>' +
+			'<label for="attackStunt">Attacking Stunt:</label>' +
+			'<input type="radio" name="attackStunt" value="0"/>None' +
+			'<input type="radio" name="attackStunt" value="1"/>1-point' +
+			'<input type="radio" name="attackStunt" value="2"/>2-point' +
+			'<input type="radio" name="attackStunt" value="3"/>3-point<br/>',
 		combatantIndex = 0,
 		combatants = new Array(),
+		dialog = $("#dialog"),
+		dialogForm = $("#dialog-form"),
+		dialogFormInputs = $("#dialog-form :input");
 		joinBattleButton = $("#joinBattle"),
 		numCombatants = 0,
 		resultsWindow = $("#results"),
 		rollButton = $("#roll"),
+		round = 0,
 		statsWindow = '<input type="text" id="name" placeholder="New Player" autofocus/>' +
 			'<input type="button" class="randomize"/><br/>' +
+			'<label for="strength">Strength: </label><input type="number" id="strength" value="1" min="1" max="5"/><br/>' +
 			'<label for="dexterity">Dexterity: </label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/>' +
 			'<label for="wits">Wits: </label><input type="number" id="wits" value="1" min="1" max="5"/><br/>' +
 			'<label for="athletics">Athletics: </label><input type="number" id="athletics" value="0" min="0" max="5"/><br/>' +
@@ -39,6 +46,13 @@ $(function() {
 		NAMES_DATABASE = data;
 	});
 
+	// selector refresh mini-plugin by Esailija @ Stack Overflow (http://goo.gl/U1YyEm)
+	$.fn.refresh = function() {
+	    var elems = $(this.selector);
+	    this.splice(0, this.length);
+	    this.push.apply(this, elems);
+	    return this;
+	};
 
 
 
@@ -47,8 +61,8 @@ $(function() {
 
 
 
-	function Combatant(name) {
-		this.name = name;
+
+	function Combatant() {
 		this.initiative = 0;
 		this.active = true;
 
@@ -98,36 +112,6 @@ $(function() {
 		printCombatants();
 	});
 
-	$("body").on( "click", ".attack", function() {
-		$("#dialog-form").html(attackWindow);
-
-		$("#dialog").dialog({
-			title: "Attack",
-			autoOpen: false,
-			height: "auto",
-			width: 350,
-			modal: true,
-			buttons: {
-				"Attack": attack,
-				Cancel: function() {
-					$("#dialog").dialog("close");
-				}
-			},
-			close: function() {
-				attackForm[0].reset();
-			}
-		});
-
-		var attackForm = $("#dialog-form").on("submit", function( event ) {
-			event.preventDefault();
-			attack();
-		});
-
-		var id = $(this).parent().attr("id");
-		populateTargetList(id);
-		$("#dialog").dialog("open");
-    });
-
 	$("body").on('click', '.randomize', function() {
 		randomNameGenerator(NAMES_DATABASE);
 		randomStatsGenerator();
@@ -176,25 +160,70 @@ $(function() {
 
 
 
- 
-    function attack() {
-		// stuff happens
-		$("#dialog").dialog("close");
+
+	$("body").on( "click", ".attack", function() {
+		var attackForm, id = $(this).parent().attr("id");
+
+		attackForm = dialogForm.on("submit", function(event) {
+			event.preventDefault();
+			attack(id);
+		});
+
+		dialogForm.html(attackWindow);
+
+		dialog.dialog({
+			title: "Attack",
+			autoOpen: false,
+			height: "auto",
+			width: "auto",
+			modal: true,
+			buttons: {
+				"Attack": attack,
+				Cancel: function() {
+					dialog.dialog("close");
+				}
+			},
+			close: function() {
+				attackForm[0].reset();
+			}
+		});
+
+		populateTargetList(id);
+		dialog.dialog("open");
+	});
+
+	function attack(id) {
+		var attackModifiers, attackPool, attackRoll,
+			attackStunt = $("#attackStunt").val(),
+			attackIsDecisive = $("#attackIsDecisive").val(),
+			target = $("#opponents option:selected").val(),
+			targetDodge = combatants[target].getEvasionPool(),
+			targetParry = combatants[target].getParryPool(),
+			targetDefense = Math.max(targetDodge, targetParry);
+
+		if (attackIsDecisive) attackPool = combatants[id].getDecisivePool();
+		else attackPool = combatants[id].getWitheringPool();
+
+		/*attackPool += attackModifiers;*/
+
+
+
+		dialog.dialog("close");
 	}
 
-    function populateTargetList(id) {
-    	console.groupCollapsed("populating target list");
-    	$("#opponents").empty();console.log("clearing out existing entries");
-    	for (current in combatants) {
-    		if (current != id) {
-    			console.log("adding id",current);
-    			$("#opponents").append('<option value="' + current + '">' + combatants[current].name + '</option>');
-    		} else {
-    			console.log("skipping",current);
-    		}
-    	}
-    	console.groupEnd();
-    }
+	function populateTargetList(id) {
+		console.groupCollapsed("populating target list");
+		$("#opponents").empty();console.log("clearing out existing entries");
+		for (current in combatants) {
+			if (current != id) {
+				console.log("adding id",current);
+				$("#opponents").append('<option value="' + current + '">' + combatants[current].name + '</option>');
+			} else {
+				console.log("skipping",current);
+			}
+		}
+		console.groupEnd();
+	}
 
 
 
@@ -207,61 +236,39 @@ $(function() {
 	$("body").on("click", ".edit, #addCombatant", function() {
 		console.groupCollapsed("Adding or editing");
 
-		$("#dialog-form").html(statsWindow);console.log("Populating dialogbox");
+		dialogForm.html(statsWindow);console.log("Populating dialogbox");
 
 		var addButtons, editButtons,
 			edit = false,
-			name = $("#name"),
-			dexterity = $("#dexterity"),
-			wits = $("#wits"),
-			awareness = $("#awareness"),
-			athletics = $("#athletics"),
-			dodge = $("#dodge"),
-			combat = $("#combat"),
-			accuracy = $("#accuracy"),
-			defense = $("#defense"),
-			mobility = $("#mobility");
+			id = $(this).parent().attr("id");
 
 		if ($(this).attr("class") === "edit") edit = true;console.log("Edit?",edit);
 
-		if (edit) {
-			var id = $(this).parent().attr("id");
+		if (edit) getStats(id);
 
-			name.val(combatants[id].name);
-			dexterity.val(combatants[id].dexterity);
-			wits.val(combatants[id].wits);
-			awareness.val(combatants[id].awareness);
-			athletics.val(combatants[id].athletics);
-			dodge.val(combatants[id].dodge);
-			combat.val(combatants[id].combat);
-			accuracy.val(combatants[id].accuracy);
-			defense.val(combatants[id].defense);
-			mobility.val(combatants[id].mobility);
-		}
-
-		$("#dialog").dialog({
+		dialog.dialog({
 			title: (edit ? "Edit combatant" : "Add combatant"),
 			autoOpen: false,
 			height: "auto",
-			width: 350,
+			width: "auto",
 			modal: true,
 			close: (edit ? editClose : addClose)});
 
 		if (edit) {
-			$("#dialog").dialog("option", "buttons", [
+			dialog.dialog("option", "buttons", [
 				{ text: "Edit combatant", click: editCombatant },
 				{ text: "Cancel", click: function() {
-					$("#dialog").dialog("close");
+					dialog.dialog("close");
 				}}]);
 		} else {
-			$("#dialog").dialog("option", "buttons", [
+			dialog.dialog("option", "buttons", [
 				{ text: "Add combatant", click: addCombatant },
 				{ text: "Cancel", click: function() {
-					$("#dialog").dialog("close");
+					dialog.dialog("close");
 				}}]);
 		}
 
-		$("#dialog").dialog("open");
+		dialog.dialog("open");
 
 		console.groupEnd();
 
@@ -270,23 +277,23 @@ $(function() {
 			combatantIndex++;console.log("combatantIndex is now",combatantIndex);
 			numCombatants++;console.log("numCombatants is now",numCombatants);
 
-			combatants[combatantIndex] = new Combatant(name.val());
+			combatants[combatantIndex] = new Combatant();
 			recordStats(combatantIndex);
 			combatants[combatantIndex].initiative = combatants[combatantIndex].joinBattle();
 
 			printCombatants();console.groupEnd();
 
-			$("#dialog").dialog("close");
+			dialog.dialog("close");
 		}
 
 		function editCombatant() {
 			recordStats(id);
 			printCombatants();
-			$("#dialog").dialog("close");
+			dialog.dialog("close");
 		}
 
 		function editClose() {
-			var editCombatantForm = $("#dialog-form").on("submit", function(event) {
+			var editCombatantForm = dialogForm.on("submit", function(event) {
 				event.preventDefault();
 				editCombatant();
 			});
@@ -295,7 +302,7 @@ $(function() {
 		}
 
 		function addClose() {
-			var addCombatantForm = $("#dialog-form").on("submit", function(event) {
+			var addCombatantForm = dialogForm.on("submit", function(event) {
 				event.preventDefault();
 				addCombatant();
 			});
@@ -303,16 +310,40 @@ $(function() {
 			addCombatantForm[0].reset();
 		}
 
+		function getStats(i) {
+			dialogFormInputs.refresh();
+
+			dialogFormInputs.each(function() {
+				var stat = $(this).attr("id"),
+					evalStr = "$(this).val(combatants["+i+"]."+stat+")";
+				if (stat) eval(evalStr);
+			});
+		}
+
 		function recordStats(i) {
-			combatants[i].dexterity = parseInt(dexterity.val());
-			combatants[i].wits = parseInt(wits.val());
-			combatants[i].awareness = parseInt(awareness.val());
-			combatants[i].athletics = parseInt(athletics.val());
-			combatants[i].dodge = parseInt(dodge.val());
-			combatants[i].combat = parseInt(combat.val());
-			combatants[i].accuracy = parseInt(accuracy.val());
-			combatants[i].defense = parseInt(defense.val());
-			combatants[i].mobility = parseInt(mobility.val());
+			console.groupCollapsed("record stats");
+
+			dialogFormInputs.refresh();
+
+			console.log("refreshing dialog form inputs selector");
+			console.log(dialogFormInputs);
+
+			dialogFormInputs.each(function() {
+				var evalStr,
+					stat = $(this).attr("id"),
+					value = $(this).val();
+
+				if (stat) {
+					if (stat === "name") evalStr = "combatants["+i+"]."+stat+" = '"+value+"'";
+					else evalStr = "combatants["+i+"]."+stat+" = parseInt("+value+")";
+	
+					console.log("stat:",stat);console.log("value:",value);console.log("string to evaluate:",evalStr);
+
+					eval(evalStr);
+				}
+			});
+
+			console.groupEnd();
 		}
 	});
 
@@ -385,6 +416,46 @@ $(function() {
 
 
 
+	function doRound() {
+		var whoseTurn = whoseTurnIsIt();
+		if (whoseTurn) {
+			$(resultsWindow).append("Highest active initiative is " + whoseTurnIsIt() + "\n");
+		}
+		else {
+			$(resultsWindow).append("Turn is over!\n");
+			resetActiveStatus();
+		}
+		scrollToBottom();
+	}
+
+	function resetActiveStatus() {
+		for (i in combatants) {
+			combatants[i].active = true;
+		}
+		printCombatants();
+	}
+
+	function whoseTurnIsIt() {
+		var highestInitiative, currentInitiative;
+
+		for (current in combatants) {
+			if (combatants[current].active) {
+				currentInitiative = combatants[current].initiative;
+				if (!highestInitiative || currentInitiative > highestInitiative) highestInitiative = currentInitiative;
+			}
+		}
+
+		return highestInitiative;
+	}
+
+
+
+
+
+
+
+
+
 	function printCombatants() {
 		console.groupCollapsed("printCombatants");
 		$("tr.playerBubble").remove();console.log("deleting existing player list");
@@ -406,7 +477,6 @@ $(function() {
 				' &bull; Evade: ' + combatants[current].getEvasionPool() +
 				' &bull; Rush: ' + combatants[current].getRushPool() +
 				' &bull; Disengage: ' + combatants[current].getDisengagePool() +
-				' &bull; Active: ' + combatants[current].active +
 				'</span><br/>' +
 				'<input type="button" class="attack" value="Attack"/>' +
 				'<input type="button" class="edit" value="Edit"/>' +
@@ -416,6 +486,9 @@ $(function() {
 		}
 
 		console.log("done printing combatants");
+
+		doRound();
+
 		console.groupEnd();
 	}
 
@@ -433,27 +506,6 @@ $(function() {
 		if (a.name > b.name) return 1;
 		else if (a.name < b.name) return -1;
 		else return 0;
-	}
-
-
-
-
-
-
-
-
-
-	function whoseTurnIsIt() {
-		var highestInitiative, currentInitiative;
-
-		for (current in combatants) {
-			if (combatants[current].active) {
-				currentInitiative = combatants[current].initiative;
-				if (currentInitiative > highestInitiative) highestInitiative = currentInitiative;
-			}
-		}
-
-		return highestInitiative;
 	}
 
 
