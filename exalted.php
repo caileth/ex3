@@ -23,13 +23,14 @@
 		#combatants{width:71em;}
 		#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
 		#name {width:25em;}
-
+		
+		.inactive{font-style:italic;background-color:#333;width:75%;height:75%;}
 		.initiative{font:500% Albertus;float:left;margin-right:.1em;}
 		.player{position:relative;border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
-		.randomize{background-image:url('/img/ten_sided_die_12.png');background-repeat:no-repeat;background-position:top left;width:16px;height:16px;}
+		.randomize{background-image:url('/img/ten_sided_die_16.png');background-repeat:no-repeat;background-position:top left;width:20px;height:20px;}
 		.remove{position:absolute;top:50%;right:1em;transform:translateY(-50%);-moz-transform:translateY(-50%);-webkit-transform:translateY(-50%);}
+		.twink{background-image:url('/img/cbe_16.png');background-repeat:no-repeat;background-position:top left;width:20px;height:20px;}
 		.ui-widget{font-size:.75em;}
-		.inactive{font-style:italic;background-color:#333;width:75%;height:75%;}
 	</style>
 	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>

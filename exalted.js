@@ -27,14 +27,16 @@ $(function() {
 		combatants = new Array(),
 		dialog = $("#dialog"),
 		dialogForm = $("#dialog-form"),
-		dialogFormInputs = $("#dialog-form :input");
+		dialogFormInputs = $("#dialog-form :input"),
+		dialogFormNumbers = $("#dialog-form :input[type=number]"),
 		joinBattleButton = $("#joinBattle"),
 		numCombatants = 0,
 		resultsWindow = $("#results"),
 		rollButton = $("#roll"),
 		round = 0,
 		statsWindow = '<input type="text" id="name" placeholder="New Player" autofocus/>' +
-			'<input type="button" class="randomize"/><br/>' +
+			'<input type="button" class="randomize"/>' +
+			'<input type="button" class="twink"/><br/>' +
 			'<label for="strength">Strength: </label><input type="number" id="strength" value="1" min="1" max="5"/><br/>' +
 			'<label for="dexterity">Dexterity: </label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/>' +
 			'<label for="stamina">Stamina: </label><input type="number" id="stamina" value="1" min="1" max="5"/><br/>' +
@@ -74,8 +76,12 @@ $(function() {
 	function Combatant() {
 		this.initiative = 0;
 		this.initiativePending = 0;
+		this.tiebreaker = Math.random();
 		this.active = true;
 
+		this.newTiebreaker = function() {
+			this.tiebreaker = Math.random();
+		}
 		this.getName = function() {
 			return this.name;
 		}
@@ -124,23 +130,21 @@ $(function() {
 
 
 
-	$("body").on('click', '.activeToggle', function() {		
-		var id = $(this).parent().attr("id");
-		if (combatants[id].active) combatants[id].active = false;
-		else combatants[id].active = true;
-		doRound();
-	});
-
 	$("body").on('click', '.randomize', function() {
 		randomNameGenerator(NAMES_DATABASE);
 		randomStatsGenerator();
 	});
 
+	$("body").on('click', '.twink', function() {
+		twinkNameGenerator();
+		twinkStatsGenerator();
+	});
+
 	$("body").on('click', '.remove', function() {
 		var id = $(this).parent().attr("id");console.log(combatants[id].name,"removed");
 		combatants.splice(id,1);
-		doRound();
 		numCombatants--;
+		doRound();
 	});
 
 	$(joinBattleButton).click(function() {
@@ -218,21 +222,20 @@ $(function() {
 	});
 
 	function attack(id) {
-		console.groupCollapsed("attack!");
-		console.log(id);
+		console.groupCollapsed("ATTACK!");
 
 		var attackModifiers, attackAuto, attackPool, attackRoll, attackSuccesses, attackThreshold, damage, damageRoll,
-			attackStunt = $("input[name=attackStunt]:checked").val(),
-			attackIsDecisive = $("#attackIsDecisive").val(),
+			attackStunt = parseInt($("input[name=attackStunt]:checked").val()),
+			attackIsDecisive = parseInt($("#attackIsDecisive").val()),
 			damageDoubles = 10,
 			damagePool = combatants[id].getDamage(),
-			defendStunt = $("input[name=defendStunt]:checked").val(),
-			target = $("#opponents option:selected").val(),
+			defendStunt = parseInt($("input[name=defendStunt]:checked").val()),
+			target = parseInt($("#opponents option:selected").val()),
 			targetDodge = combatants[target].getEvasionPool(),
 			targetParry = combatants[target].getParryPool(),
 			targetSoak = combatants[target].getSoak(),
 			targetDefense = Math.max(targetDodge, targetParry);
-
+		
 		if (attackIsDecisive) {
 			attackPool = combatants[id].getDecisivePool();
 			damageDoubles = false;
@@ -259,18 +262,21 @@ $(function() {
 		/*attackPool += attackModifiers;*/
 
 		attackRoll = diceRoller(attackPool, DEFAULT_DIE_SIDE);
-		attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, DEFAULT_DOUBLES, attackAuto);console.log("attack roll:",attackRoll);
+		attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, DEFAULT_DOUBLES, attackAuto);
 		attackThreshold = attackSuccesses - targetDefense;
+
 		resultsWindow.append(combatants[id].name + " rolls: " + attackRoll + "\n");
 		if (attackSuccesses < 0) resultsWindow.append("BOTCH!\n");
 		else if (attackThreshold >= 0) resultsWindow.append("Success! " + attackThreshold + " net successes!\n");
 		else resultsWindow.append("Failure!\n");
 
 		if (attackSuccesses > 0 && attackThreshold >= 0) {
+			resultsWindow.append("Attacker base damage pool: " + damagePool + "; Defender soak: " + targetSoak + "\n");
+
 			damagePool += (attackThreshold - targetSoak);
 			damagePool = Math.max(damagePool, combatants[id].overwhelming, 1);
 			damageRoll = diceRoller(damagePool, DEFAULT_DIE_SIDE);
-			damage = successChecker(damageRoll, DEFAULT_TARGET, damageDoubles);
+			damage = Math.max(successChecker(damageRoll, DEFAULT_TARGET, damageDoubles),0);
 
 			resultsWindow.append(combatants[id].name + " rolls damage: " + damageRoll + "\n");
 			resultsWindow.append(damage + " damage!\n");
@@ -451,8 +457,9 @@ $(function() {
 
 
 	function randomStatsGenerator() {
-		console.groupCollapsed("Stats generator");
-		$("#dialog-form :input[type=number]").each(function(){
+		console.groupCollapsed("Stats generator");		
+		dialogFormNumbers.refresh();
+		dialogFormNumbers.each(function(){
 			var min = parseInt($(this).attr("min")),
 				max = parseInt($(this).attr("max")),
 				diff = max - min,
@@ -503,6 +510,20 @@ $(function() {
 		console.groupEnd();
 	}
 
+	function twinkNameGenerator() {
+		var names = ["Reborn Vermillion Havoc","Chejop Kejak","The Scarlet Empress","The Ebon Dragon","The Unconquered Sun","Invincible Sword Princess","Killfuck Soulshitter"],
+			pick = Math.floor(Math.random() * names.length);
+
+		$("#name").val(names[pick]);
+	}
+
+	function twinkStatsGenerator() {
+		dialogFormNumbers.refresh();
+		dialogFormNumbers.each(function(){
+			$(this).val(parseInt($(this).attr("max")));
+		});
+	}
+
 
 
 
@@ -512,30 +533,42 @@ $(function() {
 
 
 	function doRound() {
-		var whoseTurn = whoseTurnIsIt();
+		if (numCombatants > 1) {
+			var whoseTurn = whoseTurnIsIt();
 
-		// set tick to highest active initiative
-		// resolve all pending damage at higher initiative than current tick
-		// if no actives, resolve all pending damage and reset active status
+			// set tick to highest active initiative
+			// resolve all pending damage at higher initiative than current tick
+			// if no actives, resolve all pending damage and reset active status
 
-		if (whoseTurn) {
-			resolvePendingDamage(whoseTurn);
-			$(resultsWindow).append("Tick " + whoseTurn + "\n");
-		} else {
-			resetActiveStatus();
-			$(resultsWindow).append("Round is over!\n");
+			if (whoseTurn) {
+				resolvePendingDamage(whoseTurn);
+				resultsWindow.append("Tick " + whoseTurn + "\n");
+			} else {
+				resetActiveStatus();
+				resultsWindow.append("Round is over!\n");
+				resetTiebreakers();
+				doRound();
+			}
 		}
-		scrollToBottom();
 		printCombatants();
+		scrollToBottom();
 	}
 
 	function resolvePendingDamage(tick) {
+		combatants.sort(sortbyInitiative);
+
 		for (i in combatants) {
 			if ((combatants[i].initiative > tick || !tick) && combatants[i].initiativePending != 0) {
-				$(resultsWindow).append("Resolving " + combatants[i].name + " pending initiative change of " + combatants[i].initiativePending + "\n");
+				resultsWindow.append("Resolving " + combatants[i].name + " pending initiative change of " + combatants[i].initiativePending + "\n");
 				combatants[i].initiative += combatants[i].initiativePending;
 				combatants[i].initiativePending = 0;
 			}
+		}
+	}
+
+	function resetTiebreakers() {
+		for (i in combatants) {
+			combatants[i].newTiebreaker();
 		}
 	}
 
@@ -584,7 +617,6 @@ $(function() {
 				'</span><br/>' +
 				'<input type="button" class="attack" value="Attack"/>' +
 				'<input type="button" class="edit" value="Edit"/>' +
-				'<input type="button" class="activeToggle" value="Toggle Active"/>' +
 				'<input type="button" class="remove" value="X"/>' +
 				'</td></tr>');
 		}
@@ -600,7 +632,11 @@ $(function() {
 		else {
 			if (a.initiative > b.initiative) return -1;
 			else if (a.initiative < b.initiative) return 1;
-			else return 0;
+			else {
+				if (a.tiebreaker > b.tiebreaker) return -1;
+				else if (a.tiebreaker < b.tiebreaker) return 1;
+				else return 0;
+			}
 		}
 	}
 
