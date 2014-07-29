@@ -1,5 +1,5 @@
 $(function() {
-	var NAMES_DATABASE,
+	var GEAR_DATABASE, NAMES_DATABASE,
 		DEFAULT_DIE_SIDE = 10,
 		DEFAULT_DOUBLES = 10,
 		DEFAULT_NUM_DICE = 5,
@@ -45,6 +45,22 @@ $(function() {
 			'<label for="awareness">Awareness: </label><input type="number" id="awareness" value="0" min="0" max="5"/><br/>' +
 			'<label for="dodge">Dodge: </label><input type="number" id="dodge" value="0" min="0" max="5"/><br/>' +
 			'<label for="combat">Combat Ability: </label><input type="number" id="combat" value="0" min="0" max="5"/><br/>' +
+			'<label for="weaponPicker">Weapon: </label><select id="weaponPicker">' +
+			'<option value="weapon.mortal.light">Unarmed</option>' +
+			'<option value="weapon.mortal.light">Light Mortal Weapon</option>' +
+			'<option value="weapon.mortal.medium">Medium Mortal Weapon</option>' +
+			'<option value="weapon.mortal.heavy">Heavy Mortal Weapon</option>' +
+			'<option value="weapon.artifact.light">Light Artifact Weapon</option>' +
+			'<option value="weapon.artifact.medium">Medium Artifact Weapon</option>' +
+			'<option value="weapon.artifact.heavy">Heavy Artifact Weapon</option></select><br/>' +
+			'<label for="armorPicker">Armor: </label><select id="armorPicker">' +
+			'<option value="armor.none.unarmored">Unarmored</option>' +
+			'<option value="armor.mortal.light">Light Mortal Armor</option>' +
+			'<option value="armor.mortal.medium">Medium Mortal Armor</option>' +
+			'<option value="armor.mortal.heavy">Heavy Mortal Armor</option>' +
+			'<option value="armor.artifact.light">Light Artifact Armor</option>' +
+			'<option value="armor.artifact.medium">Medium Artifact Armor</option>' +
+			'<option value="armor.artifact.heavy">Heavy Artifact Armor</option></select><br/>' +
 			'<label for="accuracy">Weapon Accuracy: </label><input type="number" id="accuracy" value="4" min="0" max="5"/><br/>' +
 			'<label for="damage">Weapon Damage: </label><input type="number" id="damage" value="7" min="7" max="14"/><br/>' +
 			'<label for="overwhelming">Weapon Overwhelming: </label><input type="number" id="overwhelming" value="0" min="-1" max="4"/><br/>' +
@@ -53,7 +69,28 @@ $(function() {
 			'<label for="hardness">Armor Hardness: </label><input type="number" id="hardness" value="0" min="0" max="10"/><br/>' +
 			'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-2" max="0"/>';
 
+	$.getJSON('./includes/exaltedgear.json', function(data) {
+		// exaltedgear.json syntax:
+		// "GEAR_DATABASE" : {
+		//   "weapon" : { "mortal/artifact" : { "weight" : [accuracy, damage, overwhelming, defense] } },
+		//   "armor" : { "mortal/artifact" : { "weight" : [soak, hardness, mobility penalty] } }
+		// }
+
+		GEAR_DATABASE = data;
+	});
+
 	$.getJSON('./includes/exaltedname.json', function(data) {
+		// exaltedname.json syntax:
+		// (only two locales at the moment are "imperial" and "threshold")
+		// "NAMES_DATABASE" : {
+		//   "locale" : {
+		//     "templates" : { "template" : [wordgroup, wordgroup, wordgroup, ...] }
+		//     "words" : { "wordgroup" : [word, word, word, ...] }
+		//   },
+		//   "locale" : {...},
+		//   ...
+		// }
+
 		NAMES_DATABASE = data;
 	});
 
@@ -145,6 +182,10 @@ $(function() {
 		combatants.splice(id,1);
 		numCombatants--;
 		doRound();
+	});
+
+	$(document).on('change', '#armorPicker, #weaponPicker', function() {
+		doPickerStats();
 	});
 
 	$(joinBattleButton).click(function() {
@@ -436,7 +477,9 @@ $(function() {
 
 				if (stat) {
 					if (stat === "name") evalStr = "combatants["+i+"]."+stat+" = '"+value+"'";
-					else evalStr = "combatants["+i+"]."+stat+" = parseInt("+value+")";
+					else if (stat === "armorPicker" || stat === "weaponPicker") {
+						// do nothing
+					} else evalStr = "combatants["+i+"]."+stat+" = parseInt("+value+")";
 	
 					console.log("stat:",stat);console.log("value:",value);console.log("string to evaluate:",evalStr);
 
@@ -457,13 +500,18 @@ $(function() {
 
 
 	function randomStatsGenerator() {
-		console.groupCollapsed("Stats generator");		
+		var armorOptions = $("#armorPicker option"),
+			weaponOptions = $("#weaponPicker option"),
+			randomArmor = ~~(Math.random() * armorOptions.length),
+			randomWeapon = ~~(Math.random() * weaponOptions.length);
+
+		console.groupCollapsed("Stats generator");
 		dialogFormNumbers.refresh();
 		dialogFormNumbers.each(function(){
 			var min = parseInt($(this).attr("min")),
 				max = parseInt($(this).attr("max")),
 				diff = max - min,
-				randomVal = Math.floor(Math.random() * diff) + min;
+				randomVal = ~~(Math.random() * diff) + min;
 
 			console.log("min:",min);
 			console.log("max:",max);
@@ -472,20 +520,25 @@ $(function() {
 
 			$(this).val(randomVal);
 		});
+
+		armorOptions.eq(randomArmor).prop('selected', true);
+		weaponOptions.eq(randomWeapon).prop('selected', true);
+		doPickerStats();
+
 		console.groupEnd();
 	}
 
 	function randomNameGenerator(data) {
 		console.groupCollapsed("Name generator");
 		var localeCount = Object.keys(data).length,
-			localeID = Math.floor((Math.random() * localeCount)),
+			localeID = ~~(Math.random() * localeCount),
 			locale = Object.keys(data)[localeID],
 			templateGroupCount = eval("Object.keys(data." + locale + ".templates).length"),
-			templateGroupID = Math.floor((Math.random() * templateGroupCount)),
+			templateGroupID = ~~(Math.random() * templateGroupCount),
 			templateGroup = eval("Object.keys(data." + locale + ".templates)[templateGroupID]"),
 			wordGroupsCount = eval("Object.keys(data." + locale + ".words).length"),
 			templateCount = eval("Object.keys(data." + locale + ".templates." + templateGroup + ").length"),
-			templateID = Math.floor((Math.random() * templateCount)),
+			templateID = ~~(Math.random() * templateCount),
 			template = eval("data." + locale + ".templates."+templateGroup+"["+templateID+"]"),
 			output = "";
 
@@ -498,7 +551,7 @@ $(function() {
 		for (var i in template) {
 			var wordGroup = eval("data." + locale + ".words."+template[i]),
 				numWords = wordGroup.length,
-				word = Math.floor((Math.random() * numWords));
+				word = ~~(Math.random() * numWords);
 			output += wordGroup[word];
 		}
 		console.log("Result:",output);
@@ -512,16 +565,25 @@ $(function() {
 
 	function twinkNameGenerator() {
 		var names = ["Reborn Vermillion Havoc","Chejop Kejak","The Scarlet Empress","The Ebon Dragon","The Unconquered Sun","Invincible Sword Princess","Killfuck Soulshitter"],
-			pick = Math.floor(Math.random() * names.length);
+			pick = ~~(Math.random() * names.length);
 
 		$("#name").val(names[pick]);
 	}
 
 	function twinkStatsGenerator() {
+		var armorOptions = $("#armorPicker option"),
+			weaponOptions = $("#weaponPicker option"),
+			lastArmor = armorOptions.length - 1,
+			lastWeapon = weaponOptions.length - 1;
+
 		dialogFormNumbers.refresh();
 		dialogFormNumbers.each(function(){
 			$(this).val(parseInt($(this).attr("max")));
 		});
+
+		armorOptions.eq(lastArmor).prop('selected', true);
+		weaponOptions.eq(lastWeapon).prop('selected', true);
+		doPickerStats();
 	}
 
 
@@ -654,6 +716,7 @@ $(function() {
 
 
 
+	// stole this from someone on Stack Overflow
 	function scrollToBottom() {
 		resultsWindow.scrollTop(resultsWindow[0].scrollHeight - resultsWindow.height());
 	}
@@ -730,8 +793,28 @@ $(function() {
 	function dieRoller(sides) {
 		console.groupCollapsed("dieRoller");
 		if (!sides) sides = DEFAULT_DIE_SIDE;
-		var result = Math.floor((Math.random() * sides) + 1);
+		var result = ~~(Math.random() * sides) + 1;
 		console.log("Rolled a " + result + " on a " + sides + "-sided die");
 		console.groupEnd();return result;
+	}
+
+	function doPickerStats() {
+		console.groupCollapsed("gear picker");
+		var armorVal = $("#armorPicker").val(),
+			armorStats = eval("GEAR_DATABASE." + armorVal),
+			weaponVal = $("#weaponPicker").val(),
+			weaponStats = eval("GEAR_DATABASE." + weaponVal);
+
+		$("#armor").val(armorStats[0]);
+		$("#hardness").val(armorStats[1]);
+		$("#mobility").val(armorStats[2]);
+		$("#accuracy").val(weaponStats[0]);
+		$("#damage").val(weaponStats[1]);
+		$("#overwhelming").val(weaponStats[2]);
+		$("#defense").val(weaponStats[3]);
+
+		console.log("new value for #weaponPicker is",weaponVal,":",weaponStats);
+		console.log("new value for #armorPicker is",armorVal,":",armorStats);
+		console.groupEnd();
 	}
 });

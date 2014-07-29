@@ -1,0 +1,29 @@
+{
+  "weapon" : {
+    "mortal" : {
+      "light" : [4,7,0,0],
+      "medium" : [2,9,0,1],
+      "heavy" : [0,11,0,-1]
+    },
+    "artifact" : {
+      "light" : [5,10,2,1],
+      "medium" : [3,12,3,1],
+      "heavy" : [1,14,4,0]
+    }
+  },
+  "armor" : {
+    "none" : {
+      "unarmored" : [0,0,0]
+    },
+    "mortal" : {
+      "light" : [2,0,0],
+      "medium" : [5,0,-1],
+      "heavy" : [8,0,-8]
+    },
+    "artifact" : {
+      "light" : [4,4,0],
+      "medium" : [8,7,-1],
+      "heavy" : [12,10,-2]
+    }
+  }
+}
