@@ -24,15 +24,17 @@ $(function() {
 			'<input type="radio" name="defendStunt" value="2"/>2-point' +
 			'<input type="radio" name="defendStunt" value="3"/>3-point<br/>' +
 			'<label for="attackModifiers">Attack modifier(s): ' +
-			'<input type="number" id="attackModifiers" value="0" min="-5" max="5"/>',
-		combatantIndex = 0,
+			'<input type="number" id="attackModifiers" value="0" min="-5" max="0"/>',
 		combatants = new Array(),
+		combatantsCount = 0,
+		combatantsIndex = 0,
 		dialog = $("#dialog"),
 		dialogForm = $("#dialog-form"),
 		dialogFormInputs = $("#dialog-form :input"),
 		dialogFormNumbers = $("#dialog-form :input[type=number]"),
 		joinBattleButton = $("#joinBattle"),
-		numCombatants = 0,
+		pendingAttacks = new Array(),
+		pendingAttacksIndex = 0,
 		resultsWindow = $("#results"),
 		rollButton = $("#roll"),
 		round = 0,
@@ -169,6 +171,23 @@ $(function() {
 
 
 
+	function PendingAttack(tick, tiebreaker, source, target, damage, isDecisive) {
+		this.tick = tick;
+		this.tiebreaker = tiebreaker;
+		this.source = source;
+		this.target = target;
+		this.damage = damage;
+		this.isDecisive = isDecisive;
+	}
+
+
+
+
+
+
+
+
+
 	$("body").on('click', '.randomize', function() {
 		randomNameGenerator(NAMES_DATABASE);
 		randomStatsGenerator();
@@ -182,7 +201,7 @@ $(function() {
 	$("body").on('click', '.remove', function() {
 		var id = $(this).parent().attr("id");console.log(combatants[id].name,"removed");
 		combatants.splice(id,1);
-		numCombatants--;
+		combatantsCount--;
 		doRound();
 	});
 
@@ -192,8 +211,8 @@ $(function() {
 
 	$(joinBattleButton).click(function() {
 		console.groupCollapsed("joinBattle clicked");
-		console.log(numCombatants,"combatants");
-		if(numCombatants > 1) {
+		console.log(combatantsCount,"combatants");
+		if(combatantsCount > 1) {
 			resultsWindow.append("\n---\n");
 			for (i in combatants) {
 				var joinBattlePool = combatants[i].getJoinBattlePool(),
@@ -331,18 +350,12 @@ $(function() {
 				if (attackIsDecisive) {
 					// stuff happens
 				} else {
-					combatants[id].initiative += damage + 1;
-					combatants[target].initiative -= damage;
+					resolveWitheringAttack(id, target, damage);
 				}
 			} else {
 				resultsWindow.append("Combatants at same initiative, holding resolution until end of tick\n");
-
-				if (attackIsDecisive) {
-					// stuff happens
-				} else {
-					combatants[id].initiativePending += damage + 1;
-					combatants[target].initiativePending -= damage;
-				}
+				pendingAttacks[pendingAttacksIndex] = new PendingAttack(combatants[id].initiative, combatants[id].tiebreaker, id, target, damage, attackIsDecisive);
+				pendingAttacksIndex++;
 			}
 		}
 
@@ -351,6 +364,20 @@ $(function() {
 		dialog.dialog("close");
 		doRound();
 		console.groupEnd();
+	}
+
+	function resolveWitheringAttack(sourceID, targetID, damage) {
+		var isTargetCrashed,
+			wasTargetCrashed = combatants[targetID].initiative < 1;
+
+		combatants[sourceID].initiative += damage + 1;
+		combatants[targetID].initiative -= damage;
+
+		isTargetCrashed = combatants[targetID].initiative < 1;
+
+		if (wasTargetCrashed != isTargetCrashed) {
+			// INITIATIVE CRASH
+		}
 	}
 
 	function populateTargetList(id) {
@@ -416,14 +443,14 @@ $(function() {
 
 		function addCombatant() {
 			console.groupCollapsed("Adding Combatant");
-			combatantIndex++;console.log("combatantIndex is now",combatantIndex);
-			numCombatants++;console.log("numCombatants is now",numCombatants);
+			combatantsIndex++;console.log("combatantsIndex is now",combatantsIndex);
+			combatantsCount++;console.log("combatantsCount is now",combatantsCount);
 
-			combatants[combatantIndex] = new Combatant();
-			recordStats(combatantIndex);
-			combatants[combatantIndex].initiative = combatants[combatantIndex].joinBattle();
+			combatants[combatantsIndex] = new Combatant();
+			recordStats(combatantsIndex);
+			combatants[combatantsIndex].initiative = combatants[combatantsIndex].joinBattle();
 
-			resultsWindow.append(combatants[combatantIndex].getName() + " joins battle at tick " + combatants[combatantIndex].initiative + "\n");
+			resultsWindow.append(combatants[combatantsIndex].getName() + " joins battle at tick " + combatants[combatantsIndex].initiative + "\n");
 			scrollToBottom();
 
 			doRound();console.groupEnd();
@@ -598,7 +625,7 @@ $(function() {
 
 
 	function doRound() {
-		if (numCombatants > 1) {
+		if (combatantsCount > 1) {
 			var whoseTurn = whoseTurnIsIt();
 
 			// set tick to highest active initiative
@@ -620,13 +647,24 @@ $(function() {
 	}
 
 	function resolvePendingDamage(tick) {
-		combatants.sort(sortbyInitiative);
+		pendingAttacks.sort(sortByTiebreaker);
 
-		for (i in combatants) {
-			if ((combatants[i].initiative > tick || !tick) && combatants[i].initiativePending != 0) {
-				resultsWindow.append("Resolving " + combatants[i].name + " pending initiative change of " + combatants[i].initiativePending + "\n");
-				combatants[i].initiative += combatants[i].initiativePending;
-				combatants[i].initiativePending = 0;
+		for (i in pendingAttacks) {
+			if (pendingAttacks[i].tick > tick || !tick) {
+				var damage = pendingAttacks[i].damage,
+					sourceID = pendingAttacks[i].source,
+					targetID = pendingAttacks[i].target;
+
+				resultsWindow.append("Resolving " + combatants[sourceID].name + "'s attack vs. " + combatants[targetID].name +
+					" for " + damage + " damage\n");
+
+				if (pendingAttacks[i].isDecisive) {
+					// resolve decisive attack
+				} else {
+					resolveWitheringAttack(sourceID, targetID, damage);
+				}
+
+				pendingAttacks.splice(i, 1);
 			}
 		}
 	}
@@ -702,6 +740,16 @@ $(function() {
 				else if (a.tiebreaker < b.tiebreaker) return 1;
 				else return 0;
 			}
+		}
+	}
+
+	function sortByTiebreaker(a, b) {
+		if (a.tick > b.tick) return -1;
+		else if (a.tick < b.tick) return 1;
+		else {
+			if (a.tiebreaker > b.tiebreaker) return -1;
+			else if (a.tiebreaker < b.tiebreaker) return 1;
+			else return 0;
 		}
 	}
 

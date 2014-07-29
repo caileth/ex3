@@ -37,7 +37,7 @@
 	<script src="./exalted.js"></script>
 </head>
 <body>
-	<h1>Exalted Toolkit</h1><br/>
+	<h1>Ex3 Combat Toolkit</h1><br/>
 
 	<div>
 		<h2>Results</h2><br/>
