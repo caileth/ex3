@@ -22,7 +22,9 @@ $(function() {
 			'<input type="radio" name="defendStunt" value="0"/>None' +
 			'<input type="radio" name="defendStunt" value="1"/>1-point' +
 			'<input type="radio" name="defendStunt" value="2"/>2-point' +
-			'<input type="radio" name="defendStunt" value="3"/>3-point<br/>',
+			'<input type="radio" name="defendStunt" value="3"/>3-point<br/>' +
+			'<label for="attackModifiers">Attack modifier(s): ' +
+			'<input type="number" id="attackModifiers" value="0" min="-5" max="5"/>',
 		combatantIndex = 0,
 		combatants = new Array(),
 		dialog = $("#dialog"),
@@ -265,7 +267,8 @@ $(function() {
 	function attack(id) {
 		console.groupCollapsed("ATTACK!");
 
-		var attackModifiers, attackAuto, attackPool, attackRoll, attackSuccesses, attackThreshold, damage, damageRoll,
+		var attackAuto, attackPool, attackRoll, attackSuccesses, attackThreshold, damage, damageRoll,
+			attackModifiers = parseInt($("#attackModifiers").val()),
 			attackStunt = parseInt($("input[name=attackStunt]:checked").val()),
 			attackIsDecisive = parseInt($("#attackIsDecisive").val()),
 			damageDoubles = 10,
@@ -276,13 +279,15 @@ $(function() {
 			targetParry = combatants[target].getParryPool(),
 			targetSoak = combatants[target].getSoak(),
 			targetDefense = Math.max(targetDodge, targetParry);
+
+		attackPool = attackModifiers;
 		
 		if (attackIsDecisive) {
-			attackPool = combatants[id].getDecisivePool();
+			attackPool += combatants[id].getDecisivePool();
 			damageDoubles = false;
 			resultsWindow.append(combatants[id].name + " attempts a DECISIVE ATTACK against " + combatants[target].name + "!\n");
 		} else {
-			attackPool = combatants[id].getWitheringPool();
+			attackPool += combatants[id].getWitheringPool();
 			resultsWindow.append(combatants[id].name + " attempts a Withering Attack (" + attackPool +
 				" dice) against " + combatants[target].name + " (" + targetDefense + " defense)!\n");
 		}
@@ -299,8 +304,6 @@ $(function() {
 			targetDefense += defendStunt;
 			// combatants[target].willpower += attackStunt - 1;
 		}
-
-		/*attackPool += attackModifiers;*/
 
 		attackRoll = diceRoller(attackPool, DEFAULT_DIE_SIDE);
 		attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, DEFAULT_DOUBLES, attackAuto);
