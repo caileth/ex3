@@ -32,6 +32,7 @@ $(function() {
 		dialogForm = $("#dialog-form"),
 		dialogFormInputs = $("#dialog-form :input"),
 		dialogFormNumbers = $("#dialog-form :input[type=number]"),
+		guid = (function(){function s4(){return Math.floor((1+Math.random())*0x10000).toString(16).substring(1);}return function(){return s4()+s4()+'-'+s4()+'-'+s4()+'-'+s4()+'-'+s4()+s4()+s4();};})(),
 		joinBattleButton = $("#joinBattle"),
 		pendingAttacks = new Array(),
 		pendingAttacksIndex = 0,
@@ -117,12 +118,8 @@ $(function() {
 	function Combatant() {
 		this.initiative = 0;
 		this.initiativePending = 0;
-		this.tiebreaker = Math.random();
 		this.active = true;
 
-		this.newTiebreaker = function() {
-			this.tiebreaker = Math.random();
-		}
 		this.getName = function() {
 			return this.name;
 		}
@@ -171,9 +168,9 @@ $(function() {
 
 
 
-	function PendingAttack(tick, tiebreaker, source, target, damage, isDecisive) {
+	function PendingAttack(tick, source, target, damage, isDecisive) {
 		this.tick = tick;
-		this.tiebreaker = tiebreaker;
+		this.tiebreaker = Math.random();
 		this.source = source;
 		this.target = target;
 		this.damage = damage;
@@ -354,7 +351,7 @@ $(function() {
 				}
 			} else {
 				resultsWindow.append("Combatants at same initiative, holding resolution until end of tick\n");
-				pendingAttacks[pendingAttacksIndex] = new PendingAttack(combatants[id].initiative, combatants[id].tiebreaker, id, target, damage, attackIsDecisive);
+				pendingAttacks[pendingAttacksIndex] = new PendingAttack(combatants[id].initiative, id, target, damage, attackIsDecisive);
 				pendingAttacksIndex++;
 			}
 		}
@@ -641,7 +638,6 @@ $(function() {
 			} else {
 				resetActiveStatus();
 				resultsWindow.append("Round is over!\n");
-				resetTiebreakers();
 				doRound();
 			}
 		}
@@ -669,12 +665,6 @@ $(function() {
 
 				pendingAttacks.splice(i, 1);
 			}
-		}
-	}
-
-	function resetTiebreakers() {
-		for (i in combatants) {
-			combatants[i].newTiebreaker();
 		}
 	}
 
@@ -738,11 +728,7 @@ $(function() {
 		else {
 			if (a.initiative > b.initiative) return -1;
 			else if (a.initiative < b.initiative) return 1;
-			else {
-				if (a.tiebreaker > b.tiebreaker) return -1;
-				else if (a.tiebreaker < b.tiebreaker) return 1;
-				else return 0;
-			}
+			else return 0;
 		}
 	}
 
