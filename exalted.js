@@ -413,7 +413,10 @@ $(function() {
 
 		if ($(this).attr("class") === "edit") edit = true;console.log("Edit?",edit);
 
-		if (edit) getStats(id);
+		if (edit) {
+			dialogForm.append('<br/><label for="initiative">Initiative: </label><input type="number" id="initiative" value="0"/>');
+			getStats(id);
+		}
 
 		dialog.dialog({
 			title: (edit ? "Edit combatant" : "Add combatant"),
