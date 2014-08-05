@@ -13,7 +13,8 @@
 		h2,h3,.name{font-family:Missive;}
 		h2,.name{font-size:200%;}
 		h3{font-size:150%;}
-		html{height:100%;border-left:solid crimson 50px;}
+		html{height:100%;}
+		body{border-left:solid crimson 50px;margin:0;}
 		body,textarea,input[type=button]{font-family:Goudy;}
 		table{width:600px;padding:1em;}
 		textarea{width:85em;height:10em;}
