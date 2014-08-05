@@ -4,15 +4,19 @@ $(function() {
 		DEFAULT_DOUBLES = 10,
 		DEFAULT_NUM_DICE = 5,
 		DEFAULT_TARGET = 7,
+		INITIATIVE_BREAK_BONUS = 5,
+		INITIATIVE_RESET_TURNS = 3,
+		INITIATIVE_RESET_VALUE = 3,
 		JB_DIFFICULTY = 0,
 		JB_DOUBLES = false,
 		JB_EXTRA_SUX = 3,
 		JB_TARGET = 7,
+		WITHERING_PENALTY_INITIATIVE = 15,
 		attackWindow = '<label for="opponents">Target:</label>' +
 			'<select id="opponents"></select><br/>' +
 			'<label for="attackIsDecisive">Attack Type:</label>' +
-			'<input type="radio" name="attackIsDecisive" value="false">Withering' +
-			'<input type="radio" name="attackIsDecisive" value="true">Decisive<br/>' +
+			'<input type="radio" name="attackIsDecisive" id="withering" value="false">Withering' +
+			'<input type="radio" name="attackIsDecisive" id="decisive" value="true">Decisive<br/>' +
 			'<label for="attackStunt">Attacking Stunt:</label>' +
 			'<input type="radio" name="attackStunt" value="0"/>None' +
 			'<input type="radio" name="attackStunt" value="1"/>1-point' +
@@ -118,6 +122,8 @@ $(function() {
 		this.initiative = 0;
 		this.initiativePending = 0;
 		this.active = true;
+		this.crashedAndWithered = false;
+		this.turnsInCrash = 0;
 
 		this.getName = function() {
 			return this.name;
@@ -183,6 +189,97 @@ $(function() {
 
 
 
+
+	$("body").on("click", ".edit, #addCombatant", function() {
+		console.groupCollapsed("Adding or editing");
+
+		dialogForm.html(statsWindow);console.log("Populating dialogbox");
+
+		var addButtons, editButtons,
+			edit = false,
+			id = $(this).parent().attr("id");
+
+		if ($(this).attr("class") === "edit") edit = true;console.log("Edit?",edit);
+
+		if (edit) {
+			dialogForm.append('<br/><label for="initiative">Initiative: </label><input type="number" id="initiative" value="0"/>');
+			getStats(id);
+		}
+
+		dialog.dialog({
+			title: (edit ? "Edit combatant" : "Add combatant"),
+			autoOpen: false,
+			height: "auto",
+			width: "auto",
+			modal: true,
+			close: (edit ? editClose : addClose)});
+
+		if (edit) {
+			dialog.dialog("option", "buttons", [
+				{ text: "Edit combatant", click: editCombatant },
+				{ text: "Cancel", click: function() {
+					dialog.dialog("close");
+				}}]);
+		} else {
+			dialog.dialog("option", "buttons", [
+				{ text: "Add combatant", click: addCombatant },
+				{ text: "Cancel", click: function() {
+					dialog.dialog("close");
+				}}]);
+		}
+
+		dialog.dialog("open");
+
+		console.groupEnd();
+
+		function editCombatant() {
+			console.groupCollapsed("editCombatant");
+
+			recordStats(id);
+			doRound();
+			dialog.dialog("close");console.log("closing dialog");
+
+			console.groupEnd();
+		}
+	});
+
+	$("body").on( "click", ".attack", function() {
+		var attackForm,
+			id = $(this).parent().attr("id"),
+			lookup = lookupByID(combatants);
+
+		attackForm = dialogForm.on("submit", function(event) {
+			event.preventDefault();
+			attack(id);
+		});
+
+		dialogForm.html(attackWindow);
+
+		dialog.dialog({
+			title: "Attack",
+			autoOpen: false,
+			height: "auto",
+			width: "auto",
+			modal: true,
+			buttons: {
+				Attack: function() {
+					attack(id);
+				},
+				Cancel: function() {
+					dialog.dialog("close");
+				}
+			},
+			close: function() {
+				attackForm[0].reset();
+			}
+		});
+
+		populateTargetList(id);
+
+		if (lookup[id].initiative < 1) $("#decisive").prop('disabled', true);
+
+		dialog.dialog("open");
+	});
 
 	$("body").on('click', '.randomize', function() {
 		randomNameGenerator(NAMES_DATABASE);
@@ -251,40 +348,6 @@ $(function() {
 
 
 
-	$("body").on( "click", ".attack", function() {
-		var attackForm,
-			id = $(this).parent().attr("id");
-
-		attackForm = dialogForm.on("submit", function(event) {
-			event.preventDefault();
-			attack(id);
-		});
-
-		dialogForm.html(attackWindow);
-
-		dialog.dialog({
-			title: "Attack",
-			autoOpen: false,
-			height: "auto",
-			width: "auto",
-			modal: true,
-			buttons: {
-				Attack: function() {
-					attack(id);
-				},
-				Cancel: function() {
-					dialog.dialog("close");
-				}
-			},
-			close: function() {
-				attackForm[0].reset();
-			}
-		});
-
-		populateTargetList(id);
-		dialog.dialog("open");
-	});
-
 	function attack(id) {
 		console.groupCollapsed("Attack!",id);
 
@@ -344,8 +407,7 @@ $(function() {
 			damageRoll = diceRoller(damagePool, DEFAULT_DIE_SIDE);
 			damage = Math.max(successChecker(damageRoll, DEFAULT_TARGET, damageDoubles),0);
 
-			resultsWindow.append(lookup[id].name + " rolls damage: " + damageRoll + "\n");
-			resultsWindow.append(damage + " damage!\n");
+			resultsWindow.append(lookup[id].name + " rolls " + damage + " damage! (" + damageRoll + ")\n");
 		}
 
 		if (damage > 0) {
@@ -369,18 +431,42 @@ $(function() {
 	}
 
 	function resolveWitheringAttack(sourceID, targetID, damage) {
-		var isTargetCrashed,
-			lookup = lookupByID(combatants),
-			wasTargetCrashed = lookup[targetID].initiative < 1;
+		console.groupCollapsed("Resolve Withering Attack");
 
-		lookup[sourceID].initiative += damage + 1;
+		var isTargetCrashed, lookup = lookupByID(combatants),
+			wasTargetCrashed = lookup[targetID].initiative < 1,
+			witheringPenalty = lookup[sourceID].initiative >= WITHERING_PENALTY_INITIATIVE;
+
+		lookup[sourceID].initiative++;
+		resultsWindow.append(lookup[sourceID].name + " gains an Initiative for a successful Withering Attack.\n");
+
+		if (lookup[targetID].crashedAndWithered) {
+			lookup[sourceID].initiative += Math.min(1, damage);
+			resultsWindow.append(lookup[targetID].name + " is in Crash and has already been withered. " +
+				lookup[sourceID].name + " gains " + Math.min(1, damage) + " Initiative");
+		} else if (witheringPenalty) {
+			lookup[sourceID].initiative += Math.ceil(damage / 2);
+			resultsWindow.append(lookup[sourceID].name + " is over " + WITHERING_PENALTY_INITIATIVE +
+				" Initiative and gains only " + Math.ceil(damage / 2) + " from the attack");
+		} else {
+			lookup[sourceID].initiative += damage;
+			resultsWindow.append(lookup[sourceID].name + " gains " + damage + " Initiative");
+		}
+		
 		lookup[targetID].initiative -= damage;
+		resultsWindow.append("&mdash;" + lookup[targetID].name + " loses " + damage + "!\n");
 
 		isTargetCrashed = lookup[targetID].initiative < 1;
+		console.log("is target crashed?",isTargetCrashed);
 
 		if (wasTargetCrashed != isTargetCrashed) {
-			// INITIATIVE CRASH
+			lookup[sourceID].initiative += INITIATIVE_BREAK_BONUS;
+			resultsWindow.append(lookup[sourceID].name+" gains Initiative Break bonus!\n");
 		}
+
+		if (isTargetCrashed) lookup[targetID].crashedAndWithered = true;
+
+		console.groupEnd();
 	}
 
 	function populateTargetList(id) {
@@ -405,59 +491,6 @@ $(function() {
 
 
 
-
-	$("body").on("click", ".edit, #addCombatant", function() {
-		console.groupCollapsed("Adding or editing");
-
-		dialogForm.html(statsWindow);console.log("Populating dialogbox");
-
-		var addButtons, editButtons,
-			edit = false,
-			id = $(this).parent().attr("id");
-
-		if ($(this).attr("class") === "edit") edit = true;console.log("Edit?",edit);
-
-		if (edit) {
-			dialogForm.append('<br/><label for="initiative">Initiative: </label><input type="number" id="initiative" value="0"/>');
-			getStats(id);
-		}
-
-		dialog.dialog({
-			title: (edit ? "Edit combatant" : "Add combatant"),
-			autoOpen: false,
-			height: "auto",
-			width: "auto",
-			modal: true,
-			close: (edit ? editClose : addClose)});
-
-		if (edit) {
-			dialog.dialog("option", "buttons", [
-				{ text: "Edit combatant", click: editCombatant },
-				{ text: "Cancel", click: function() {
-					dialog.dialog("close");
-				}}]);
-		} else {
-			dialog.dialog("option", "buttons", [
-				{ text: "Add combatant", click: addCombatant },
-				{ text: "Cancel", click: function() {
-					dialog.dialog("close");
-				}}]);
-		}
-
-		dialog.dialog("open");
-
-		console.groupEnd();
-
-		function editCombatant() {
-			console.groupCollapsed("editCombatant");
-
-			recordStats(id);
-			doRound();
-			dialog.dialog("close");console.log("closing dialog");
-
-			console.groupEnd();
-		}
-	});
 
 	function addCombatant() {
 		console.groupCollapsed("Adding Combatant");
@@ -663,6 +696,7 @@ $(function() {
 				resolvePendingDamage(whoseTurn);
 				resultsWindow.append("Tick " + whoseTurn + "\n");
 			} else {
+				iterateCrashCounter();
 				resetActiveStatus();
 				resultsWindow.append("Round is over!\n");
 				doRound();
@@ -672,6 +706,21 @@ $(function() {
 		printCombatants();
 		scrollToBottom();
 		console.groupEnd();
+	}
+
+	function iterateCrashCounter() {
+		for (i in combatants) {
+			if (combatants[i].initiative < 1) combatants[i].turnsInCrash++;
+			else combatants[i].turnsInCrash = 0;
+		}
+
+		for (j in combatants) {
+			if (combatants[j].turnsInCrash >= INITIATIVE_RESET_TURNS) {
+				combatants[j].initiative = INITIATIVE_RESET_VALUE;
+				combatants[j].turnsInCrash = 0;
+				resultsWindow.append(combatants[j].name + " achieves Initiative Reset!\n");
+			}
+		}
 	}
 
 	function resolvePendingDamage(tick) {
@@ -705,6 +754,7 @@ $(function() {
 
 		for (i in combatants) {
 			combatants[i].active = true;
+			combatants[i].crashedAndWithered = false;
 		}
 	}
 
@@ -730,6 +780,7 @@ $(function() {
 		for (i in combatants) {
 			$("#combatants > tbody:last").append('<tr class="' + 
 				(combatants[i].active ? '' : 'inactive ') +
+				(combatants[i].initiative > 0 ? '' : 'crashed ') +
 				'playerBubble">' + 
 				'<td name="' + combatants[i].name + '" id="' + combatants[i].id + '" class="player">' +
 				'<span class="initiative">' + combatants[i].initiative + '</span>' +
@@ -772,12 +823,6 @@ $(function() {
 			else if (a.tiebreaker < b.tiebreaker) return 1;
 			else return 0;
 		}
-	}
-
-	function sortbyName(a, b) {
-		if (a.name > b.name) return 1;
-		else if (a.name < b.name) return -1;
-		else return 0;
 	}
 
 

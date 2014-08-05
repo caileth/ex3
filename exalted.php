@@ -25,6 +25,7 @@
 		#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
 		#name {width:25em;}
 		
+		.crashed{background-color:red !important;}
 		.inactive{font-style:italic;background-color:#333;width:75%;height:75%;}
 		.initiative{font:500% Albertus;float:left;margin-right:.1em;}
 		.player{position:relative;border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
