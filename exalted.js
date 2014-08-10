@@ -125,7 +125,7 @@ $(function() {
 
 
 
-	$("body").on("click", ".debugDamage", function() {
+	$("body").on("click", ".debugBashing", function() {
 		var id = $(this).parent().attr("id"),
 			lookup = lookupByID(combatants),
 			damage = parseInt(prompt("How much damage?"));
@@ -138,6 +138,48 @@ $(function() {
 			lookup[id].recordDamage();
 			printCombatants();
 		}
+	});
+
+	$("body").on("click", ".debugLethal", function() {
+		var id = $(this).parent().attr("id"),
+			lookup = lookupByID(combatants),
+			damage = parseInt(prompt("How much damage?"));
+
+		console.log(damage,"damage to",lookup[id].name);
+
+		if (damage) {
+			lookup[id].lethal += damage;
+				console.log(lookup[id].name + " now has " + lookup[id].lethal + " Lethal");
+			lookup[id].recordDamage();
+			printCombatants();
+		}
+	});
+
+	$("body").on("click", ".debugAggravated", function() {
+		var id = $(this).parent().attr("id"),
+			lookup = lookupByID(combatants),
+			damage = parseInt(prompt("How much damage?"));
+
+		console.log(damage,"damage to",lookup[id].name);
+
+		if (damage) {
+			lookup[id].aggravated += damage;
+				console.log(lookup[id].name + " now has " + lookup[id].aggravated + " Aggravated");
+			lookup[id].recordDamage();
+			printCombatants();
+		}
+	});
+
+	$("body").on("click", ".debugHeal", function() {
+		var id = $(this).parent().attr("id"),
+			lookup = lookupByID(combatants);
+
+		lookup[id].aggravated = 0;
+		lookup[id].lethal = 0;
+		lookup[id].bashing = 0;
+		
+		lookup[id].recordDamage();
+		printCombatants();
 	});
 
 
@@ -947,11 +989,14 @@ $(function() {
 				' &bull; Rush: ' + combatants[i].getRushPool() +
 				' &bull; Disengage: ' + combatants[i].getDisengagePool() +
 				'<br/>' +
-				combatants[i].getHealthTrackHTML() +
+				'Health: ' + combatants[i].getHealthTrackHTML() +
 				'</span><br/>' +
 				'<input type="button" class="attack" value="Attack"/>' +
 				'<input type="button" class="edit" value="Edit"/>' +
-				'<input type="button" class="debugDamage" value="(Do You Really Want to) Hurt Me"/>' +
+				'<input type="button" class="debugBashing" value="Bashing"/>' +
+				'<input type="button" class="debugLethal" value="Lethal"/>' +
+				'<input type="button" class="debugAggravated" value="Aggravated"/>' +
+				'<input type="button" class="debugHeal" value="I NEED A MONK"/>' +
 				'<input type="button" class="remove" value="X"/>' +
 				'</td></tr>');
 		}
