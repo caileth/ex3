@@ -7,11 +7,19 @@ $(function() {
 		INITIATIVE_BREAK_BONUS = 5,
 		INITIATIVE_RESET_TURNS = 3,
 		INITIATIVE_RESET_VALUE = 3,
+		GLYPH_EMPTY = '&square;',
+		GLYPH_AGG = '&#10036;',
+		GLYPH_LETHAL = '&Cross;',
+		GLYPH_BASHING = '&frasl;',
 		JB_DIFFICULTY = 0,
 		JB_DOUBLES = false,
 		JB_EXTRA_SUX = 3,
 		JB_TARGET = 7,
 		WITHERING_PENALTY_INITIATIVE = 15,
+		WOUND_PENALTY_BRUISED = 0,
+		WOUND_PENALTY_INJURED = -1,
+		WOUND_PENALTY_WOUNDED = -2,
+		WOUND_PENALTY_MAIMED = -4,
 		attackWindow = '<label for="opponents">Target:</label>' +
 			'<select id="opponents"></select><br/>' +
 			'<label for="attackIsDecisive">Attack Type:</label>' +
@@ -117,22 +125,83 @@ $(function() {
 
 
 
+	$("body").on("click", ".debugDamage", function() {
+		var id = $(this).parent().attr("id"),
+			lookup = lookupByID(combatants),
+			damage = parseInt(prompt("How much damage?"));
+
+		console.log(damage,"damage to",lookup[id].name);
+
+		if (damage) {
+			lookup[id].bashing += damage;
+				console.log(lookup[id].name + " now has " + lookup[id].bashing + " bashing");
+			lookup[id].recordDamage();
+			printCombatants();
+		}
+	});
+
+
+
+
+
+
+
+
+
 	function Combatant() {
 		this.id = guid();
 		this.initiative = 0;
-		this.initiativePending = 0;
 		this.active = true;
+
 		this.crashedAndWithered = false;
 		this.turnsInCrash = 0;
 
+		this.bashing	= 0;
+		this.lethal		= 0;
+		this.aggravated = 0;
+
+		this.healthTrack = [
+			[0],	// -0 bruised
+			[0,0],	// -1 injured
+			[0,0],	// -2 wounded
+			[0],	// -4 maimed
+			[0]		// incapacitated
+		];
+
+		this.getHealthTrackHTML = function() {
+			var result = '';
+			for (var i = 0; i < this.healthTrack.length; i++) {
+				var track = this.healthTrack[i];
+				for (var j = 0; j < track.length; j++) {
+					switch (track[j]) {
+						case 0:
+							result += GLYPH_EMPTY + ' ';
+							break;
+						case 1:
+							result += GLYPH_BASHING + ' ';
+							break;
+						case 2:
+							result += GLYPH_LETHAL + ' ';
+							break;
+						case 3:
+							result += GLYPH_AGG + ' ';
+							break;
+					}
+				}
+			}
+			return result;
+		}
 		this.getName = function() {
 			return this.name;
-		}
+		};
 		this.getDamage = function() {
 			return this.strength + this.damage;
-		}
+		};
 		this.getJoinBattlePool = function() {
-			return this.awareness + this.wits;
+			var pool = this.awareness + this.wits;
+				console.log("Join Battle pool:",pool);
+
+			return pool;
 		};
 		this.getWitheringPool = function() {
 			return this.dexterity + this.combat + this.accuracy;
@@ -154,15 +223,98 @@ $(function() {
 		};
 		this.getSoak = function() {
 			return this.stamina + this.armor;
-		}
+		};
 		this.joinBattle = function() {
 			console.groupCollapsed(this.name,"joins battle");
-			var pool = this.getJoinBattlePool();console.log("JB pool:",pool);
-			var roll = diceRoller(pool, DEFAULT_DIE_SIDE);console.log("JB roll:",pool);
-			var suxx = Math.max(successChecker(roll, JB_TARGET, JB_DOUBLES), 0);console.log("JB sux:",suxx);
-			var initiative = suxx + JB_EXTRA_SUX;console.log("JB initiative:",initiative);
-			console.groupEnd();return initiative;
-		};		
+
+			var pool = this.getJoinBattlePool(),
+				roll = diceRoller(pool, DEFAULT_DIE_SIDE),
+				suxx = Math.max(successChecker(roll, JB_TARGET, JB_DOUBLES), 0),
+				initiative = suxx + JB_EXTRA_SUX;
+			
+			console.log("JB sux:",suxx);
+			console.log("JB initiative:",initiative);
+			console.groupEnd();
+
+			return initiative;
+		};
+		this.resetHealthTrack = function() {
+			console.log("resetting health track");
+			for (i in this.healthTrack) {
+				for (j in this.healthTrack[i]) {
+					this.healthTrack[i][j] = 0;
+				}
+			}
+		};
+		this.recordDamage = function() {
+			console.group("Record Damage");
+
+			var lastHLTrackPos = this.healthTrack.length - 1,
+				lastHLPos = this.healthTrack[lastHLTrackPos].length - 1,
+				pending = new Array();
+
+			pending[1] = this.bashing,
+			pending[2] = this.lethal,
+			pending[3] = this.aggravated;
+
+			console.log(pending);
+
+			this.resetHealthTrack();
+
+			doDamage(pending, 3, 0, this.healthTrack);
+			doDamage(pending, 2, 0, this.healthTrack);
+			doDamage(pending, 1, 0, this.healthTrack);
+
+			if (this.healthTrack[lastHLTrackPos][lastHLPos] === 1) doDamage(pending, 1, 1, this.healthTrack);
+
+			console.groupEnd();
+
+			function doDamage(type, level, replacementLevel, healthTrack) {
+				console.groupCollapsed("Do Damage",type,level,replacementLevel);
+				for (i in healthTrack) {
+					var track = healthTrack[i];
+					for (j in track) {
+						console.log("cursor at healthTrack["+i+"]["+j+"]: "+track[j]);
+						if (track[j] === replacementLevel && type[level] > 0) {
+							console.log("wound at target level detected,",type[level],"damage to go");
+							if (level === replacementLevel) track[j] = replacementLevel + 1;
+							else track[j] = level;
+							type[level]--;
+							console.log("done.",type[level]," to go");
+						}
+					}
+				}
+				console.groupEnd();
+			}
+		}
+		this.getWoundPenalty = function() {
+			console.group("Get Wound Penalty");
+
+			this.recordDamage();
+
+			var lastNonEmpty = findLastGreaterThan(this.healthTrack, 0);
+
+			console.groupEnd();
+
+			if (lastNonEmpty === -1) return 0;
+			else if (lastNonEmpty.track === 0) return WOUND_PENALTY_BRUISED;
+			else if (lastNonEmpty.track === 1) return WOUND_PENALTY_INJURED;
+			else if (lastNonEmpty.track === 2) return WOUND_PENALTY_WOUNDED;
+			else if (lastNonEmpty.track === 3) return WOUND_PENALTY_MAIMED;
+			else if (lastNonEmpty.track === 4) {
+				if (lastNonEmpty.level > 1) return "dead";
+				else return "incapacitated";
+			}
+
+			function findLastGreaterThan(array, value) {
+				for (var i = this.array.length - 1; i >= 0; i--) {
+					for (var j = this.array[i].length - 1; j >= 0; j--) {
+						if (array[i][j] > value) return {"track" : i, "level" : j};
+					}
+				}
+				return -1;
+			}
+		};
 	}
 
 
@@ -365,6 +517,7 @@ $(function() {
 			targetSoak = lookup[target].getSoak(),
 			targetDefense = Math.max(targetDodge, targetParry);
 
+		// will add the actual pool to this later
 		attackPool = attackModifiers;
 		
 		if (attackIsDecisive) {
@@ -688,9 +841,9 @@ $(function() {
 			var whoseTurn = whoseTurnIsIt();
 			console.log(">1 combatant detected. Highest tick is",whoseTurn);
 
-			// set tick to highest active initiative
-			// resolve all pending damage at higher initiative than current tick
-			// if no actives, resolve all pending damage and reset active status
+			// 1. set tick to highest active initiative
+			// 2. resolve all pending damage at higher initiative than current tick
+			// 3. if no actives, resolve all pending damage and reset active status
 
 			if (whoseTurn) {
 				resolvePendingDamage(whoseTurn);
@@ -793,9 +946,12 @@ $(function() {
 				' &bull; Evade: ' + combatants[i].getEvasionPool() +
 				' &bull; Rush: ' + combatants[i].getRushPool() +
 				' &bull; Disengage: ' + combatants[i].getDisengagePool() +
+				'<br/>' +
+				combatants[i].getHealthTrackHTML() +
 				'</span><br/>' +
 				'<input type="button" class="attack" value="Attack"/>' +
 				'<input type="button" class="edit" value="Edit"/>' +
+				'<input type="button" class="debugDamage" value="(Do You Really Want to) Hurt Me"/>' +
 				'<input type="button" class="remove" value="X"/>' +
 				'</td></tr>');
 		}
