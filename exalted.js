@@ -262,6 +262,10 @@ $(function() {
 		this.getEvasionPool = function() {
 			return Math.ceil((this.dexterity + this.dodge) / 2) + this.mobility;
 		};
+		this.getDefense = function() {
+			if (isNaN(this.getWoundPenalty())) return 0;
+			else return Math.max(this.getParryPool(), this.getEvasionPool()) - this.onslaught;
+		}
 		this.getRushPool = function() {
 			return this.dexterity + this.athletics;
 		};
@@ -447,17 +451,17 @@ $(function() {
 	});
 
 	$("body").on( "click", ".attack", function() {
-		if (combatants.length > 1) {
+		if (combatants.length > 1) {	
+			dialogForm.html(attackWindow);
+
 			var attackForm,
 				id = $(this).parent().attr("id"),
 				lookup = lookupByID(combatants);
 	
 			attackForm = dialogForm.on("submit", function(event) {
 				event.preventDefault();
-				attack(id);
+				attack(id, $("#opponents option:selected").val());
 			});
-	
-			dialogForm.html(attackWindow);
 	
 			dialog.dialog({
 				title: "Attack",
@@ -467,7 +471,7 @@ $(function() {
 				modal: true,
 				buttons: {
 					Attack: function() {
-						attack(id);
+						attack(id, $("#opponents option:selected").val());
 					},
 					Cancel: function() {
 						dialog.dialog("close");
@@ -553,143 +557,128 @@ $(function() {
 
 
 
-	function attack(id) {
-		console.groupCollapsed("Attack!",id);
+	function attack(id, target) {
+		var lookup		= lookupByID(combatants),
+			attacker	= lookup[id],
+			defender	= lookup[target];
 
-		var attackAuto, attackPool, attackRoll, attackSuccesses, attackThreshold, damage, damageRoll,
-			lookup = lookupByID(combatants),
-			attackModifiers = parseInt($("#attackModifiers").val()),
-			attackStunt = parseInt($("input[name=attackStunt]:checked").val()),
-			attackIsDecisive = parseInt($("#attackIsDecisive").val()),
-			attackWound = lookup[id].getWoundPenalty(),
-			damageDoubles = DEFAULT_DOUBLES,
-			damagePool = lookup[id].getDamage(),
-			defendStunt = parseInt($("input[name=defendStunt]:checked").val()),
-			target = $("#opponents option:selected").val(),
-			targetDodge = lookup[target].getEvasionPool(),
-			targetParry = lookup[target].getParryPool(),
-			targetSoak = lookup[target].getSoak(),
-			targetDefense = Math.max(targetDodge, targetParry),
-			targetWound = lookup[target].getWoundPenalty();
+		var attackIsDecisive	= $("#attackIsDecisive").val(),
+			attackModifiers		= parseInt($("#attackModifiers").val()),
+			attackStunt			= parseInt($("input[name=attackStunt]:checked").val()),
+			defendStunt			= parseInt($("input[name=defendStunt]:checked").val());
 
-		// will add the actual pool to this later
-		attackPool = attackModifiers;
+		console.groupCollapsed(attacker.name,"attacks",defender.name,"!");
 
-		// add in attacker wound penalties
-		if (!isNaN(attackWound)) attackPool += attackWound;
+		// add in attacker wound penalties if applicable (otherwise this function probably shouldn't be called in the first place)
+		if (!isNaN(attacker.getWoundPenalty())) attackModifiers += attacker.getWoundPenalty();
 
-		// add in defender wound penalties, or set defense to 0 if incap/dead
-		if (isNaN(targetWound)) targetDefense = 0;
-		else targetDefense += targetWound;
-
-		targetDefense -= lookup[target].onslaught;
-		lookup[target].onslaught++;
-		
-		if (attackIsDecisive) {
-			attackPool += lookup[id].getDecisivePool();
-			damageDoubles = false;
-			resultsWindow.append(lookup[id].name + " attempts a DECISIVE ATTACK against " + lookup[target].name + "!\n");
+		if (attacker.initiative === defender.initiative) {
+			// check for clash; store attack or attack results
+		} else if (attackIsDecisive) {
+			resolveDecisiveAttack(attacker, defender, attackModifiers, attackStunt, defendStunt);
 		} else {
-			attackPool += lookup[id].getWitheringPool();
-			resultsWindow.append(lookup[id].name + " attempts a Withering Attack (" + attackPool +
-				" dice) against " + lookup[target].name + " (" + targetDefense + " defense)!\n");
+			resolveWitheringAttack(attacker, defender, attackModifiers, attackStunt, defendStunt);
 		}
 
-		if (attackStunt > 0) {
-			resultsWindow.append(lookup[id].name + " uses a " + attackStunt + "-point stunt!\n");
-			attackPool += 2;
-			attackAuto = attackStunt - 1;
-			// lookup[id].willpower += attackStunt - 1;
-		}
+		attacker.active = false;
+		defender.onslaught++;
 
-		if (defendStunt > 0) {
-			resultsWindow.append(lookup[target].name + " uses a " + defendStunt + "-point stunt!\n");
-			targetDefense += defendStunt;
-			// lookup[target].willpower += defendStunt - 1;
-		}
-
-		attackRoll = diceRoller(attackPool, DEFAULT_DIE_SIDE);
-		attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, DEFAULT_DOUBLES, attackAuto);
-
-		if (lookup[id].initiative === lookup[target].initiative) {
-			// CLASH ATTACK
-		} else {
-			attackThreshold = attackSuccesses - Math.max(targetDefense, 0);
-
-			resultsWindow.append(lookup[id].name + " rolls: " + attackRoll + "\n");
-			if (attackSuccesses < 0) resultsWindow.append("BOTCH!\n");
-			else if (attackThreshold >= 0) resultsWindow.append("Success! " + attackThreshold + " net successes!\n");
-			else resultsWindow.append("Failure!\n");
-
-			if (attackSuccesses > 0 && attackThreshold >= 0) {
-				resultsWindow.append("Attacker base damage pool: " + damagePool + "; Defender soak: " + targetSoak + "\n");
-
-				damagePool += (attackThreshold - targetSoak);
-				damagePool = Math.max(damagePool, lookup[id].overwhelming, 1);
-				damageRoll = diceRoller(damagePool, DEFAULT_DIE_SIDE);
-				damage = Math.max(successChecker(damageRoll, DEFAULT_TARGET, damageDoubles),0);
-
-				resultsWindow.append(lookup[id].name + " rolls " + damage + " damage! (" + damageRoll + ")\n");
-			}
-
-			if (damage > 0) {
-				if (lookup[id].initiative != lookup[target].initiative) {
-					if (attackIsDecisive) {
-						// stuff happens
-					} else {
-						resolveWitheringAttack(id, target, damage);
-					}
-				} else {
-					resultsWindow.append("Combatants at same initiative, holding resolution until end of tick\n");
-					pendingAttacks[pendingAttacks.length] = new PendingAttack(lookup[id].initiative, id, target, damage, attackIsDecisive);
-				}
-			}
-
-			lookup[id].active = false;
-		}
+		console.groupEnd();
 
 		dialog.dialog("close");
 		doRound();
-		console.groupEnd();
 	}
 
-	function resolveWitheringAttack(sourceID, targetID, damage) {
-		console.groupCollapsed("Resolve Withering Attack");
+	function resolveWitheringAttack(attacker, defender, attackModifiers, attackStunt, defendStunt) {
+		var attackAuto = 0,
+			attackPool = attacker.getWitheringPool() + attackModifiers,
+			damage,
+			targetDefense = defender.getDefense();
 
-		var isTargetCrashed, lookup = lookupByID(combatants),
-			wasTargetCrashed = lookup[targetID].initiative < 1,
-			witheringPenalty = lookup[sourceID].initiative >= WITHERING_PENALTY_INITIATIVE;
+		if (attackStunt > 0) {
+			resultsWindow.append(attacker.name + " uses a " + attackStunt + "-point stunt!\n");
+			attackPool += 2;
+			attackAuto = attackStunt - 1;
+			// attacker.willpower += attackStunt - 1;
+		}
 
-		lookup[sourceID].initiative++;
-		resultsWindow.append(lookup[sourceID].name + " gains an Initiative for a successful Withering Attack.\n");
+		if (defendStunt > 0) {
+			resultsWindow.append(defender.name + " uses a " + defendStunt + "-point stunt!\n");
+			targetDefense += defendStunt;
+			// defender.willpower += defendStunt - 1;
+		}
 
-		if (lookup[targetID].crashedAndWithered) {
-			lookup[sourceID].initiative += Math.min(1, damage);
-			resultsWindow.append(lookup[targetID].name + " is in Crash and has already been withered. " +
-				lookup[sourceID].name + " gains " + Math.min(1, damage) + " Initiative");
+		resultsWindow.append(attacker.name + " attempts a Withering Attack (" + attackPool + " dice) against " + defender.name + " (" + targetDefense + " defense)!\n");
+
+		makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefense);
+	}
+
+	function resolveDecisiveAttack(attacker, defender, attackModifiers, attackStunt, defendStunt) {
+		// stuff happens
+	}
+
+	function makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefense) {
+		var attackRoll = diceRoller(attackPool, DEFAULT_DIE_SIDE),
+			attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, DEFAULT_DOUBLES, attackAuto),
+			attackThreshold = attackSuccesses - Math.max(targetDefense, 0);
+
+		resultsWindow.append(attacker.name + " rolls: " + attackRoll + "\n");
+
+		if (attackSuccesses < 0) {
+			resultsWindow.append("BOTCH!\n");
+		} else if (attackThreshold >= 0) {
+			resultsWindow.append("Success! " + attackThreshold + " net successes!\n");
+			checkWitheringDamage(attacker, defender, attackThreshold);
+		} else {
+			resultsWindow.append("Failure!\n");
+		}
+	}
+
+	function checkWitheringDamage(attacker, defender, attackThreshold) {
+		resultsWindow.append("Attacker base damage pool: " + damagePool + "; Defender soak: " + defender.getSoak() + "\n");
+
+		var damagePool = Math.max((attacker.getDamage() + attackThreshold - defender.getSoak()), attacker.overwhelming, 1),
+			damageRoll = diceRoller(damagePool, DEFAULT_DIE_SIDE),
+			damage = Math.max(successChecker(damageRoll, DEFAULT_TARGET),0);
+
+		resultsWindow.append(attacker.name + " rolls " + damage + " damage! (" + damageRoll + ")\n");
+
+		if (damage > 0) resolveWitheringDamage(attacker, defender, damage);
+	}
+
+	function resolveWitheringDamage(attacker, defender, damage) {
+		var isTargetCrashed,
+			wasTargetCrashed = defender.initiative < 1,
+			witheringPenalty = attacker.initiative >= WITHERING_PENALTY_INITIATIVE;
+
+		attacker.initiative++;
+		resultsWindow.append(attacker.name + " gains an Initiative for a successful Withering Attack.\n");
+
+		if (defender.crashedAndWithered) {
+			attacker.initiative += Math.min(1, damage);
+			resultsWindow.append(defender.name + " is in Crash and has already been withered. " +
+				attacker.name + " gains " + Math.min(1, damage) + " Initiative");
 		} else if (witheringPenalty) {
-			lookup[sourceID].initiative += Math.ceil(damage / 2);
-			resultsWindow.append(lookup[sourceID].name + " is over " + WITHERING_PENALTY_INITIATIVE +
+			attacker.initiative += Math.ceil(damage / 2);
+			resultsWindow.append(attacker.name + " is over " + WITHERING_PENALTY_INITIATIVE +
 				" Initiative and gains only " + Math.ceil(damage / 2) + " from the attack");
 		} else {
-			lookup[sourceID].initiative += damage;
-			resultsWindow.append(lookup[sourceID].name + " gains " + damage + " Initiative");
+			attacker.initiative += damage;
+			resultsWindow.append(attacker.name + " gains " + damage + " Initiative");
 		}
 		
-		lookup[targetID].initiative -= damage;
-		resultsWindow.append("&mdash;" + lookup[targetID].name + " loses " + damage + "!\n");
+		defender.initiative -= damage;
+		resultsWindow.append("&mdash;" + defender.name + " loses " + damage + "!\n");
 
-		isTargetCrashed = lookup[targetID].initiative < 1;
+		isTargetCrashed = defender.initiative < 1;
 		console.log("is target crashed?",isTargetCrashed);
 
 		if (wasTargetCrashed != isTargetCrashed) {
-			lookup[sourceID].initiative += INITIATIVE_BREAK_BONUS;
-			resultsWindow.append(lookup[sourceID].name+" gains Initiative Break bonus!\n");
+			attacker.initiative += INITIATIVE_BREAK_BONUS;
+			resultsWindow.append(attacker.name+" gains Initiative Break bonus!\n");
 		}
 
-		if (isTargetCrashed) lookup[targetID].crashedAndWithered = true;
-
-		console.groupEnd();
+		if (isTargetCrashed) defender.crashedAndWithered = true;
 	}
 
 	function populateTargetList(id) {
