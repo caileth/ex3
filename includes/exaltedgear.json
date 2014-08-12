@@ -1,14 +1,14 @@
 {
   "weapon" : {
     "mortal" : {
-      "light" : [4,7,0,0],
-      "medium" : [2,9,0,1],
-      "heavy" : [0,11,0,-1]
+      "light" : [4,7,0,0,false],
+      "medium" : [2,9,0,1,true],
+      "heavy" : [0,11,0,-1,true]
     },
     "artifact" : {
-      "light" : [5,10,2,1],
-      "medium" : [3,12,3,1],
-      "heavy" : [1,14,4,0]
+      "light" : [5,10,2,1,true],
+      "medium" : [3,12,3,1,true],
+      "heavy" : [1,14,4,0,true]
     }
   },
   "armor" : {

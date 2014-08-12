@@ -25,8 +25,10 @@
 		#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
 		#name {width:25em;}
 		
-		.crashed{background-color:red !important;}
-		.inactive{font-style:italic;background-color:#333;width:75%;height:75%;}
+		.inactive{font-style:italic;background-color:#333 !important;width:75%;height:75%;}
+		.crashed{background-color:purple !important;}
+		.incapacitated{background-color:orange !important;}
+		.dead{background-color:red !important;}
 		.initiative{font:500% Albertus;float:left;margin-right:.1em;}
 		.player{position:relative;border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
 		.randomize{background-image:url('/img/ten_sided_die_16.png');background-repeat:no-repeat;background-position:top left;width:20px;height:20px;}
