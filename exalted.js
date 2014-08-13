@@ -706,7 +706,8 @@ $(function() {
 			var stat = $(this).attr("id"),
 				evalStr = "$(this).val(lookup['"+id+"']."+stat+")";
 			if (stat === "doesLethal") eval("$(this).prop('checked', lookup['"+id+"']."+stat+")");
-			else if (stat != "armorPicker" && stat != "weaponPicker") eval(evalStr);
+			if (stat === "armorPicker" || stat === "weaponPicker") { /* do nothing */ }
+			else if (stat) eval(evalStr);
 		});
 	}
 
