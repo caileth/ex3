@@ -25,10 +25,10 @@
 		#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
 		#name {width:25em;}
 		
-		.inactive{font-style:italic;background-color:#333 !important;width:75%;height:75%;}
-		.crashed{background-color:purple !important;}
-		.incapacitated{background-color:orange !important;}
-		.dead{background-color:red !important;}
+		.inactive{font-style:italic;background-color:#333;width:75%;height:75%;}
+		.crashed{background-color:purple;}
+		.incapacitated{background-color:orange;color:white;font-style:italic;}
+		.dead{background-color:red;color:white;font-style:italic;}
 		.initiative{font:500% Albertus;float:left;margin-right:.1em;}
 		.player{position:relative;border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
 		.randomize{background-image:url('/img/ten_sided_die_16.png');background-repeat:no-repeat;background-position:top left;width:20px;height:20px;}
@@ -48,7 +48,7 @@
 		<textarea id="results" readonly tabindex="-1"></textarea>
 	</div>
 
-	<div id="roller">	
+<!-- 	<div id="roller">	
 		<h3>Basic Die Roller</h3><br/>
 		<input type="number" id="numDice" value="10" min="1" max="25"/>
 		<input type="button" id="roll" value="d10"/>@ <input type="number" id="targetNumber" value="7" min="1" max="10"/>,
@@ -57,7 +57,7 @@
 		<input type="radio" name="doubleRule" value="9"/>9s
 		<input type="radio" name="doubleRule" value="8"/>8s
 		<input type="radio" name="doubleRule" value="false"/>None
-	</div>
+	</div> -->
 
 	<div id="combatants">
 		<h3>Combatants</h3><br/>

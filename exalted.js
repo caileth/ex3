@@ -1,5 +1,8 @@
 $(function() {
 	var GEAR_DATABASE, NAMES_DATABASE,
+		DECISIVE_MISS_PENALTY_HIGH = 3,
+		DECISIVE_MISS_PENALTY_LOW = 2,
+		DECISIVE_MISS_PENALTY_THRESHOLD = 10,
 		DEFAULT_DIE_SIDE = 10,
 		DEFAULT_DOUBLES = 10,
 		DEFAULT_HEALTH_TRACK = ['-0', '-1', '-2', '-4', 'Incapacitated'],
@@ -8,10 +11,10 @@ $(function() {
 		INITIATIVE_BREAK_BONUS = 5,
 		INITIATIVE_RESET_TURNS = 3,
 		INITIATIVE_RESET_VALUE = 3,
-		GLYPH_EMPTY = '<img src="img/healthy_16.png"/>',
-		GLYPH_AGG = '<img src="img/agg_16.png"/>',
-		GLYPH_LETHAL = '<img src="img/lethal_vert_16.png"/>',
-		GLYPH_BASHING = '<img src="img/bashing_vert_16.png"/>',
+		GLYPH_EMPTY = '&#9711;',
+		GLYPH_AGG = '&#10036;',
+		GLYPH_LETHAL = '&#215;',
+		GLYPH_BASHING = '&#8260;',
 		JB_DIFFICULTY = 0,
 		JB_DOUBLES = false,
 		JB_EXTRA_SUX = 3,
@@ -43,7 +46,7 @@ $(function() {
 		dialog = $("#dialog"),
 		dialogForm = $("#dialog-form"),
 		dialogFormInputs = $("#dialog-form :input"),
-		dialogFormNumbers = $("#dialog-form :input[type=number]"),
+		dialogFormNumbers = $("#dialog-form :input[type=number] :not(#initiative)"),
 		guid = (function(){function s4(){return Math.floor((1+Math.random())*0x10000).toString(16).substring(1);}return function(){return s4()+s4()+'-'+s4()+'-'+s4()+'-'+s4()+'-'+s4()+s4()+s4();};})(),
 		joinBattleButton = $("#joinBattle"),
 		pendingAttacks = new Array(),
@@ -127,72 +130,6 @@ $(function() {
 
 
 
-	$("body").on("click", ".debugBashing", function() {
-		var id = $(this).parent().attr("id"),
-			lookup = lookupByID(combatants),
-			damage = parseInt(prompt("How much damage?"));
-
-		console.log(damage,"damage to",lookup[id].name);
-
-		if (damage) {
-			lookup[id].bashing += damage;
-				console.log(lookup[id].name + " now has " + lookup[id].bashing + " bashing");
-			lookup[id].recordDamage();
-			doRound();
-		}
-	});
-
-	$("body").on("click", ".debugLethal", function() {
-		var id = $(this).parent().attr("id"),
-			lookup = lookupByID(combatants),
-			damage = parseInt(prompt("How much damage?"));
-
-		console.log(damage,"damage to",lookup[id].name);
-
-		if (damage) {
-			lookup[id].lethal += damage;
-				console.log(lookup[id].name + " now has " + lookup[id].lethal + " Lethal");
-			lookup[id].recordDamage();
-			doRound();
-		}
-	});
-
-	$("body").on("click", ".debugAggravated", function() {
-		var id = $(this).parent().attr("id"),
-			lookup = lookupByID(combatants),
-			damage = parseInt(prompt("How much damage?"));
-
-		console.log(damage,"damage to",lookup[id].name);
-
-		if (damage) {
-			lookup[id].aggravated += damage;
-				console.log(lookup[id].name + " now has " + lookup[id].aggravated + " Aggravated");
-			lookup[id].recordDamage();
-			doRound();
-		}
-	});
-
-	$("body").on("click", ".debugHeal", function() {
-		var id = $(this).parent().attr("id"),
-			lookup = lookupByID(combatants);
-
-		lookup[id].aggravated = 0;
-		lookup[id].lethal = 0;
-		lookup[id].bashing = 0;
-		
-		lookup[id].recordDamage();
-		lookup[id].active = true;
-		doRound();
-	});
-
-
-
-
-
-
-
-
-
 	function Combatant() {
 		this.id = guid();
 		this.initiative = 0;
@@ -222,19 +159,20 @@ $(function() {
 				for (var j = 0; j < track.length; j++) {
 					switch (track[j]) {
 						case 0:
-							result += GLYPH_EMPTY + ' ';
+							result += GLYPH_EMPTY;
 							break;
 						case 1:
-							result += GLYPH_BASHING + ' ';
+							result += GLYPH_BASHING;
 							break;
 						case 2:
-							result += GLYPH_LETHAL + ' ';
+							result += GLYPH_LETHAL;
 							break;
 						case 3:
-							result += GLYPH_AGG + ' ';
+							result += GLYPH_AGG;
 							break;
 					}
 				}
+				result += ' ';
 			}
 			return result;
 		}
@@ -302,7 +240,8 @@ $(function() {
 
 			var lastHLTrackPos = this.healthTrack.length - 1,
 				lastHLPos = this.healthTrack[lastHLTrackPos].length - 1,
-				pending = new Array();
+				pending = new Array(),
+				wound;
 
 			pending[1] = this.bashing,
 			pending[2] = this.lethal,
@@ -318,7 +257,12 @@ $(function() {
 
 			if (this.healthTrack[lastHLTrackPos][lastHLPos] === 1) doDamage(pending, 1, 1, this.healthTrack);
 
-			if (isNaN(this.getWoundPenalty())) this.active = false;
+			wound = this.getWoundPenalty();
+
+			if (isNaN(wound)) this.active = false;
+
+			if (wound === 'incapacitated') resultsWindow.append(this.name + " is Incapacitated!\n");
+			if (wound === 'dead') resultsWindow.append(this.name + " is DEAD!\n");
 
 			console.groupEnd();
 
@@ -341,21 +285,20 @@ $(function() {
 			}
 		}
 		this.getWoundPenalty = function() {
-			console.groupCollapsed("Get Wound Penalty");
+			var lastNonEmpty = findLastGreaterThan(this.healthTrack, 0),
+				result;
 
-			var lastNonEmpty = findLastGreaterThan(this.healthTrack, 0);
+			if (!lastNonEmpty) result = 0;
+			else if (lastNonEmpty.track === 0) result = WOUND_PENALTY_BRUISED;
+			else if (lastNonEmpty.track === 1) result = WOUND_PENALTY_INJURED;
+			else if (lastNonEmpty.track === 2) result = WOUND_PENALTY_WOUNDED;
+			else if (lastNonEmpty.track === 3) result = WOUND_PENALTY_MAIMED;
+			else if (lastNonEmpty.track === 4 && lastNonEmpty.level > 1) result = "dead";
+			else result = "incapacitated";
 
-			console.groupEnd();
+			console.log("Wound Penalty for",this.name,"is",result);
 
-			if (!lastNonEmpty) return 0;
-			else if (lastNonEmpty.track === 0) return WOUND_PENALTY_BRUISED;
-			else if (lastNonEmpty.track === 1) return WOUND_PENALTY_INJURED;
-			else if (lastNonEmpty.track === 2) return WOUND_PENALTY_WOUNDED;
-			else if (lastNonEmpty.track === 3) return WOUND_PENALTY_MAIMED;
-			else if (lastNonEmpty.track === 4) {
-				if (lastNonEmpty.level > 1) return "dead";
-				else return "incapacitated";
-			}
+			return result;
 
 			function findLastGreaterThan(array, value) {
 				for (var i = array.length - 1; i >= 0; i--) {
@@ -564,22 +507,24 @@ $(function() {
 			attacker	= lookup[id],
 			defender	= lookup[target];
 
-		var attackIsDecisive	= $("#attackIsDecisive").val(),
+		var attackIsDecisive	= $("input[name=attackIsDecisive]:checked").val() == "true",
 			attackModifiers		= parseInt($("#attackModifiers").val()),
 			attackStunt			= parseInt($("input[name=attackStunt]:checked").val()),
+			attackWound			= attacker.getWoundPenalty();
 			defendStunt			= parseInt($("input[name=defendStunt]:checked").val());
+
+		attackStunt = stunt(attackStunt);
+		defendStunt = stunt(defendStunt);
 
 		console.groupCollapsed(attacker.name,"attacks",defender.name,"!");
 
 		// add in attacker wound penalties if applicable (otherwise this function probably shouldn't be called in the first place)
-		if (!isNaN(attacker.getWoundPenalty())) attackModifiers += attacker.getWoundPenalty();
+		if (!isNaN(attackWound)) attackModifiers += attackWound;
 
 		if (attacker.initiative === defender.initiative) {
 			pendingAttacks[pendingAttacks.length] = new PendingAttack(this.initiative, attacker, defender, attackModifiers, attackStunt, defendStunt, attackIsDecisive);
-		} else if (attackIsDecisive) {
-			resolveDecisiveAttack(attacker, defender, attackModifiers, attackStunt, defendStunt);
 		} else {
-			resolveWitheringAttack(attacker, defender, attackModifiers, attackStunt, defendStunt);
+			resolveAttack(attacker, defender, attackModifiers, attackStunt, defendStunt, attackIsDecisive);
 		}
 
 		attacker.active = false;
@@ -591,62 +536,71 @@ $(function() {
 		doRound();
 	}
 
-	function resolveWitheringAttack(attacker, defender, attackModifiers, attackStunt, defendStunt) {
-		var attackAuto = 0,
-			attackPool = attacker.getWitheringPool() + attackModifiers,
-			damage,
-			targetDefense = defender.getDefense();
+	function resolveAttack(attacker, defender, attackModifiers, attackStunt, defendStunt, isDecisive) {
+		var attackAuto = attackStunt.auto, // presumably will add Charm hooks here eventually
+			attackPool = attackModifiers + attackStunt.dice,
+			targetDefense = defender.getDefense() + defendStunt.static;
 
-		if (attackStunt > 0) {
-			resultsWindow.append(attacker.name + " uses a " + attackStunt + "-point stunt!\n");
-			attackPool += 2;
-			attackAuto = attackStunt - 1;
-			// attacker.willpower += attackStunt - 1;
-		}
+		if (attackStunt.level > 0) resultsWindow.append(attacker.name + " uses a " + attackStunt.level + "-point stunt!\n");
+		if (defendStunt.level > 0) resultsWindow.append(defender.name + " uses a " + defendStunt.level + "-point stunt!\n");
 
-		if (defendStunt > 0) {
-			resultsWindow.append(defender.name + " uses a " + defendStunt + "-point stunt!\n");
-			targetDefense += defendStunt;
-			// defender.willpower += defendStunt - 1;
-		}
+		if (isDecisive) attackPool += attacker.getDecisivePool();
+		else attackPool += attacker.getWitheringPool();
 
-		resultsWindow.append(attacker.name + " attempts a Withering Attack (" + attackPool + " dice) against " + defender.name + " (" + targetDefense + " defense)!\n");
+		resultsWindow.append(attacker.name + " attempts a " + (isDecisive ? "Decisive" : "Withering") + " Attack (" + attackPool + " dice) against " + defender.name + " (" + targetDefense + " defense)!\n");
 
-		makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefense);
+		makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefense, isDecisive);
 	}
 
-	function resolveDecisiveAttack(attacker, defender, attackModifiers, attackStunt, defendStunt) {
-		// stuff happens
-	}
-
-	function makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefense) {
+	function makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefense, isDecisive) {
 		var attackRoll = diceRoller(attackPool, DEFAULT_DIE_SIDE),
 			attackSuccesses = successChecker(attackRoll, DEFAULT_TARGET, DEFAULT_DOUBLES, attackAuto),
 			attackThreshold = attackSuccesses - Math.max(targetDefense, 0);
 
 		resultsWindow.append(attacker.name + " rolls: " + attackRoll + "\n");
 
-		if (attackSuccesses < 0) {
-			resultsWindow.append("BOTCH!\n");
-		} else if (attackThreshold >= 0) {
+		if (attackThreshold >= 0) {
 			resultsWindow.append("Success! " + attackThreshold + " net successes!\n");
-			checkWitheringDamage(attacker, defender, attackThreshold);
+			if (isDecisive) checkDecisiveDamage(attacker, defender);
+			else checkWitheringDamage(attacker, defender, attackThreshold);
 		} else {
+			// botch stuff?
 			resultsWindow.append("Failure!\n");
+			if (isDecisive) {
+				var initLoss = (attacker.initiative > DECISIVE_MISS_PENALTY_THRESHOLD ? DECISIVE_MISS_PENALTY_HIGH : DECISIVE_MISS_PENALTY_LOW);
+				resultsWindow.append(attacker.name + " fails Decisive attack and loses " + initLoss + " Initiative!\n");
+				attacker.initiative -= initLoss;
+			}
 		}
 	}
 
 	function checkWitheringDamage(attacker, defender, attackThreshold) {
-
 		var damagePool = Math.max((attacker.getDamage() + attackThreshold - defender.getSoak()), attacker.overwhelming, 1),
-			damageRoll = diceRoller(damagePool, DEFAULT_DIE_SIDE),
-			damage = Math.max(successChecker(damageRoll, DEFAULT_TARGET),0);
+			damageRoll = diceRoller(damagePool),
+			damage = Math.max(successChecker(damageRoll),0);
 			
 		resultsWindow.append("Attacker base damage pool: " + damagePool + "; Defender soak: " + defender.getSoak() + "\n");
-
 		resultsWindow.append(attacker.name + " rolls " + damage + " damage! (" + damageRoll + ")\n");
 
 		if (damage > 0) resolveWitheringDamage(attacker, defender, damage);
+	}
+
+	function checkDecisiveDamage(attacker, defender, attackThreshold) {
+		var damageRoll = diceRoller(attacker.initiative),
+			damage = successChecker(damageRoll, DEFAULT_TARGET, false);
+
+		if (attacker.doesLethal) {
+			defender.lethal += damage;
+		} else {
+			defender.bashing += damage;
+		}
+
+		resultsWindow.append(attacker.name + " rolls: " + damageRoll + "\n");
+		resultsWindow.append(defender.name + " takes " + damage + " damage!\n");
+
+		defender.recordDamage();
+
+		attacker.initiative = INITIATIVE_RESET_VALUE;
 	}
 
 	function resolveWitheringDamage(attacker, defender, damage) {
@@ -752,7 +706,7 @@ $(function() {
 			var stat = $(this).attr("id"),
 				evalStr = "$(this).val(lookup['"+id+"']."+stat+")";
 			if (stat === "doesLethal") eval("$(this).prop('checked', lookup['"+id+"']."+stat+")");
-			else if (stat) eval(evalStr);
+			else if (stat != "armorPicker" && stat != "weaponPicker") eval(evalStr);
 		});
 	}
 
@@ -958,9 +912,9 @@ $(function() {
 					var secondAttack = pendingAttacks[j];
 					resolveClashAttack(attack, secondAttack);
 				} else if (attack.isDecisive) {
-					resolveDecisiveAttack(attack.attacker, attack.defender, attack.attackModifiers, attack.attackStunt, attack.defendStunt);
+					resolveAttack(attack.attacker, attack.defender, attack.attackModifiers, attack.attackStunt, attack.defendStunt);
 				} else {
-					resolveWitheringAttack(attack.attacker, attack.defender, attack.attackModifiers, attack.attackStunt, attack.defendStunt);
+					resolveAttack(attack.attacker, attack.defender, attack.attackModifiers, attack.attackStunt, attack.defendStunt);
 				}
 
 				pendingAttacks.splice(i, 1);
@@ -972,6 +926,38 @@ $(function() {
 
 	function resolveClashAttack(attack, secondAttack) {
 		// resolve clash attack
+		var first = attack.attacker,
+			second = secondAttack.attacker;
+		if (attack.isDecisive && secondAttack.isDecisive) {
+			//  both decisive
+			var firstAttack		= successChecker(first.getDecisivePool()),
+				secondAttack	= successChecker(second.getDecisivePool()),
+				result			= firstAttack - secondAttack;
+
+			if (result > 0) {
+				// first attack wins
+
+			} else if (result < 0) {
+				// second attack wins
+			} else {
+				// it's a tie, nothing happens
+			}
+		} else if (!attack.isDecisive && !secondAttack.isDecisive) {
+			// both withering
+		} else if (attack.isDecisive) {
+			// first attack decisive, second withering
+		} else {
+			// first attack withering, second decisive
+		}
+	}
+
+	function stunt(level) {
+		switch (level) {
+			case 1: return {"level": 1, "dice": 2, "successes": 0, "willpower": 0, "static": 1};
+			case 2: return {"level": 2, "dice": 2, "successes": 1, "willpower": 1, "static": 2};
+			case 3: return {"level": 3, "dice": 2, "successes": 2, "willpower": 2, "static": 3};
+			default: return {"level": 0, "dice": 0, "successes": 0, "willpower": 0, "static": 0};
+		}
 	}
 
 	function clashAttackCheck(tick, attacker) {
@@ -1013,14 +999,20 @@ $(function() {
 		combatants.sort(sortbyInitiative);
 
 		for (i in combatants) {
-			console.groupCollapsed("printing",combatants[i].name);
+			console.log("printing",combatants[i].name);
+			var wound = combatants[i].getWoundPenalty();
 			$("#combatants > tbody:last").append('<tr class="' + 
-				(combatants[i].active ? '' : 'inactive ') +
-				(combatants[i].initiative > 0 ? '' : 'crashed ') +
+				(wound === 'dead' ? 'dead ' : 
+					(wound === 'incapacitated' ? 'incapacitated ' :
+						(!combatants[i].active ? 'inactive ' :
+							(combatants[i].initiative < 1 ? 'crashed ' : '')))) +
 				'playerBubble">' + 
 				'<td name="' + combatants[i].name + '" id="' + combatants[i].id + '" class="player">' +
 				'<span class="initiative">' + combatants[i].initiative + '</span>' +
-				'<span class="name">' + combatants[i].name + '</span><br/>' +
+				'<span class="name">' + combatants[i].name +
+				(wound === 'dead' ? ' (DEAD) ' :
+					(wound === 'incapacitated' ? ' (Incapacitated) ' : '')) +
+				'</span><br/>' +
 				'<span class="stats">' +
 				'Join Battle: ' + combatants[i].getJoinBattlePool() +
 				' &bull; Withering: ' + combatants[i].getWitheringPool() +
@@ -1032,15 +1024,10 @@ $(function() {
 				'<br/>' +
 				'<b>Health:</b> ' + combatants[i].getHealthTrackHTML() +
 				'</span><br/>' +
-				'<input type="button" class="attack" value="Attack"/>' +
+				'<input type="button" class="attack" value="Attack"' + (isNaN(wound) ? ' disabled' : '') +'/>' +
 				'<input type="button" class="edit" value="Edit"/>' +
-				'<input type="button" class="debugBashing" value="Bashing"/>' +
-				'<input type="button" class="debugLethal" value="Lethal"/>' +
-				'<input type="button" class="debugAggravated" value="Aggravated"/>' +
-				'<input type="button" class="debugHeal" value="I NEED A MONK"/>' +
 				'<input type="button" class="remove" value="X"/>' +
 				'</td></tr>');
-			console.groupEnd();
 		}
 
 		console.log("done printing combatants");
@@ -1110,11 +1097,13 @@ $(function() {
 	}
 
 	function successChecker(roll, target, doubleRule, auto) {
-		console.groupCollapsed("success checker");
 		var successes, rolledAOne = false;
 
-		if (!target) target = DEFAULT_TARGET;
-		if (!auto) auto = 0;
+		if (target === undefined) target = DEFAULT_TARGET;
+		if (doubleRule === undefined) doubleRule = DEFAULT_DOUBLES;
+		if (auto === undefined) auto = 0;
+
+		console.groupCollapsed("success checker",roll,target,doubleRule,auto);
 		
 		successes = auto;
 
@@ -1136,8 +1125,9 @@ $(function() {
 	}
 
 	function diceRoller(numDice, sides) {
-		if (!numDice) numDice = DEFAULT_NUM_DICE;
-		if (!sides) sides = DEFAULT_DIE_SIDE;
+		if (numDice === undefined) numDice = DEFAULT_NUM_DICE;
+		if (sides === undefined) sides = DEFAULT_DIE_SIDE;
+
 		console.groupCollapsed("Rolling",numDice,sides,"sided dice");
 
 		var result = Array(numDice);
@@ -1152,7 +1142,7 @@ $(function() {
 
 	function dieRoller(sides) {
 		console.groupCollapsed("dieRoller");
-		if (!sides) sides = DEFAULT_DIE_SIDE;
+		if (sides === undefined) sides = DEFAULT_DIE_SIDE;
 		var result = ~~(Math.random() * sides) + 1;
 		console.log("Rolled a " + result + " on a " + sides + "-sided die");
 		console.groupEnd();return result;
