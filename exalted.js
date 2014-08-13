@@ -380,13 +380,15 @@ $(function() {
 
 
 
-	function PendingAttack(tick, source, target, damage, isDecisive) {
-		this.tick = tick;
-		this.tiebreaker = Math.random();
-		this.source = source;
-		this.target = target;
-		this.damage = damage;
-		this.isDecisive = isDecisive;
+	function PendingAttack(tick, attacker, defender, attackModifiers, attackStunt, defendStunt, isDecisive) {
+		this.tick				= tick;
+		this.tiebreaker			= Math.random();
+		this.attacker			= attacker;
+		this.defender			= defender;
+		this.attackModifiers	= attackModifiers;
+		this.attackStunt		= attackStunt;
+		this.defendStunt		= defendStunt;
+		this.isDecisive			= isDecisive;
 	}
 
 
@@ -573,7 +575,7 @@ $(function() {
 		if (!isNaN(attacker.getWoundPenalty())) attackModifiers += attacker.getWoundPenalty();
 
 		if (attacker.initiative === defender.initiative) {
-			// check for clash; store attack or attack results
+			pendingAttacks[pendingAttacks.length] = new PendingAttack(this.initiative, attacker, defender, attackModifiers, attackStunt, defendStunt, attackIsDecisive);
 		} else if (attackIsDecisive) {
 			resolveDecisiveAttack(attacker, defender, attackModifiers, attackStunt, defendStunt);
 		} else {
@@ -635,11 +637,12 @@ $(function() {
 	}
 
 	function checkWitheringDamage(attacker, defender, attackThreshold) {
-		resultsWindow.append("Attacker base damage pool: " + damagePool + "; Defender soak: " + defender.getSoak() + "\n");
 
 		var damagePool = Math.max((attacker.getDamage() + attackThreshold - defender.getSoak()), attacker.overwhelming, 1),
 			damageRoll = diceRoller(damagePool, DEFAULT_DIE_SIDE),
 			damage = Math.max(successChecker(damageRoll, DEFAULT_TARGET),0);
+			
+		resultsWindow.append("Attacker base damage pool: " + damagePool + "; Defender soak: " + defender.getSoak() + "\n");
 
 		resultsWindow.append(attacker.name + " rolls " + damage + " damage! (" + damageRoll + ")\n");
 
@@ -909,7 +912,7 @@ $(function() {
 			// 3. if no actives, resolve all pending damage and reset active status
 
 			if (whoseTurn) {
-				resolvePendingDamage(whoseTurn);
+				resolvePendingAttacks(whoseTurn);
 				resultsWindow.append("Tick " + whoseTurn + "\n");
 			} else {
 				iterateCrashCounter();
@@ -939,34 +942,48 @@ $(function() {
 		}
 	}
 
-	function resolvePendingDamage(tick) {
+	function resolvePendingAttacks(tick) {
 		console.groupCollapsed("resolving pending damage at tick",tick);
-		pendingAttacks.sort(sortByTiebreaker);console.log("sorting pendingAttacks",pendingAttacks);
+		
+		pendingAttacks.sort(sortByTiebreaker);
 
 		for (i in pendingAttacks) {
-			if (pendingAttacks[i].tick > tick || !tick) {
-				var damage = pendingAttacks[i].damage,
-					lookup = lookupByID(combatants),
-					sourceID = pendingAttacks[i].source,
-					targetID = pendingAttacks[i].target;
+			var attack = pendingAttacks[i];
+			if (attack.tick > tick || !tick) {
+				resultsWindow.append("Resolving " + attack.attacker.name + "'s attack vs. " + attack.defender.name + "\n");
 
-				resultsWindow.append("Resolving " + lookup[sourceID].name + "'s attack vs. " + lookup[targetID].name + " for " + damage + " damage\n");
+				var j = clashAttackCheck(tick, attack.attacker);
 
-				if (pendingAttacks[i].isDecisive) {
-					// resolve decisive attack
+				if (j) {
+					var secondAttack = pendingAttacks[j];
+					resolveClashAttack(attack, secondAttack);
+				} else if (attack.isDecisive) {
+					resolveDecisiveAttack(attack.attacker, attack.defender, attack.attackModifiers, attack.attackStunt, attack.defendStunt);
 				} else {
-					resolveWitheringAttack(sourceID, targetID, damage);
+					resolveWitheringAttack(attack.attacker, attack.defender, attack.attackModifiers, attack.attackStunt, attack.defendStunt);
 				}
 
 				pendingAttacks.splice(i, 1);
-				resolvePendingDamage(tick);
+				resolvePendingAttacks(tick);
 			}
 		}
 		console.groupEnd();
 	}
 
+	function resolveClashAttack(attack, secondAttack) {
+		// resolve clash attack
+	}
+
+	function clashAttackCheck(tick, attacker) {
+		for (i in pendingAttacks) {
+			var check = pendingAttacks[i];
+			if (check.tick === tick && check.defender === attacker) return i;
+		}
+		return false;
+	}
+
 	function resetActiveStatus() {
-		resolvePendingDamage();
+		resolvePendingAttacks();
 
 		for (i in combatants) {
 			if (isNaN(combatants[i].getWoundPenalty()))	combatants[i].active = false;
