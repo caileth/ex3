@@ -705,7 +705,9 @@ $(function() {
 		dialogFormInputs.each(function() {
 			var stat = $(this).attr("id"),
 				evalStr = "$(this).val(lookup['"+id+"']."+stat+")";
+			
 			if (stat === "doesLethal") eval("$(this).prop('checked', lookup['"+id+"']."+stat+")");
+			
 			if (stat === "armorPicker" || stat === "weaponPicker") { /* do nothing */ }
 			else if (stat) eval(evalStr);
 		});
@@ -825,7 +827,7 @@ $(function() {
 	}
 
 	function twinkNameGenerator() {
-		var names = ["Reborn Vermillion Havoc","Chejop Kejak","The Scarlet Empress","The Ebon Dragon","The Unconquered Sun","Invincible Sword Princess","Killfuck Soulshitter"],
+		var names = ["Reborn Vermillion Havoc","Chejop Kejak","The Scarlet Empress","The Ebon Dragon","The Unconquered Sun","Invincible Sword Princess","Killfuck Soulshitter","Ma-Ha-Suchi"],
 			pick = ~~(Math.random() * names.length);
 
 		$("#name").val(names[pick]);
