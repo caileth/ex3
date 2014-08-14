@@ -46,7 +46,7 @@ $(function() {
 		dialog = $("#dialog"),
 		dialogForm = $("#dialog-form"),
 		dialogFormInputs = $("#dialog-form :input"),
-		dialogFormNumbers = $("#dialog-form :input[type=number] :not(#initiative)"),
+		dialogFormNumbers = $("#dialog-form :input[type=number]:not(#initiative)"),
 		guid = (function(){function s4(){return Math.floor((1+Math.random())*0x10000).toString(16).substring(1);}return function(){return s4()+s4()+'-'+s4()+'-'+s4()+'-'+s4()+'-'+s4()+s4()+s4();};})(),
 		joinBattleButton = $("#joinBattle"),
 		pendingAttacks = new Array(),
@@ -707,8 +707,7 @@ $(function() {
 				evalStr = "$(this).val(lookup['"+id+"']."+stat+")";
 			
 			if (stat === "doesLethal") eval("$(this).prop('checked', lookup['"+id+"']."+stat+")");
-			
-			if (stat === "armorPicker" || stat === "weaponPicker") { /* do nothing */ }
+			else if (stat === "armorPicker" || stat === "weaponPicker") { /* do nothing */ }
 			else if (stat) eval(evalStr);
 		});
 	}
