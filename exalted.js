@@ -929,28 +929,35 @@ $(function() {
 	function resolveClashAttack(attack, secondAttack) {
 		// resolve clash attack
 		var first = attack.attacker,
-			second = secondAttack.attacker;
-		if (attack.isDecisive && secondAttack.isDecisive) {
-			//  both decisive
-			var firstAttack		= successChecker(first.getDecisivePool()),
-				secondAttack	= successChecker(second.getDecisivePool()),
-				result			= firstAttack - secondAttack;
+			second = secondAttack.attacker,
+			result;
 
-			if (result > 0) {
-				// first attack wins
+		console.groupCollapsed("Clash attack:",first.name,"vs.",second.name,"!");
 
-			} else if (result < 0) {
-				// second attack wins
-			} else {
-				// it's a tie, nothing happens
-			}
-		} else if (!attack.isDecisive && !secondAttack.isDecisive) {
-			// both withering
-		} else if (attack.isDecisive) {
-			// first attack decisive, second withering
+		if (attack.isDecisive && secondAttack.isDecisive) result = opposedRoll(first.getDecisivePool(), second.getDecisivePool());
+		else if (!attack.isDecisive && !secondAttack.isDecisive) result = opposedRoll(first.getWitheringPool(), second.getWitheringPool());
+		else if (attack.isDecisive) result = opposedRoll(first.getDecisivePool(), second.getWitheringPool());
+		else result = opposedRoll(first.getWitheringPool(), second.getDecisivePool());
+
+		if (result > 0) {
+			// first attack wins
+			console.log(first.name,"wins with",result,"net successes!");
+		} else if (result < 0) {
+			// second attack wins
+			console.log(second.name,"wins with",result,"net successes!");
 		} else {
-			// first attack withering, second decisive
+			// it's a tie, report it
+			console.log("Clash indecisive!");
 		}
+
+		console.groupEnd();
+	}
+
+	function opposedRoll(first, second) {
+		var a = successChecker(first),
+			b = successChecker(second);
+
+		return a - b;
 	}
 
 	function stunt(level) {
