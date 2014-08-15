@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8"/>
 	<title>exalted stuff</title>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 	<style>
@@ -38,6 +39,11 @@
 	</style>
 	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+	<script src="./includes/exalted-defines.js"></script>
+	<script src="./includes/exalted-utils.js"></script>
+	<script src="./includes/exalted-prototypes.js"></script>
+	<script src="./includes/exalted-dialogs.js"></script>
+	<script src="./includes/exalted-randomCrap.js"></script>
 	<script src="./exalted.js"></script>
 </head>
 <body>
