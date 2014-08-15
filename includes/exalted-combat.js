@@ -121,7 +121,10 @@ function checkWitheringDamage(attacker, defender, attackThreshold, clash) {
 		damageRoll = diceRoller(damagePool),
 		damage = Math.max(successChecker(damageRoll),0);
 
-	if (clash) damage += CLASH_BONUS_WITHERING;
+	if (clash) {
+		damage += CLASH_BONUS_WITHERING;
+		RESULTS_WINDOW.append("CLASH!\n");
+	}
 		
 	RESULTS_WINDOW.append("Attacker base damage pool: " + damagePool + "; Defender soak: " + defender.getSoak() + "\n");
 	RESULTS_WINDOW.append(attacker.name + " rolls " + damage + " damage! (" + damageRoll + ")\n");
@@ -133,7 +136,10 @@ function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
 	var damageRoll = diceRoller(attacker.initiative),
 		damage = successChecker(damageRoll, undefined, false);
 
-	if (clash) damage += CLASH_BONUS_DECISIVE;
+	if (clash) {
+		damage += CLASH_BONUS_DECISIVE;
+		RESULTS_WINDOW.append("CLASH!\n");
+	}
 
 	if (attacker.doesLethal) {
 		defender.lethal += damage;
@@ -150,7 +156,7 @@ function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
 }
 
 function resolveWitheringDamage(attacker, defender, damage) {
-	var isTargetCrashed,
+	var wasAttackerCrashed = attacker.initiative < 1,
 		wasTargetCrashed = defender.initiative < 1,
 		witheringPenalty = attacker.initiative >= WITHERING_PENALTY_INITIATIVE;
 
@@ -173,11 +179,19 @@ function resolveWitheringDamage(attacker, defender, damage) {
 	defender.initiative -= damage;
 	RESULTS_WINDOW.append("&mdash;" + defender.name + " loses " + damage + "!\n");
 
-	isTargetCrashed = defender.initiative < 1;
+	var isTargetCrashed = defender.initiative < 1;
 	console.log("is target crashed?",isTargetCrashed);
 
 	if (wasTargetCrashed != isTargetCrashed) {
-		attacker.initiative += INITIATIVE_BREAK_BONUS;
+		attacker.initiative += INITIATIVE_BREAK_BONUS; // unless they've been recently crashed, fix this
+		if (wasAttackerCrashed && attacker.crashedBy === defender) {
+			// INITIATIVE SHIFT
+			attacker.initiative = Math.max(attacker.initiative, INITIATIVE_RESET_VALUE);
+			attacker.initiative += attacker.joinBattle();
+			attacker.active = true;
+			// should only be able to use new turn for attacking same dude
+		}
+		defender.crashedBy = attacker;
 		RESULTS_WINDOW.append(attacker.name+" gains Initiative Break bonus!\n");
 	}
 
