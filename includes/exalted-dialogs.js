@@ -8,11 +8,10 @@ function editCombatant(id, combatants) {
 }
 
 function addCombatant(combatants) {
-	console.groupCollapsed("Adding Combatant");
-
 	var i = combatants.length;
+	console.groupCollapsed("Adding combatant — current length of combatants is",i);
 
-	combatants[i] = new Combatant();
+	combatants.push(new Combatant());
 	recordStats(combatants[i].id, combatants);
 	combatants[i].initiative = combatants[i].joinBattle();
 
@@ -45,7 +44,8 @@ function addClose(combatants) {
 function getStats(id, combatants) {
 	DIALOG_FORM_INPUTS.refresh();
 
-	var lookup = lookupByID(combatants);console.log(lookup);
+	var lookup = lookupByID(combatants);
+		console.log(lookup);
 
 	DIALOG_FORM_INPUTS.each(function() {
 		var stat = $(this).attr("id"),
@@ -62,7 +62,8 @@ function recordStats(id, combatants) {
 
 	DIALOG_FORM_INPUTS.refresh();
 
-	var lookup = lookupByID(combatants);console.log(lookup);
+	var lookup = lookupByID(combatants);
+		console.log(lookup);
 
 	console.log("refreshing dialog form inputs selector");
 	console.log(DIALOG_FORM_INPUTS);

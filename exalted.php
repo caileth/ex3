@@ -44,6 +44,8 @@
 	<script src="./includes/exalted-prototypes.js"></script>
 	<script src="./includes/exalted-dialogs.js"></script>
 	<script src="./includes/exalted-randomCrap.js"></script>
+	<script src="./includes/exalted-combatants.js"></script>
+	<script src="./includes/exalted-combat.js"></script>
 	<script src="./exalted.js"></script>
 </head>
 <body>

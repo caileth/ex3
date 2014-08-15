@@ -101,11 +101,21 @@ $.fn.refresh = function() {
 };
 
 function lookupByID(array) {
+	console.groupCollapsed("lookup by ID called for",array);
 	var result = {};
 	for (var i = 0, len = array.length; i < len; i++) {
 		result[array[i].id] = array[i];
+		console.log("setting",array[i].name,"to lookup[",array[i].id,"]");
 	}
+	console.groupEnd();
 	return result;
+}
+
+function opposedRoll(first, second) {
+	var a = successChecker(diceRoller(first)),
+		b = successChecker(diceRoller(second));
+
+	return a - b;
 }
 
 function sanitize(str) {
@@ -114,4 +124,13 @@ function sanitize(str) {
 
 function scrollToBottom() {
 	RESULTS_WINDOW.scrollTop(RESULTS_WINDOW[0].scrollHeight - RESULTS_WINDOW.height());
+}
+
+function stunt(level) {
+	switch (level) {
+		case 1: return {"level": 1, "dice": 2, "successes": 0, "willpower": 0, "static": 1};
+		case 2: return {"level": 2, "dice": 2, "successes": 1, "willpower": 1, "static": 2};
+		case 3: return {"level": 3, "dice": 2, "successes": 2, "willpower": 2, "static": 3};
+		default: return {"level": 0, "dice": 0, "successes": 0, "willpower": 0, "static": 0};
+	}
 }
