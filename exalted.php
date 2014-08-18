@@ -18,7 +18,7 @@
 		body{border-left:solid crimson 50px;margin:0;}
 		body,textarea,input[type=button]{font-family:Goudy;}
 		table{width:600px;padding:1em;}
-		textarea{width:85em;height:10em;}
+		textarea{width:85em;height:30em;}
 		input[type=number]{width:2.5em;}
 		body > div{margin:1em;}
 
@@ -39,9 +39,9 @@
 	</style>
 	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
+	<script src="./includes/exalted-prototypes.js"></script>
 	<script src="./includes/exalted-defines.js"></script>
 	<script src="./includes/exalted-utils.js"></script>
-	<script src="./includes/exalted-prototypes.js"></script>
 	<script src="./includes/exalted-dialogs.js"></script>
 	<script src="./includes/exalted-randomCrap.js"></script>
 	<script src="./includes/exalted-combatants.js"></script>

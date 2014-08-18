@@ -1,21 +1,21 @@
-function editCombatant(id, combatants) {
+function editCombatant(id) {
 	console.groupCollapsed("editCombatant");
 
-	recordStats(id, combatants);
+	recordStats(id, SCENE.combatants);
 	DIALOG.dialog("close");console.log("closing dialog");
 
 	console.groupEnd();
 }
 
-function addCombatant(combatants) {
-	var i = combatants.length;
-	console.groupCollapsed("Adding combatant — current length of combatants is",i);
+function addCombatant() {
+	var i = SCENE.combatants.length;
+	console.groupCollapsed("Adding combatant — current length of SCENE.combatants is",i);
 
-	combatants.push(new Combatant());
-	recordStats(combatants[i].id, combatants);
-	combatants[i].initiative = combatants[i].joinBattle();
+	SCENE.combatants.push(new Combatant());
+	recordStats(SCENE.combatants[i].id, SCENE.combatants);
+	SCENE.combatants[i].initiative = SCENE.combatants[i].joinBattle();
 
-	RESULTS_WINDOW.append(combatants[i].getName() + " joins battle at tick " + combatants[i].initiative + "\n");
+	RESULTS_WINDOW.append(SCENE.combatants[i].getName() + " joins battle at tick " + SCENE.combatants[i].initiative + "\n");
 	scrollToBottom();
 
 	console.groupEnd();
@@ -23,28 +23,28 @@ function addCombatant(combatants) {
 	DIALOG.dialog("close");
 }
 
-function editClose(id, combatants) {
+function editClose(id) {
 	var editCombatantForm = DIALOG_FORM.on("submit", function(event) {
 		event.preventDefault();
-		editCombatant(id, combatants);
+		editCombatant(id, SCENE.combatants);
 	});
 
 	editCombatantForm[0].reset();
 }
 
-function addClose(combatants) {
+function addClose() {
 	var addCombatantForm = DIALOG_FORM.on("submit", function(event) {
 		event.preventDefault();
-		addCombatant(combatants);
+		addCombatant(SCENE.combatants);
 	});
 
 	addCombatantForm[0].reset();
 }
 
-function getStats(id, combatants) {
+function getStats(id) {
 	DIALOG_FORM_INPUTS.refresh();
 
-	var lookup = lookupByID(combatants);
+	var lookup = lookupByID(SCENE.combatants);
 		console.log(lookup);
 
 	DIALOG_FORM_INPUTS.each(function() {
@@ -57,12 +57,12 @@ function getStats(id, combatants) {
 	});
 }
 
-function recordStats(id, combatants) {
+function recordStats(id) {
 	console.groupCollapsed("record stats",id);
 
 	DIALOG_FORM_INPUTS.refresh();
 
-	var lookup = lookupByID(combatants);
+	var lookup = lookupByID(SCENE.combatants);
 		console.log(lookup);
 
 	console.log("refreshing dialog form inputs selector");

@@ -26,7 +26,7 @@ $(function() {
 
 		if (edit) {
 			DIALOG_FORM.append('<br/><label for="initiative">Initiative: </label><input type="number" id="initiative" value="0"/>');
-			getStats(id, combatants);
+			getStats(id);
 		}
 
 		DIALOG.dialog({
@@ -35,12 +35,12 @@ $(function() {
 			height: "auto",
 			width: "auto",
 			modal: true,
-			close: (edit ? function(){editClose(id, combatants);} : function(){addClose(combatants);})});
+			close: (edit ? function(){editClose(id);} : function(){addClose();})});
 
 		if (edit) {
 			DIALOG.dialog("option", "buttons", [
 				{ text: "Edit combatant", click: function() {
-					editCombatant(id, combatants);
+					editCombatant(id);
 					doRound();
 				}},
 				{ text: "Cancel", click: function() {
@@ -49,7 +49,7 @@ $(function() {
 		} else {
 			DIALOG.dialog("option", "buttons", [
 				{ text: "Add combatant", click: function() {
-					addCombatant(combatants);
+					addCombatant();
 					doRound();
 				}},
 				{ text: "Cancel", click: function() {
@@ -64,12 +64,12 @@ $(function() {
 
 	$("body").on( "click", ".attack", function() {
 		console.groupCollapsed("Attack Button");
-		if (combatants.length > 1) {	
+		if (SCENE.combatants.length > 1) {	
 			DIALOG_FORM.html(ATTACK_WINDOW);
 
 			var attackForm,
 				id = $(this).parent().attr("id"),
-				lookup = lookupByID(combatants);
+				lookup = lookupByID(SCENE.combatants);
 	
 			attackForm = DIALOG_FORM.on("submit", function(event) {
 				event.preventDefault();
@@ -105,13 +105,17 @@ $(function() {
 	});
 
 	$("body").on('click', '.randomize', function() {
+		console.groupCollapsed("Random Button");
 		randomNameGenerator(NAMES_DATABASE);
 		randomStatsGenerator();
+		console.groupEnd();
 	});
 
 	$("body").on('click', '.twink', function() {
+		console.groupCollapsed("Twink Button");
 		twinkNameGenerator();
 		twinkStatsGenerator();
+		console.groupEnd();
 	});
 
 	$("body").on('click', '.remove', function() {
@@ -119,9 +123,9 @@ $(function() {
 
 		var id = $(this).parent().attr("id");
 
-		for (var i = 0; i < combatants.length; i++) {
-			if (combatants[i].id === id) {
-				combatants.splice(i,1);
+		for (i in SCENE.combatants) {
+			if (SCENE.combatants[i].id === id) {
+				SCENE.combatants.splice(i,1);
 			}
 		}
 
@@ -135,15 +139,15 @@ $(function() {
 
 	$("#joinBattle").click(function() {
 		console.groupCollapsed("joinBattle clicked");
-		console.log(combatants.length,"combatants");
-		if(combatants.length > 1) {
+		console.log(SCENE.combatants.length,"combatants");
+		if (SCENE.combatants.length > 1) {
 			RESULTS_WINDOW.append("\n---\n");
-			for (var i = 0; i < combatants.length; i++) {
-				var joinBattlePool = combatants[i].getJoinBattlePool(),
+			for (i in SCENE.combatants) {
+				var joinBattlePool = SCENE.combatants[i].getJoinBattlePool(),
 					joinBattleRoll = diceRoller(joinBattlePool),
 					joinBattleSuxx = Math.max(successChecker(joinBattleRoll, JB_TARGET, JB_DOUBLES), 0);
-				combatants[i].initiative = joinBattleSuxx + JB_EXTRA_SUX;
-				RESULTS_WINDOW.append(combatants[i].name + " joins battle at initiative " + combatants[i].initiative + "\n");
+				SCENE.combatants[i].initiative = joinBattleSuxx + JB_EXTRA_SUX;
+				RESULTS_WINDOW.append(SCENE.combatants[i].name + " joins battle at initiative " + SCENE.combatants[i].initiative + "\n");
 			}
 			scrollToBottom();
 			doRound();

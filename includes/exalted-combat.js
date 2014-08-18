@@ -1,8 +1,7 @@
-var combatants = new CombatantsList(),
-	pendingAttacks = new PendingAttacksList();
-
 function attack(id, target) {
-	var lookup		= lookupByID(combatants),
+	console.groupCollapsed("Attack!");
+
+	var lookup		= lookupByID(SCENE.combatants),
 		attacker	= lookup[id],
 		defender	= lookup[target];
 
@@ -12,19 +11,22 @@ function attack(id, target) {
 		attackWound			= attacker.getWoundPenalty();
 		defendStunt			= parseInt($("input[name=defendStunt]:checked").val());
 
+	attacker.isShifting = false;
+
 	attackStunt = stunt(attackStunt);
 	defendStunt = stunt(defendStunt);
-
-	console.groupCollapsed(attacker.name,"attacks",defender.name,"!");
 
 	// add in attacker wound penalties if applicable (otherwise this function probably shouldn't be called in the first place)
 	if (!isNaN(attackWound)) attackModifiers += attackWound;
 
-	pendingAttacks.push(new PendingAttack(attacker.initiative, attacker, defender, attackModifiers, attackStunt, defendStunt, attackIsDecisive));
-		console.log(pendingAttacks);
+	SCENE.pendingAttacks.push(new PendingAttack(attacker.initiative, attacker, defender, attackModifiers, attackStunt, defendStunt, attackIsDecisive));
+		console.log("new attack pushed:",SCENE.pendingAttacks);
 
-	attacker.active = false;
+	if (!attacker.isShifting) {
+		attacker.active = false;
 		console.log("Setting",attacker.name,"to inactive");
+	}
+
 	defender.onslaught++;
 		console.log(defender.name+" is now at -"+defender.onslaught+" Onslaught penalty");
 
@@ -69,7 +71,7 @@ function resolveClashAttack(attack, secondAttack) {
 		second = secondAttack.attacker,
 		result;
 
-	console.groupCollapsed("Clash attack:",first.name,"vs.",second.name,"!");
+	RESULTS_WINDOW.append("CLASH! "+first.name+" vs. "+second.name,"!"+"\n");
 
 	if (attack.isDecisive && secondAttack.isDecisive) result = opposedRoll(first.getDecisivePool(), second.getDecisivePool());
 	else if (!attack.isDecisive && !secondAttack.isDecisive) result = opposedRoll(first.getWitheringPool(), second.getWitheringPool());
@@ -77,21 +79,20 @@ function resolveClashAttack(attack, secondAttack) {
 	else result = opposedRoll(first.getWitheringPool(), second.getDecisivePool());
 
 	if (result > 0) {
-		console.log(first.name,"wins with",result,"net successes!");
+		RESULTS_WINDOW.append(first.name+" wins with "+result+" net successes!\n");
 		if (attack.isDecisive) checkDecisiveDamage(first, second, result, true);
 		else checkWitheringDamage(first, second, result, true);
 		second.onslaught += CLASH_PENALTY;
 	} else if (result < 0) {
-		console.log(second.name,"wins with",result,"net successes!");
+		result = Math.abs(result);
+		RESULTS_WINDOW.append(second.name+" wins with "+result+" net successes!\n");
 		if (secondAttack.isDecisive) checkDecisiveDamage(second, first, result, true);
 		else checkWitheringDamage(second, first, result, true);
 		first.onslaught += CLASH_PENALTY;
 	} else {
 		RESULTS_WINDOW.append(first.name+" and "+second.name+" Clash&mdash;but it's indecisive!\n");
-		console.log("Clash indecisive!");
+		RESULTS_WINDOW.append("Clash indecisive!\n");
 	}
-
-	console.groupEnd();
 }
 
 function makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefense, isDecisive) {
@@ -99,18 +100,16 @@ function makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefens
 		attackSuccesses = successChecker(attackRoll, undefined, undefined, attackAuto),
 		attackThreshold = attackSuccesses - Math.max(targetDefense, 0);
 
-	RESULTS_WINDOW.append(attacker.name + " rolls: " + attackRoll + "\n");
-
 	if (attackThreshold >= 0) {
-		RESULTS_WINDOW.append("Success! " + attackThreshold + " net successes!\n");
+		RESULTS_WINDOW.append(attacker.name + " succeeds at +" + attackThreshold + "! (" + attackRoll + ")\n");
 		if (isDecisive) checkDecisiveDamage(attacker, defender);
 		else checkWitheringDamage(attacker, defender, attackThreshold);
 	} else {
 		// botch stuff?
-		RESULTS_WINDOW.append("Failure!\n");
+		RESULTS_WINDOW.append(attacker.name + " fails!\n");
 		if (isDecisive) {
 			var initLoss = (attacker.initiative > DECISIVE_MISS_PENALTY_THRESHOLD ? DECISIVE_MISS_PENALTY_HIGH : DECISIVE_MISS_PENALTY_LOW);
-			RESULTS_WINDOW.append(attacker.name + " fails Decisive attack and loses " + initLoss + " Initiative!\n");
+			RESULTS_WINDOW.append(attacker.name + " loses " + initLoss + " Initiative!\n");
 			attacker.initiative -= initLoss;
 		}
 	}
@@ -121,25 +120,26 @@ function checkWitheringDamage(attacker, defender, attackThreshold, clash) {
 		damageRoll = diceRoller(damagePool),
 		damage = Math.max(successChecker(damageRoll),0);
 
-	if (clash) {
-		damage += CLASH_BONUS_WITHERING;
-		RESULTS_WINDOW.append("CLASH!\n");
-	}
-		
-	RESULTS_WINDOW.append("Attacker base damage pool: " + damagePool + "; Defender soak: " + defender.getSoak() + "\n");
-	RESULTS_WINDOW.append(attacker.name + " rolls " + damage + " damage! (" + damageRoll + ")\n");
+	console.log("Raw damage",attacker.getDamage(),"Threshold:",attackThreshold,"Soak:",defender.getSoak(),"Overwhelm:",attacker.overwhelming,"Final pool:",damagePool);
+	RESULTS_WINDOW.append(attacker.name + " rolls " + damagePool + " dice and inflicts " + damage + " damage! (" + damageRoll + ")\n");
 
-	if (damage > 0) resolveWitheringDamage(attacker, defender, damage);
+	if (clash) {
+		RESULTS_WINDOW.append(attacker.name+" gains "+CLASH_BONUS_WITHERING+" automatic damage for a successful Clash!\n");
+		damage += CLASH_BONUS_WITHERING;
+	}		
+
+	if (damage > 0) {
+		attacker.initiative++;
+		RESULTS_WINDOW.append(attacker.name + " gains an Initiative for a successful Withering Attack.\n");
+		resolveWitheringDamage(attacker, defender, damage);
+	}
 }
 
 function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
 	var damageRoll = diceRoller(attacker.initiative),
 		damage = successChecker(damageRoll, undefined, false);
 
-	if (clash) {
-		damage += CLASH_BONUS_DECISIVE;
-		RESULTS_WINDOW.append("CLASH!\n");
-	}
+	if (clash) damage += CLASH_BONUS_DECISIVE;
 
 	if (attacker.doesLethal) {
 		defender.lethal += damage;
@@ -160,17 +160,12 @@ function resolveWitheringDamage(attacker, defender, damage) {
 		wasTargetCrashed = defender.initiative < 1,
 		witheringPenalty = attacker.initiative >= WITHERING_PENALTY_INITIATIVE;
 
-	attacker.initiative++;
-	RESULTS_WINDOW.append(attacker.name + " gains an Initiative for a successful Withering Attack.\n");
-
 	if (defender.crashedAndWithered) {
 		attacker.initiative += Math.min(1, damage);
-		RESULTS_WINDOW.append(defender.name + " is in Crash and has already been withered. " +
-			attacker.name + " gains " + Math.min(1, damage) + " Initiative");
+		RESULTS_WINDOW.append(defender.name + " is in Crash and has already been withered. " + attacker.name + " gains " + Math.min(1, damage) + " Initiative");
 	} else if (witheringPenalty) {
 		attacker.initiative += Math.ceil(damage / 2);
-		RESULTS_WINDOW.append(attacker.name + " is over " + WITHERING_PENALTY_INITIATIVE +
-			" Initiative and gains only " + Math.ceil(damage / 2) + " from the attack");
+		RESULTS_WINDOW.append(attacker.name + " is over " + WITHERING_PENALTY_INITIATIVE + " Initiative and gains only " + Math.ceil(damage / 2) + " from the attack");
 	} else {
 		attacker.initiative += damage;
 		RESULTS_WINDOW.append(attacker.name + " gains " + damage + " Initiative");
@@ -188,7 +183,7 @@ function resolveWitheringDamage(attacker, defender, damage) {
 			// INITIATIVE SHIFT
 			attacker.initiative = Math.max(attacker.initiative, INITIATIVE_RESET_VALUE);
 			attacker.initiative += attacker.joinBattle();
-			attacker.active = true;
+			attacker.isShifting = true;
 			// should only be able to use new turn for attacking same dude
 		}
 		defender.crashedBy = attacker;
@@ -201,7 +196,7 @@ function resolveWitheringDamage(attacker, defender, damage) {
 function populateTargetList(id) {
 	console.groupCollapsed("populating target list");
 	$("#opponents").empty();console.log("clearing out existing entries");
-	var lookup = lookupByID(combatants);
+	var lookup = lookupByID(SCENE.combatants);
 	for (i in lookup) {
 		if (i != id) {
 			console.log("adding id",i);
@@ -216,29 +211,32 @@ function populateTargetList(id) {
 function doRound() {
 	console.groupCollapsed("Do Round");
 
-	if (combatants.length > 1) {
-		var whoseTurn = combatants.whoseTurnIsIt();
+	if (SCENE.combatants.length > 1) {
+		var whoseTurn = SCENE.whoseTurnIsIt();
 		console.log(">1 combatant detected. Highest tick is",whoseTurn);
 
 		// 1. set tick to highest active initiative
 		// 2. resolve all pending damage at higher initiative than current tick
 		// 3. if no actives, resolve all pending damage and reset active status
 
+		SCENE.resolve(whoseTurn);
+		
+		// refresh in case of initiative shift
+		whoseTurn = SCENE.whoseTurnIsIt();
+
 		if (whoseTurn != null) {
-			pendingAttacks.resolve(whoseTurn);
-			combatants.resetOnslaught(whoseTurn);
+			SCENE.resetOnslaught(whoseTurn);
 			RESULTS_WINDOW.append("Tick " + whoseTurn + "\n");
 		} else {
-			pendingAttacks.resolve();
-			combatants.resetActiveStatus();
-			combatants.iterateCrashCounter();
-			combatants.resetOnslaught();
+			SCENE.resetActiveStatus();
+			SCENE.iterateCrashCounter();
+			SCENE.resetOnslaught();
 			RESULTS_WINDOW.append("Round is over!\n");
 			doRound();
 		}
 	}
 
-	combatants.print();
-	scrollToBottom();
 	console.groupEnd();
+	SCENE.printCombatants();
+	scrollToBottom();
 }
