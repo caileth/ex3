@@ -4,6 +4,30 @@
 		"selected_items":
 		[
 			[
+				"INITI",
+				"INITIATIVE_RESET_VALUE"
+			],
+			[
+				"cras",
+				"crashedBy"
+			],
+			[
+				"group",
+				"groupEnd"
+			],
+			[
+				"highe",
+				"highestInitiative"
+			],
+			[
+				"secon",
+				"second"
+			],
+			[
+				"pen",
+				"PendingAttack"
+			],
+			[
 				"weap",
 				"weaponPicker"
 			],
@@ -58,10 +82,6 @@
 			[
 				"getde",
 				"getDecisivePool"
-			],
-			[
-				"secon",
-				"secondAttack"
 			],
 			[
 				"tar",
@@ -208,10 +228,6 @@
 				"resolvePendingDamage"
 			],
 			[
-				"group",
-				"groupCollapsed"
-			],
-			[
 				"grou",
 				"groupEnd"
 			],
@@ -242,10 +258,6 @@
 			[
 				"di",
 				"dialogForm"
-			],
-			[
-				"pen",
-				"pendingAttacksIndex"
 			],
 			[
 				"ta",
@@ -502,18 +514,6 @@
 			[
 				"backgron",
 				"background-image"
-			],
-			[
-				"join",
-				"joinBattleSuxx"
-			],
-			[
-				"JB",
-				"JB_EXTRA_SUX"
-			],
-			[
-				"so",
-				"sortbyInitiative"
 			]
 		]
 	},
@@ -523,7 +523,15 @@
 			"file": "includes/exalted-combat.js",
 			"settings":
 			{
-				"buffer_size": 8301,
+				"buffer_size": 9392,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "includes/exalted-prototypes.js",
+			"settings":
+			{
+				"buffer_size": 10686,
 				"line_ending": "Windows"
 			}
 		},
@@ -531,7 +539,7 @@
 			"file": "includes/exalted-defines.js",
 			"settings":
 			{
-				"buffer_size": 6117,
+				"buffer_size": 6192,
 				"line_ending": "Windows"
 			}
 		},
@@ -539,7 +547,7 @@
 			"file": "exalted.js",
 			"settings":
 			{
-				"buffer_size": 3980,
+				"buffer_size": 4045,
 				"line_ending": "Windows"
 			}
 		},
@@ -547,7 +555,7 @@
 			"file": "includes/exalted-utils.js",
 			"settings":
 			{
-				"buffer_size": 3498,
+				"buffer_size": 3646,
 				"line_ending": "Windows"
 			}
 		},
@@ -563,7 +571,7 @@
 			"file": "includes/exalted-dialogs.js",
 			"settings":
 			{
-				"buffer_size": 2330,
+				"buffer_size": 2372,
 				"line_ending": "Windows"
 			}
 		},
@@ -572,22 +580,6 @@
 			"settings":
 			{
 				"buffer_size": 3617,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "includes/exalted-prototypes.js",
-			"settings":
-			{
-				"buffer_size": 5601,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "includes/exalted-combatants.js",
-			"settings":
-			{
-				"buffer_size": 4336,
 				"line_ending": "Windows"
 			}
 		}
@@ -624,6 +616,7 @@
 	},
 	"file_history":
 	[
+		"/D/Documents/GitHub/ex3/includes/exalted-combatants.js",
 		"/D/Documents/GitHub/ex3/includes/exalted-defines.js",
 		"/D/Documents/GitHub/ex3/exalted.php",
 		"/D/Documents/GitHub/ex3/exalted.js",
@@ -750,8 +743,7 @@
 		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/various_traits_events.txt",
 		"/C/Users/Justin/Desktop/minecraft server/logs/latest.log",
 		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/lovers_events.txt",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/decisions/demesne_laws.txt",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/decisions/crown_laws.txt"
+		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/decisions/demesne_laws.txt"
 	],
 	"find":
 	{
@@ -770,6 +762,54 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"shift",
+			"joinBattle",
+			"join",
+			"target",
+			"Target",
+			"active = false",
+			"crash",
+			"crashed",
+			"shift",
+			"combatants",
+			"resetActive",
+			"lookupByID",
+			"pendingAttack",
+			".length",
+			"lookupByID",
+			"record stats",
+			"getStats",
+			"lookup",
+			"refreshing dialog",
+			"pendingAttacksList",
+			"this",
+			"combatants",
+			"pending",
+			"pendingAttack",
+			"combatants",
+			"pendingAttacks",
+			"combatants",
+			"Combatants",
+			"combatants",
+			"Combatants",
+			"combatants",
+			"whose turn",
+			"whoseTurn",
+			"whoseTurns",
+			"resolving",
+			"pending attack",
+			"resolving pending attack",
+			"second",
+			"first",
+			"second",
+			"PendingAttack",
+			"whoseTurn",
+			"onslaught",
+			"onsalught",
+			"resetActive",
+			"whoseTurn",
+			"onslaught",
+			"onsalught",
 			"print",
 			"attackWindow",
 			"default",
@@ -849,55 +889,7 @@
 			"checkDecisive",
 			"#attackIsDecisive",
 			"#attackIsDecsiive",
-			"id=\"attackIs",
-			"#attackIsDecisive",
-			"function attack",
-			"attack",
-			"recordDamage",
-			"doDamage",
-			"checkDecisive",
-			"doesLethal",
-			".lethal",
-			"initiative > 10",
-			"initiative ? 10",
-			"isDecisive",
-			"3",
-			"resolveDecisiveAttack",
-			"resolveWitheringAttack",
-			"resolvewithering",
-			"stunt",
-			"clashdamage",
-			"attackStunt.dice",
-			"stunt",
-			"attackStunt",
-			"stunt",
-			"resolveDecisive",
-			"attac",
-			"stunt",
-			"resolveclash",
-			"resolvewithering",
-			"resolvedecisive",
-			"resolveclash",
-			"function successchecker",
-			"successchecker",
-			"resolveclash",
-			"successchecker",
-			"resolvePending",
-			"resolvepending",
-			"attack",
-			"source",
-			"function attack",
-			"function Comb",
-			"resetActive",
-			"reset",
-			"getDecisive",
-			"attack",
-			"wound penalty",
-			"recordDamage",
-			"debug",
-			"24",
-			"gethealthtrackhtml",
-			"gethealthtrackhhtml"
+			"id=\"attackIs"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -960,15 +952,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8301,
+						"buffer_size": 9392,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4320,
-								4320
+								8074,
+								8074
 							]
 						],
 						"settings":
@@ -977,7 +969,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 688.0,
+						"translation.y": 2070.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -985,19 +977,19 @@
 				},
 				{
 					"buffer": 1,
-					"file": "includes/exalted-defines.js",
+					"file": "includes/exalted-prototypes.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6117,
+						"buffer_size": 10686,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6117,
-								6117
+								7653,
+								7653
 							]
 						],
 						"settings":
@@ -1006,56 +998,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1416.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "exalted.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3980,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1773,
-								1773
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 375.0,
+						"translation.y": 3825.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "includes/exalted-utils.js",
+					"buffer": 2,
+					"file": "includes/exalted-defines.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3498,
+						"buffer_size": 6192,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2882,
-								2882
+								79,
+								79
 							]
 						],
 						"settings":
@@ -1064,14 +1027,72 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1350.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "exalted.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4045,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1127,
+								1127
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
 					"buffer": 4,
+					"file": "includes/exalted-utils.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3646,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1125,
+								1125
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": -0.0,
+						"translation.y": 180.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "exalted.php",
 					"semi_transient": false,
 					"settings":
@@ -1093,27 +1114,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 360.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 6,
 					"file": "includes/exalted-dialogs.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2330,
+						"buffer_size": 2372,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2330,
-								2330
+								1157,
+								1157
 							]
 						],
 						"settings":
@@ -1125,11 +1146,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 7,
 					"file": "includes/exalted-randomCrap.js",
 					"semi_transient": false,
 					"settings":
@@ -1154,65 +1175,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "includes/exalted-prototypes.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 5601,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								451,
-								451
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
-					"file": "includes/exalted-combatants.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4336,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3025,
-								3025
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 765.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
