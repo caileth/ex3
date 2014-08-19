@@ -12,9 +12,11 @@ function attack(id, target) {
 		defendStunt			= parseInt($("input[name=defendStunt]:checked").val());
 
 	attacker.isShifting = false;
+		console.log("setting attacker shift to false");
 
 	attackStunt = stunt(attackStunt);
 	defendStunt = stunt(defendStunt);
+		console.log("stunts:",attackStunt,"vs.",defendStunt);
 
 	// add in attacker wound penalties if applicable (otherwise this function probably shouldn't be called in the first place)
 	if (!isNaN(attackWound)) attackModifiers += attackWound;
@@ -22,10 +24,7 @@ function attack(id, target) {
 	SCENE.pendingAttacks.push(new PendingAttack(attacker.initiative, attacker, defender, attackModifiers, attackStunt, defendStunt, attackIsDecisive));
 		console.log("new attack pushed:",SCENE.pendingAttacks);
 
-	if (!attacker.isShifting) {
-		attacker.active = false;
-		console.log("Setting",attacker.name,"to inactive");
-	}
+	attacker.active = false;
 
 	defender.onslaught++;
 		console.log(defender.name+" is now at -"+defender.onslaught+" Onslaught penalty");
@@ -160,6 +159,8 @@ function resolveWitheringDamage(attacker, defender, damage) {
 		wasTargetCrashed = defender.initiative < 1,
 		witheringPenalty = attacker.initiative >= WITHERING_PENALTY_INITIATIVE;
 
+	console.log("target was crashed before attack resolution?",wasTargetCrashed);
+
 	if (defender.crashedAndWithered) {
 		attacker.initiative += Math.min(1, damage);
 		RESULTS_WINDOW.append(defender.name + " is in Crash and has already been withered. " + attacker.name + " gains " + Math.min(1, damage) + " Initiative");
@@ -175,15 +176,18 @@ function resolveWitheringDamage(attacker, defender, damage) {
 	RESULTS_WINDOW.append("&mdash;" + defender.name + " loses " + damage + "!\n");
 
 	var isTargetCrashed = defender.initiative < 1;
-	console.log("is target crashed?",isTargetCrashed);
+	console.log("target is crashed now?",isTargetCrashed);
 
 	if (wasTargetCrashed != isTargetCrashed) {
 		attacker.initiative += INITIATIVE_BREAK_BONUS; // unless they've been recently crashed, fix this
 		if (wasAttackerCrashed && attacker.crashedBy === defender) {
 			// INITIATIVE SHIFT
+			RESULTS_WINDOW.append("INITIATIVE SHIFT!!!\n");
+			console.log("Initiative shift!");
 			attacker.initiative = Math.max(attacker.initiative, INITIATIVE_RESET_VALUE);
 			attacker.initiative += attacker.joinBattle();
 			attacker.isShifting = true;
+			attacker.active = true;
 			// should only be able to use new turn for attacking same dude
 		}
 		defender.crashedBy = attacker;
@@ -193,36 +197,23 @@ function resolveWitheringDamage(attacker, defender, damage) {
 	if (isTargetCrashed) defender.crashedAndWithered = true;
 }
 
-function populateTargetList(id) {
-	console.groupCollapsed("populating target list");
-	$("#opponents").empty();console.log("clearing out existing entries");
-	var lookup = lookupByID(SCENE.combatants);
-	for (i in lookup) {
-		if (i != id) {
-			console.log("adding id",i);
-			$("#opponents").append('<option value="' + i + '">' + lookup[i].name + '</option>');
-		} else {
-			console.log("skipping",i);
-		}
-	}
-	console.groupEnd();
-}
-
 function doRound() {
 	console.groupCollapsed("Do Round");
 
 	if (SCENE.combatants.length > 1) {
 		var whoseTurn = SCENE.whoseTurnIsIt();
-		console.log(">1 combatant detected. Highest tick is",whoseTurn);
+			console.log(">1 combatant detected. Highest tick is",whoseTurn);
 
 		// 1. set tick to highest active initiative
 		// 2. resolve all pending damage at higher initiative than current tick
 		// 3. if no actives, resolve all pending damage and reset active status
 
 		SCENE.resolve(whoseTurn);
+			console.log("Pending attacks resolved");
 		
 		// refresh in case of initiative shift
 		whoseTurn = SCENE.whoseTurnIsIt();
+			console.log("whoseTurn refreshed:",whoseTurn);
 
 		if (whoseTurn != null) {
 			SCENE.resetOnslaught(whoseTurn);

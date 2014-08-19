@@ -41,22 +41,6 @@ function addClose() {
 	addCombatantForm[0].reset();
 }
 
-function getStats(id) {
-	DIALOG_FORM_INPUTS.refresh();
-
-	var lookup = lookupByID(SCENE.combatants);
-		console.log(lookup);
-
-	DIALOG_FORM_INPUTS.each(function() {
-		var stat = $(this).attr("id"),
-			evalStr = "$(this).val(lookup['"+id+"']."+stat+")";
-		
-		if (stat === "doesLethal") eval("$(this).prop('checked', lookup['"+id+"']."+stat+")");
-		else if (stat === "armorPicker" || stat === "weaponPicker") { /* do nothing */ }
-		else if (stat) eval(evalStr);
-	});
-}
-
 function recordStats(id) {
 	console.groupCollapsed("record stats",id);
 
@@ -70,19 +54,26 @@ function recordStats(id) {
 
 	DIALOG_FORM_INPUTS.each(function() {
 		var evalStr,
-			stat = $(this).attr("id"),
+			stat = $(this).attr('id'),
+			type = $(this).attr('type'),
 			value = $(this).val();
 
-		if (stat) {
-			if (stat === "name") evalStr = "lookup['"+id+"']."+stat+" = '"+sanitize(value)+"'";
-			else if (stat === "armorPicker" || stat === "weaponPicker") {
-				// do nothing
-			} else if (stat === "doesLethal") {
-				value = $(this).prop('checked');
-				evalStr = "lookup['"+id+"'].doesLethal = '"+value+"'";
-			} else evalStr = "lookup['"+id+"']."+stat+" = parseInt("+value+")";
+		if (type === undefined) type = $(this).prop('tagName').toLowerCase();
 
-			console.log(stat,value);
+		if (stat === "crashedBy") lookup[id].crashedBy = lookup[value];
+		else if (stat) {
+			if (type === "text") {
+				evalStr = "lookup['"+id+"']."+stat+" = '"+sanitize(value)+"'";
+			} else if (type === "select") {
+				// do nothing
+			} else if (type === "checkbox") {
+				value = $(this).prop('checked');
+				evalStr = "lookup['"+id+"']."+stat+" = '"+value+"'";
+			} else {
+				evalStr = "lookup['"+id+"']."+stat+" = parseInt("+value+")";
+			}
+
+			console.log(stat,type,value,evalStr);
 
 			eval(evalStr);
 		}

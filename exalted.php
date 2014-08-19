@@ -19,7 +19,7 @@
 		body,textarea,input[type=button]{font-family:Goudy;}
 		table{width:600px;padding:1em;}
 		textarea{width:85em;height:30em;}
-		input[type=number]{width:2.5em;}
+		input[type=number]{width:3em;}
 		body > div{margin:1em;}
 
 		#combatants{width:71em;}

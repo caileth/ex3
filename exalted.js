@@ -24,10 +24,7 @@ $(function() {
 
 		if ($(this).attr("class") === "edit") edit = true;console.log("Edit?",edit);
 
-		if (edit) {
-			DIALOG_FORM.append('<br/><label for="initiative">Initiative: </label><input type="number" id="initiative" value="0"/>');
-			getStats(id);
-		}
+		if (edit) $("#dialog-form :input").Ex3('getStats', id);
 
 		DIALOG.dialog({
 			title: (edit ? "Edit combatant" : "Add combatant"),
@@ -95,13 +92,50 @@ $(function() {
 				}
 			});
 	
-			populateTargetList(id);
+			$("#opponents").Ex3('populate', id);
 	
 			if (lookup[id].initiative < 1) $("#decisive").prop('disabled', true);
 	
 			DIALOG.dialog("open");
 		} else console.log("There's nobody to attack!");
 		console.groupEnd();
+	});
+
+	$("body").on('click', '.debug', function() {
+		var debugForm,
+			id = $(this).parent().attr("id"),
+			lookup = lookupByID(SCENE.combatants);
+
+		DIALOG_FORM.html(
+			'<label for="initiative">Initiative: </label><input type="number" id="initiative" value="0"/>' + '<br/>' +			
+			'<label for="crashedBy">Crashed By: </label><select id="crashedBy"></select>'
+		);
+
+		DIALOG.dialog({
+			title: "Debug",
+			autoOpen: false,
+			height: "auto",
+			width: "auto",
+			modal: true,
+			buttons: {
+				Edit: function() {
+					editCombatant(id);
+					doRound();
+				},
+				Cancel: function() {
+					DIALOG.dialog("close");
+				}
+			},
+			close: function() {
+				editClose(id);
+			}
+		});
+
+		$("#dialog-form :input").Ex3('getStats', id);
+
+		$("#crashedBy").Ex3('populate', id, true);
+
+		DIALOG.dialog("open");
 	});
 
 	$("body").on('click', '.randomize', function() {
@@ -166,3 +200,61 @@ $(function() {
 		printRoll(numDice, undefined, targetNumber, doubleRule, difficulty);
 	});
 });
+
+
+
+
+
+
+
+
+
+(function($) {
+	$.fn.Ex3 = function(action, id, extra) {
+		var lookup = lookupByID(SCENE.combatants);
+
+		if (action === "populate") {
+			console.groupCollapsed("populating target list");
+
+			this.empty();
+				console.log("clearing out existing entries");
+
+			if (extra) this.append('<option value="undefined">None</option>');
+
+			for (i in lookup) {
+				if (i != id) {
+					console.log("adding id",i);
+					this.append('<option value="' + i + '">' + lookup[i].name + '</option>');
+				} else {
+					console.log("skipping",i);
+				}
+			}
+			console.groupEnd();
+			return this;
+		}
+
+		if (action === "getStats") {
+			this.each(function() {
+				var evalStr,
+					stat = $(this).attr('id'),
+					type = $(this).attr('type');
+
+				if (type === undefined) type = $(this).prop('tagName').toLowerCase();
+				
+				if (stat) {
+					if (type === "checkbox") {
+						evalStr = "$(this).prop('checked', lookup['"+id+"']."+stat+")";
+					} else if (type === "select") {
+						// do nothing
+					} else {
+						evalStr = "$(this).val(lookup['"+id+"']."+stat+")";
+					}
+				}
+				
+				console.log(stat,type,evalStr);
+
+				eval(evalStr);
+			});
+		}
+	};
+}(jQuery));

@@ -57,6 +57,7 @@ function Scene() {
 				'</span><br/>' +
 				'<input type="button" class="attack" value="Attack"' + (isNaN(wound) ? ' disabled' : '') +'/>' +
 				'<input type="button" class="edit" value="Edit"/>' +
+				'<input type="button" class="debug" value="Debug"/>' +
 				'<input type="button" class="remove" value="X"/>' +
 				'</td></tr>');
 		}
@@ -67,6 +68,7 @@ function Scene() {
 	};
 
 	this.resetActiveStatus = function() {
+		console.log("Active status reset for all capacitated combatants");
 		for (i in this.combatants) {
 			var current = this.combatants[i];
 			if (isNaN(current.getWoundPenalty())) current.active = false;
@@ -76,9 +78,10 @@ function Scene() {
 	};
 
 	this.resetOnslaught = function(tick) {
+		console.log("Onslaught reset for tick",tick);
 		for (i in this.combatants) {
 			var current = this.combatants[i];
-			if (current.initiative === tick || tick === undefined) current.onslaught = 0;
+			if (current.initiative === tick || tick === null) current.onslaught = 0;
 		}
 	};
 
@@ -93,7 +96,7 @@ function Scene() {
 				console.log(this.combatants[i].name,"is active at tick",current,"— highest Initiative is now",highestInitiative);
 			}
 		}
-
+		if (!highestInitiative) console.log("Nobody!");
 		console.groupEnd();
 		return highestInitiative;
 	};
@@ -116,20 +119,19 @@ function Scene() {
 
 		for (i in this.pendingAttacks) {
 			var attack = this.pendingAttacks[i];
-			if (attack.tick > tick || tick === undefined) {
+			if (attack.tick > tick || tick === null) {
 				console.log(attack.attacker.name + "'s attack vs. " + attack.defender.name + " is up for resolution\n");
 
 				var j = this.clashAttackCheck(attack.tick, attack.attacker);
-					console.log("Clash attack check:",j);
 
 				if (j) {
-					var secondAttack = this[j];
+					var secondAttack = this.pendingAttacks[j];
 					resolveClashAttack(attack, secondAttack);
+					this.pendingAttacks.splice(j, 1);
 				} else {
 					resolveAttack(attack.attacker, attack.defender, attack.attackModifiers, attack.attackStunt, attack.defendStunt, attack.isDecisive);
 				}
 
-				if (j) this.pendingAttacks.splice(j, 1);
 				this.pendingAttacks.splice(i, 1);
 				this.resolve(tick);
 			}
