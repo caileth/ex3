@@ -149,7 +149,7 @@ function Scene() {
 
 					this.pendingAttacks.splice(j, 1);
 				} else {
-					resolveAttack(attack.attacker, attack.defender, attack.attackModifiers, attack.attackStunt, attack.defendStunt, attack.isDecisive);
+					resolveAttack(attack);
 				}
 
 					console.log("pendingAttacks length before splice (i is",i,"):",this.pendingAttacks.length);
@@ -360,7 +360,7 @@ function Combatant() {
 
 
 
-function PendingAttack(tick, attacker, defender, attackModifiers, attackStunt, defendStunt, isDecisive) {
+function PendingAttack(tick, attacker, defender, attackModifiers, attackStunt, defendStunt, isDecisive, attackSpecialty, defendSpecialty) {
 	this.tick				= tick;
 	this.tiebreaker			= Math.random();
 	this.attacker			= attacker;
@@ -369,6 +369,8 @@ function PendingAttack(tick, attacker, defender, attackModifiers, attackStunt, d
 	this.attackStunt		= attackStunt;
 	this.defendStunt		= defendStunt;
 	this.isDecisive			= isDecisive;
+	this.attackSpecialty	= attackSpecialty;
+	this.defendSpecialty	= defendSpecialty;
 }
 
 

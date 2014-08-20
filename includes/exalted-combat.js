@@ -7,8 +7,10 @@ function attack(id, target) {
 
 	var attackIsDecisive	= $("input[name=attackIsDecisive]:checked").val() == "true",
 		attackModifiers		= parseInt($("#attackModifiers").val()),
+		attackSpecialty		= $("#attackSpecialty").prop('checked'),
 		attackStunt			= parseInt($("input[name=attackStunt]:checked").val()),
-		attackWound			= attacker.getWoundPenalty();
+		attackWound			= attacker.getWoundPenalty(),
+		defendSpecialty		= $("#defendSpecialty").prop('checked'),
 		defendStunt			= parseInt($("input[name=defendStunt]:checked").val());
 
 	attacker.isShifting = false;
@@ -21,7 +23,7 @@ function attack(id, target) {
 	// add in attacker wound penalties if applicable (otherwise this function probably shouldn't be called in the first place)
 	if (!isNaN(attackWound)) attackModifiers += attackWound;
 
-	SCENE.pendingAttacks.push(new PendingAttack(attacker.initiative, attacker, defender, attackModifiers, attackStunt, defendStunt, attackIsDecisive));
+	SCENE.pendingAttacks.push(new PendingAttack(attacker.initiative, attacker, defender, attackModifiers, attackStunt, defendStunt, attackIsDecisive, attackSpecialty, defendSpecialty));
 		console.log("new attack pushed:",SCENE.pendingAttacks);
 
 	attacker.active = false;
@@ -35,27 +37,27 @@ function attack(id, target) {
 	doRound();
 }
 
-function resolveAttack(attacker, defender, attackModifiers, attackStunt, defendStunt, isDecisive) {
-	console.groupCollapsed("Resolving " + attacker.name + "'s attack versus " + defender.name);
+function resolveAttack(attack) {
+	console.groupCollapsed("Resolving " + attack.attacker.name + "'s attack versus " + attack.defender.name);
 
-	var attackAuto = attackStunt.auto, // presumably will add Charm hooks here eventually
-		attackPool = attackModifiers + attackStunt.dice,
-		targetDefense = defender.getDefense() + defendStunt.static;
+	var attackAuto = attack.attackStunt.auto, // presumably will add Charm hooks here eventually
+		attackPool = attack.attackModifiers + attack.attackStunt.dice,
+		targetDefense = attack.defender.getDefense() + attack.defendStunt.static;
 
-		console.log("Attack modifiers:",attackModifiers);
-		console.log("Attack stunt level:",attackStunt);
-		console.log("Defend stunt level:",defendStunt);
-		console.log("Decisive?",isDecisive);
+		console.log("Attack modifiers:",attack.attackModifiers);
+		console.log("Attack stunt level:",attack.attackStunt);
+		console.log("Defend stunt level:",attack.defendStunt);
+		console.log("Decisive?",attack.isDecisive);
 
-	if (attackStunt.level > 0) RESULTS_WINDOW.append(attacker.name + " uses a " + attackStunt.level + "-point stunt!\n");
-	if (defendStunt.level > 0) RESULTS_WINDOW.append(defender.name + " uses a " + defendStunt.level + "-point stunt!\n");
+	if (attack.attackStunt.level > 0) RESULTS_WINDOW.append(attack.attacker.name + " uses a " + attack.attackStunt.level + "-point stunt!\n");
+	if (attack.defendStunt.level > 0) RESULTS_WINDOW.append(attack.defender.name + " uses a " + attack.defendStunt.level + "-point stunt!\n");
 
-	if (isDecisive) attackPool += attacker.getDecisivePool();
-	else attackPool += attacker.getWitheringPool();
+	if (attack.isDecisive) attackPool += attack.attacker.getDecisivePool();
+	else attackPool += attack.attacker.getWitheringPool();
 
-	RESULTS_WINDOW.append(attacker.name + " attempts a " + (isDecisive ? "Decisive" : "Withering") + " Attack (" + attackPool + " dice) against " + defender.name + " (" + targetDefense + " defense)!\n");
+	RESULTS_WINDOW.append(attack.attacker.name + " attempts a " + (attack.isDecisive ? "Decisive" : "Withering") + " Attack (" + attackPool + " dice) against " + attack.defender.name + " (" + targetDefense + " defense)!\n");
 
-	makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefense, isDecisive);
+	makeAttackRoll(attack.attacker, attack.defender, attackAuto, attackPool, targetDefense, attack.isDecisive);
 
 	console.groupEnd();
 }
