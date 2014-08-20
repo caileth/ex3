@@ -27,39 +27,49 @@ function Scene() {
 		this.combatants.sort(sortbyInitiative);
 
 		for (i in this.combatants) {
-			var current = this.combatants[i],			
+			var current = this.combatants[i],
+				stats = '',
 				wound = current.getWoundPenalty();
 
 			console.log("printing",current.name);
+
+			stats += '<tr class="';
+			if (wound === 'dead') stats += 'dead ';
+			else if (wound === 'incapacitated') stats += 'incapacitated ';
+			else if (!current.active) stats += 'inactive ';
+			else if (current.initiative < 1) stats += 'crashed ';
+			stats += 'playerBubble">';
+
+			stats += '<td name="' + current.name + '" id="' + current.id + '" class="player">';			
+
+			if (wound != 'dead') stats += '<span class="initiative">' + current.initiative + '</span>';
+					
+			stats += '<span class="name">' + current.name;
+			if (wound === 'dead') stats += ' (DEAD) ';
+			if (wound === 'incapacitated') stats += ' (Incapacitated) ';
+			stats += '</span><br/>';
 			
-			$("#combatants > tbody:last").append('<tr class="' + 
-				(wound === 'dead' ? 'dead ' : 
-					(wound === 'incapacitated' ? 'incapacitated ' :
-						(!current.active ? 'inactive ' :
-							(current.initiative < 1 ? 'crashed ' : '')))) +
-				'playerBubble">' + 
-				'<td name="' + current.name + '" id="' + current.id + '" class="player">' +
-				'<span class="initiative">' + current.initiative + '</span>' +
-				'<span class="name">' + current.name +
-				(wound === 'dead' ? ' (DEAD) ' :
-					(wound === 'incapacitated' ? ' (Incapacitated) ' : '')) +
-				'</span><br/>' +
-				'<span class="stats">' +
-				'Join Battle: ' + current.getJoinBattlePool() +
-				' &bull; Withering: ' + current.getWitheringPool() +
-				' &bull; Decisive: ' + current.getDecisivePool() +
-				' &bull; Parry: ' + current.getParryPool() +
-				' &bull; Evade: ' + current.getEvasionPool() +
-				' &bull; Rush: ' + current.getRushPool() +
-				' &bull; Disengage: ' + current.getDisengagePool() +
-				'<br/>' +
-				'<b>Health:</b> ' + current.getHealthTrackHTML() +
-				'</span><br/>' +
-				'<input type="button" class="attack" value="Attack"' + (isNaN(wound) ? ' disabled' : '') +'/>' +
-				'<input type="button" class="edit" value="Edit"/>' +
-				'<input type="button" class="debug" value="Debug"/>' +
-				'<input type="button" class="remove" value="X"/>' +
-				'</td></tr>');
+			stats += '<span class="stats">';
+			if (wound != 'dead') {
+				stats += 'Join Battle: ' + current.getJoinBattlePool() +
+						' &bull; Withering: ' + current.getWitheringPool() +
+						' &bull; Decisive: ' + current.getDecisivePool() +
+						' &bull; Parry: ' + current.getParryPool() +
+						' &bull; Evade: ' + current.getEvasionPool() +
+						' &bull; Rush: ' + current.getRushPool() +
+						' &bull; Disengage: ' + current.getDisengagePool() +
+						'<br/>';
+			}
+			stats += '<b>Health:</b> ' + current.getHealthTrackHTML();
+			stats += '</span><br/>';
+			
+			stats += '<input type="button" class="attack" value="Attack"' + (isNaN(wound) ? ' disabled' : '') +'/>' +
+						'<input type="button" class="edit" value="Edit"/>' +
+						'<input type="button" class="debug" value="ST"/>' +
+						'<input type="button" class="remove" value="&#x2718;"/>' +
+						'</td></tr>';
+
+			$("#combatants > tbody:last").append(stats);
 		}
 
 		console.log("done printing CombatantsList");
@@ -189,22 +199,7 @@ function Combatant() {
 		for (var i = 0; i < this.healthTrack.length; i++) {
 			var track = this.healthTrack[i];
 			result += DEFAULT_HEALTH_TRACK[i]+':';
-			for (var j = 0; j < track.length; j++) {
-				switch (track[j]) {
-					case 0:
-						result += GLYPH_EMPTY;
-						break;
-					case 1:
-						result += GLYPH_BASHING;
-						break;
-					case 2:
-						result += GLYPH_LETHAL;
-						break;
-					case 3:
-						result += GLYPH_AGG;
-						break;
-				}
-			}
+			for (var j = 0; j < track.length; j++) result += GLYPHS_HEALTH[track[j]];
 			result += ' ';
 		}
 		return result;

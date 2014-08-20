@@ -92,13 +92,7 @@ function dieRoller(sides) {
 
 
 
-// selector refresh mini-plugin by Esailija @ Stack Overflow (http://goo.gl/U1YyEm)
-$.fn.refresh = function() {
-	var elems = $(this.selector);
-	this.splice(0, this.length);
-	this.push.apply(this, elems);
-	return this;
-};
+
 
 function lookupByID(array) {
 	console.groupCollapsed("lookup by ID called for",array);

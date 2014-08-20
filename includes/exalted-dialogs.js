@@ -68,7 +68,7 @@ function recordStats(id) {
 				// do nothing
 			} else if (type === "checkbox") {
 				value = $(this).prop('checked');
-				evalStr = "lookup['"+id+"']."+stat+" = '"+value+"'";
+				evalStr = "lookup['"+id+"']."+stat+" = "+value;
 			} else {
 				evalStr = "lookup['"+id+"']."+stat+" = parseInt("+value+")";
 			}

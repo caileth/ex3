@@ -161,8 +161,7 @@ function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
 			console.log("Attacker doesn't do lethal");
 	}
 
-	RESULTS_WINDOW.append(attacker.name + " rolls: " + damageRoll + "\n");
-	RESULTS_WINDOW.append(defender.name + " takes " + damage + " damage!\n");
+	RESULTS_WINDOW.append(attacker.name + " inflicts " + damage + " damage on " + attacker.initiative + " dice! (" + damageRoll + "\n");
 
 	defender.recordDamage();
 
@@ -218,6 +217,8 @@ function resolveWitheringDamage(attacker, defender, damage) {
 function doRound() {
 	console.groupCollapsed("Do Round");
 
+	RESULTS_WINDOW.refresh();
+
 	if (SCENE.combatants.length > 1) {
 		var whoseTurn = SCENE.whoseTurnIsIt();
 			console.log(">1 combatant detected. Highest tick is",whoseTurn);
@@ -235,14 +236,24 @@ function doRound() {
 
 		if (whoseTurn != null) {
 			SCENE.resetOnslaught(whoseTurn);
-			RESULTS_WINDOW.append("Tick " + whoseTurn + "\n");
+
+			var lastLineBreak = RESULTS_WINDOW.val().trim().lastIndexOf("\n"),
+				lastLine = RESULTS_WINDOW.val().substr(lastLineBreak + 1),
+				tickAnnounce = "Tick " + whoseTurn + "\n";
+
+			console.log(lastLine,"vs.",tickAnnounce,lastLine === tickAnnounce);
+
+			if (lastLine != tickAnnounce) RESULTS_WINDOW.append(tickAnnounce);
 		} else {
 			SCENE.resetActiveStatus();
 			SCENE.iterateCrashCounter();
 			SCENE.resetOnslaught();
-			RESULTS_WINDOW.append("Round is over!\n");
+			ROUND++;
+			RESULTS_WINDOW.append("--- ROUND "+ROUND+" ---\n");
 			doRound();
 		}
+	} else {
+		console.log("Not enough combatants");
 	}
 
 	console.groupEnd();

@@ -1,9 +1,25 @@
-$(function() {
-	var round = 0;
+/*
 
+TO DO:
+Fix populateTarget to exclude dead targets
+Add Onslaught readout to characer list or maybe just print highest Defense rating, all inclusive, on any given tick
+
+*/
+
+
+
+
+
+
+
+
+
+$(function() {
 	DIALOG.refresh();
 	DIALOG_FORM.refresh();
 	RESULTS_WINDOW.refresh();
+
+	RESULTS_WINDOW.append("--- ROUND "+ROUND+" ---\n");
 
 
 
@@ -107,8 +123,12 @@ $(function() {
 			lookup = lookupByID(SCENE.combatants);
 
 		DIALOG_FORM.html(
-			'<label for="initiative">Initiative: </label><input type="number" id="initiative" value="0"/>' + '<br/>' +			
-			'<label for="crashedBy">Crashed By: </label><select id="crashedBy"></select>'
+			'<label for="active">Active: </label><input type="checkbox" id="active"/>' + '<br/>' +
+			'<label for="initiative">Initiative: </label><input type="number" id="initiative"/>' + '<br/>' +
+			'<label for="crashedBy">Crashed By: </label><select id="crashedBy"></select>' + '<br/>' +
+			'<label for="bashing">Bashing: </label><input type="number" id="bashing"/>' + '<br/>' +
+			'<label for="lethal">Lethal: </label><input type="number" id="lethal"/>' + '<br/>' +
+			'<label for="aggravated">Aggravated: </label><input type="number" id="aggravated"/>'
 		);
 
 		DIALOG.dialog({
@@ -120,6 +140,7 @@ $(function() {
 			buttons: {
 				Edit: function() {
 					editCombatant(id);
+					lookup[id].recordDamage();
 					doRound();
 				},
 				Cancel: function() {
@@ -210,6 +231,22 @@ $(function() {
 
 
 (function($) {
+	// selector refresh mini-plugin by Esailija @ Stack Overflow (http://goo.gl/U1YyEm)
+	$.fn.refresh = function() {
+		var elems = $(this.selector);
+		this.splice(0, this.length);
+		this.push.apply(this, elems);
+		return this;
+	};
+
+
+
+
+
+
+
+
+
 	$.fn.Ex3 = function(action, id, extra) {
 		var lookup = lookupByID(SCENE.combatants);
 

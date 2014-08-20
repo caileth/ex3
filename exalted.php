@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8"/>
-	<title>exalted stuff</title>
+	<title>Exalted Stuff</title>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 	<style>
 		@font-face{font-family:Albertus;src:url(includes/AlbertusMTStd.otf);}
@@ -23,10 +23,9 @@
 		body > div{margin:1em;}
 
 		#combatants{width:71em;}
-		#combatants tr:first-of-type{text-transform:uppercase;background-color:gold;}
 		#name {width:25em;}
 		
-		.inactive{font-style:italic;background-color:#333;width:75%;height:75%;}
+		.inactive{font-style:italic;background-color:#444;width:75%;height:75%;}
 		.crashed{background-color:purple;}
 		.incapacitated{background-color:orange;color:white;font-style:italic;}
 		.dead{background-color:red;color:white;font-style:italic;}
