@@ -1,19 +1,3 @@
-/*
-
-TO DO:
-Fix populateTarget to exclude dead targets
-Add Onslaught readout to characer list or maybe just print highest Defense rating, all inclusive, on any given tick
-
-*/
-
-
-
-
-
-
-
-
-
 $(function() {
 	DIALOG.refresh();
 	DIALOG_FORM.refresh();
