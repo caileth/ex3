@@ -50,6 +50,10 @@ var ATTACK_WINDOW =	'<label for="opponents">Target:</label>' +
 					'<input type="radio" name="defendStunt" id="stuntDefendOne" value="1"/>1-point' +
 					'<input type="radio" name="defendStunt" id="stuntDefendTwo" value="2"/>2-point' +
 					'<input type="radio" name="defendStunt" id="stuntDefendThree" value="3"/>3-point<br/>' +
+					'<label for="attackSpecialty">Applicable specialty on attack?</label>' +
+					'<input type="checkbox" id="specialtyAttack"/><br/>' +
+					'<label for="defenseSpecialty">Applicable specialty on defense?</label>' +
+					'<input type="checkbox" id="specialtyDefense"/><br/>' +
 					'<label for="attackModifiers">Attack modifier(s): ' +
 					'<input type="number" id="attackModifiers" value="0" min="-5" max="0"/>';
 

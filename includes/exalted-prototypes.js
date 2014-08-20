@@ -54,8 +54,7 @@ function Scene() {
 				stats += 'Join Battle: ' + current.getJoinBattlePool() +
 						' &bull; Withering: ' + current.getWitheringPool() +
 						' &bull; Decisive: ' + current.getDecisivePool() +
-						' &bull; Parry: ' + current.getParryPool() +
-						' &bull; Evade: ' + current.getEvasionPool() +
+						' &bull; Defense: ' + current.getDefense() +
 						' &bull; Rush: ' + current.getRushPool() +
 						' &bull; Disengage: ' + current.getDisengagePool() +
 						'<br/>';

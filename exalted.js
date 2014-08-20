@@ -250,7 +250,7 @@ $(function() {
 			if (extra) this.append('<option value="undefined">None</option>');
 
 			for (i in lookup) {
-				if (i != id) {
+				if (i != id && lookup[i].getWoundPenalty() != 'dead') {
 					console.log("adding id",i);
 					this.append('<option value="' + i + '">' + lookup[i].name + '</option>');
 				} else {

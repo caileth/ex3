@@ -146,24 +146,30 @@ function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
 	var damageRoll = diceRoller(attacker.initiative),
 		damage = successChecker(damageRoll, undefined, false);
 
-	if (clash) {
-		damage += CLASH_BONUS_DECISIVE;
-			console.log("Clash detected");
+	if (defender.initiative < 1 || attacker.initiative > defender.hardness) {
+		if (clash) {
+			damage += CLASH_BONUS_DECISIVE;
+				console.log("Clash detected");
+		} else {
+				console.log("No clash");
+		}
+
+		if (attacker.doesLethal) {
+			defender.lethal += damage;
+				console.log("Attacker does lethal");
+		} else {
+			defender.bashing += damage;
+				console.log("Attacker doesn't do lethal");
+		}
+
+		RESULTS_WINDOW.append(attacker.name + " inflicts " + damage + " damage on " + attacker.initiative + " dice! (" + damageRoll + ")\n");
+
+		defender.recordDamage();
 	} else {
-			console.log("No clash");
+		RESULTS_WINDOW.append("It doesn't penetrate" + defender.name + "'s Hardness!\n");
+		console.log(defender.name,"balls so hard motherfuckas wanna fine him");
+		for (var i = 0; i < 3; i++) console.log("That shit cray");
 	}
-
-	if (attacker.doesLethal) {
-		defender.lethal += damage;
-			console.log("Attacker does lethal");
-	} else {
-		defender.bashing += damage;
-			console.log("Attacker doesn't do lethal");
-	}
-
-	RESULTS_WINDOW.append(attacker.name + " inflicts " + damage + " damage on " + attacker.initiative + " dice! (" + damageRoll + ")\n");
-
-	defender.recordDamage();
 
 	attacker.initiative = INITIATIVE_RESET_VALUE;
 		console.log("Resetting attacker initiative");
