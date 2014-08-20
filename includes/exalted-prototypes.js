@@ -115,9 +115,9 @@ function Scene() {
 		console.groupCollapsed("resolving pending attacks before "+(tick ? "tick "+tick : "end of turn"));
 		
 		this.pendingAttacks.sort(sortByTiebreaker);
-			console.log("sorting pending attacks by initiative, then tiebreaker",this);
+			console.log("sorting pending attacks by initiative, then tiebreaker",this.pendingAttacks);
 
-		for (i in this.pendingAttacks) {
+		for (var i = 0; i < this.pendingAttacks.length; i++) {
 			var attack = this.pendingAttacks[i];
 			if (attack.tick > tick || tick === null) {
 				console.log(attack.attacker.name + "'s attack vs. " + attack.defender.name + " is up for resolution\n");
@@ -126,13 +126,20 @@ function Scene() {
 
 				if (j) {
 					var secondAttack = this.pendingAttacks[j];
+
+						console.log("pendingAttacks length before splice (j is",j,"):",this.pendingAttacks.length);
 					resolveClashAttack(attack, secondAttack);
+						console.log("pendingAttacks length after splice:",this.pendingAttacks.length);
+
 					this.pendingAttacks.splice(j, 1);
 				} else {
 					resolveAttack(attack.attacker, attack.defender, attack.attackModifiers, attack.attackStunt, attack.defendStunt, attack.isDecisive);
 				}
 
+					console.log("pendingAttacks length before splice (i is",i,"):",this.pendingAttacks.length);
 				this.pendingAttacks.splice(i, 1);
+					console.log("pendingAttacks length after splice:",this.pendingAttacks.length);
+
 				this.resolve(tick);
 			}
 		}
@@ -273,7 +280,7 @@ function Combatant() {
 		pending[2] = this.lethal,
 		pending[3] = this.aggravated;
 
-		console.log(pending);
+		console.log("pending:",pending);
 
 		this.resetHealthTrack();
 
@@ -281,7 +288,10 @@ function Combatant() {
 		doDamage(pending, 2, 0, this.healthTrack);
 		doDamage(pending, 1, 0, this.healthTrack);
 
-		if (this.healthTrack[lastHLTrackPos][lastHLPos] === 1) doDamage(pending, 1, 1, this.healthTrack);
+		if (this.healthTrack[lastHLTrackPos][lastHLPos] === 1) {
+			doDamage(pending, 1, 1, this.healthTrack);
+				console.log("Upconverting extra bashing");
+		}
 
 		wound = this.getWoundPenalty();
 

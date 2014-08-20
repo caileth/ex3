@@ -95,9 +95,12 @@ function resolveClashAttack(attack, secondAttack) {
 }
 
 function makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefense, isDecisive) {
+	console.groupCollapsed("makeAttackRoll");
 	var attackRoll = diceRoller(attackPool),
 		attackSuccesses = successChecker(attackRoll, undefined, undefined, attackAuto),
 		attackThreshold = attackSuccesses - Math.max(targetDefense, 0);
+
+	console.log("attackThreshold is",attackThreshold);
 
 	if (attackThreshold >= 0) {
 		RESULTS_WINDOW.append(attacker.name + " succeeds at +" + attackThreshold + "! (" + attackRoll + ")\n");
@@ -112,6 +115,9 @@ function makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefens
 			attacker.initiative -= initLoss;
 		}
 	}
+
+	console.log("makeAttackRoll finished");
+	console.groupEnd();
 }
 
 function checkWitheringDamage(attacker, defender, attackThreshold, clash) {
@@ -135,15 +141,24 @@ function checkWitheringDamage(attacker, defender, attackThreshold, clash) {
 }
 
 function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
+	console.groupCollapsed("checkDecisiveDamage");
+
 	var damageRoll = diceRoller(attacker.initiative),
 		damage = successChecker(damageRoll, undefined, false);
 
-	if (clash) damage += CLASH_BONUS_DECISIVE;
+	if (clash) {
+		damage += CLASH_BONUS_DECISIVE;
+			console.log("Clash detected");
+	} else {
+			console.log("No clash");
+	}
 
 	if (attacker.doesLethal) {
 		defender.lethal += damage;
+			console.log("Attacker does lethal");
 	} else {
 		defender.bashing += damage;
+			console.log("Attacker doesn't do lethal");
 	}
 
 	RESULTS_WINDOW.append(attacker.name + " rolls: " + damageRoll + "\n");
@@ -152,6 +167,9 @@ function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
 	defender.recordDamage();
 
 	attacker.initiative = INITIATIVE_RESET_VALUE;
+		console.log("Resetting attacker initiative");
+
+	console.groupEnd();
 }
 
 function resolveWitheringDamage(attacker, defender, damage) {
