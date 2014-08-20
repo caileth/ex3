@@ -16,3 +16,4 @@ TO DO:
 - Willpower
 - Essence
 - Charms
+- Stunt descriptions

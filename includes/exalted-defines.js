@@ -41,15 +41,15 @@ var ATTACK_WINDOW =	'<label for="opponents">Target:</label>' +
 					'<input type="radio" name="attackIsDecisive" id="withering" value="false">Withering' +
 					'<input type="radio" name="attackIsDecisive" id="decisive" value="true">Decisive<br/>' +
 					'<label for="attackStunt">Attacking Stunt:</label>' +
-					'<input type="radio" name="attackStunt" value="0"/>None' +
-					'<input type="radio" name="attackStunt" value="1"/>1-point' +
-					'<input type="radio" name="attackStunt" value="2"/>2-point' +
-					'<input type="radio" name="attackStunt" value="3"/>3-point<br/>' +
+					'<input type="radio" name="attackStunt" id="stuntAttackNone" value="0"/>None' +
+					'<input type="radio" name="attackStunt" id="stuntAttackOne" value="1"/>1-point' +
+					'<input type="radio" name="attackStunt" id="stuntAttackTwo" value="2"/>2-point' +
+					'<input type="radio" name="attackStunt" id="stuntAttackThree" value="3"/>3-point<br/>' +
 					'<label for="defendStunt">Defending Stunt:</label>' +
-					'<input type="radio" name="defendStunt" value="0"/>None' +
-					'<input type="radio" name="defendStunt" value="1"/>1-point' +
-					'<input type="radio" name="defendStunt" value="2"/>2-point' +
-					'<input type="radio" name="defendStunt" value="3"/>3-point<br/>' +
+					'<input type="radio" name="defendStunt" id="stuntDefendNone" value="0"/>None' +
+					'<input type="radio" name="defendStunt" id="stuntDefendOne" value="1"/>1-point' +
+					'<input type="radio" name="defendStunt" id="stuntDefendTwo" value="2"/>2-point' +
+					'<input type="radio" name="defendStunt" id="stuntDefendThree" value="3"/>3-point<br/>' +
 					'<label for="attackModifiers">Attack modifier(s): ' +
 					'<input type="number" id="attackModifiers" value="0" min="-5" max="0"/>';
 

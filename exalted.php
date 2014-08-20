@@ -27,7 +27,7 @@
 		
 		.inactive{font-style:italic;background-color:#444;width:75%;height:75%;}
 		.crashed{background-color:purple;}
-		.incapacitated{background-color:orange;color:white;font-style:italic;}
+		.incapacitated{background-color:#FE5A1D;color:white;font-style:italic;}
 		.dead{background-color:red;color:white;font-style:italic;}
 		.initiative{font:500% Albertus;float:left;margin-right:.1em;}
 		.player{position:relative;border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}

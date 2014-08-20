@@ -97,7 +97,14 @@ $(function() {
 			if (lookup[id].initiative < 1) $("#decisive").prop('disabled', true);
 	
 			DIALOG.dialog("open");
-		} else console.log("There's nobody to attack!");
+
+			$("#withering").prop('checked', true);
+			$("#stuntAttackOne").prop('checked', true);
+			$("#stuntDefendOne").prop('checked', true);
+		} else {
+			console.log("There's nobody to attack!");
+		}
+		
 		console.groupEnd();
 	});
 

@@ -42,7 +42,7 @@ function Scene() {
 
 			stats += '<td name="' + current.name + '" id="' + current.id + '" class="player">';			
 
-			if (wound != 'dead') stats += '<span class="initiative">' + current.initiative + '</span>';
+			if (wound != 'dead' && wound != 'incapacitated') stats += '<span class="initiative">' + current.initiative + '</span>';
 					
 			stats += '<span class="name">' + current.name;
 			if (wound === 'dead') stats += ' (DEAD) ';
@@ -50,7 +50,7 @@ function Scene() {
 			stats += '</span><br/>';
 			
 			stats += '<span class="stats">';
-			if (wound != 'dead') {
+			if (wound != 'dead' && wound != 'incapacitated') {
 				stats += 'Join Battle: ' + current.getJoinBattlePool() +
 						' &bull; Withering: ' + current.getWitheringPool() +
 						' &bull; Decisive: ' + current.getDecisivePool() +
@@ -110,6 +110,13 @@ function Scene() {
 		console.groupEnd();
 		return highestInitiative;
 	};
+
+	this.isAnybodyOutThere = function() {
+		for (i in this.combatants) {
+			if (!isNaN(this.combatants[i].getWoundPenalty())) return true;
+		}
+		return false;
+	}
 
 
 
@@ -374,12 +381,20 @@ function PendingAttack(tick, attacker, defender, attackModifiers, attackStunt, d
 
 
 function sortbyInitiative(a, b) {
-	if (a.active && !b.active) return -1;
-	else if (!a.active && b.active) return 1;
+	if (a.getWoundPenalty() != 'dead' && b.getWoundPenalty() === 'dead') return -1;
+	else if (a.getWoundPenalty() === 'dead' && b.getWoundPenalty() != 'dead') return 1;
 	else {
-		if (a.initiative > b.initiative) return -1;
-		else if (a.initiative < b.initiative) return 1;
-		else return 0;
+		if (a.getWoundPenalty() != 'incapacitated' && b.getWoundPenalty() === 'incapacitated') return -1;
+		else if (a.getWoundPenalty() === 'incapacitated' && b.getWoundPenalty() != 'incapacitated') return 1;
+		else {
+			if (a.active && !b.active) return -1;
+			else if (!a.active && b.active) return 1;
+			else {
+				if (a.initiative > b.initiative) return -1;
+				else if (a.initiative < b.initiative) return 1;
+				else return 0;
+			}
+		}
 	}
 }
 

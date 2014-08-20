@@ -108,7 +108,7 @@ function makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefens
 		else checkWitheringDamage(attacker, defender, attackThreshold);
 	} else {
 		// botch stuff?
-		RESULTS_WINDOW.append(attacker.name + " fails!\n");
+		RESULTS_WINDOW.append(attacker.name + " fails! (" + attackRoll + ")\n");
 		if (isDecisive) {
 			var initLoss = (attacker.initiative > DECISIVE_MISS_PENALTY_THRESHOLD ? DECISIVE_MISS_PENALTY_HIGH : DECISIVE_MISS_PENALTY_LOW);
 			RESULTS_WINDOW.append(attacker.name + " loses " + initLoss + " Initiative!\n");
@@ -161,7 +161,7 @@ function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
 			console.log("Attacker doesn't do lethal");
 	}
 
-	RESULTS_WINDOW.append(attacker.name + " inflicts " + damage + " damage on " + attacker.initiative + " dice! (" + damageRoll + "\n");
+	RESULTS_WINDOW.append(attacker.name + " inflicts " + damage + " damage on " + attacker.initiative + " dice! (" + damageRoll + ")\n");
 
 	defender.recordDamage();
 
@@ -180,23 +180,25 @@ function resolveWitheringDamage(attacker, defender, damage) {
 
 	if (defender.crashedAndWithered) {
 		attacker.initiative += Math.min(1, damage);
-		RESULTS_WINDOW.append(defender.name + " is in Crash and has already been withered. " + attacker.name + " gains " + Math.min(1, damage) + " Initiative");
+		RESULTS_WINDOW.append(defender.name + " is in Crash and has already been withered. " + attacker.name + " gains " + Math.min(1, damage) + " Initiative; ");
 	} else if (witheringPenalty) {
 		attacker.initiative += Math.ceil(damage / 2);
-		RESULTS_WINDOW.append(attacker.name + " is over " + WITHERING_PENALTY_INITIATIVE + " Initiative and gains only " + Math.ceil(damage / 2) + " from the attack");
+		RESULTS_WINDOW.append(attacker.name + " is over " + WITHERING_PENALTY_INITIATIVE + " Initiative and gains only " + Math.ceil(damage / 2) + " from the attack; ");
 	} else {
 		attacker.initiative += damage;
-		RESULTS_WINDOW.append(attacker.name + " gains " + damage + " Initiative");
+		RESULTS_WINDOW.append(attacker.name + " gains " + damage + " Initiative from damage; ");
 	}
 	
 	defender.initiative -= damage;
-	RESULTS_WINDOW.append("&mdash;" + defender.name + " loses " + damage + "!\n");
+	RESULTS_WINDOW.append(defender.name + " loses " + damage + "!\n");
 
 	var isTargetCrashed = defender.initiative < 1;
 	console.log("target is crashed now?",isTargetCrashed);
 
 	if (wasTargetCrashed != isTargetCrashed) {
 		attacker.initiative += INITIATIVE_BREAK_BONUS; // unless they've been recently crashed, fix this
+		RESULTS_WINDOW.append(attacker.name+" gains +" + INITIATIVE_BREAK_BONUS + " Initiative Break bonus!\n");
+
 		if (wasAttackerCrashed && attacker.crashedBy === defender) {
 			// INITIATIVE SHIFT
 			RESULTS_WINDOW.append("INITIATIVE SHIFT!!!\n");
@@ -208,7 +210,6 @@ function resolveWitheringDamage(attacker, defender, damage) {
 			// should only be able to use new turn for attacking same dude
 		}
 		defender.crashedBy = attacker;
-		RESULTS_WINDOW.append(attacker.name+" gains Initiative Break bonus!\n");
 	}
 
 	if (isTargetCrashed) defender.crashedAndWithered = true;
@@ -219,7 +220,7 @@ function doRound() {
 
 	RESULTS_WINDOW.refresh();
 
-	if (SCENE.combatants.length > 1) {
+	if (SCENE.combatants.length > 1 && SCENE.isAnybodyOutThere()) {
 		var whoseTurn = SCENE.whoseTurnIsIt();
 			console.log(">1 combatant detected. Highest tick is",whoseTurn);
 
