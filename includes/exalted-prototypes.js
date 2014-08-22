@@ -228,15 +228,17 @@ function Combatant() {
 	this.getDecisivePool = function() {
 		return this.dexterity + this.combat;
 	};
-	this.getParryPool = function() {
-		return Math.ceil((this.dexterity + this.combat) / 2) + this.defense;
+	this.getParryPool = function(specialty) {
+		if (specialty) return Math.ceil((this.dexterity + this.combat + SPECIALTY_DIE_BONUS) / 2) + this.defense;
+		else return Math.ceil((this.dexterity + this.combat) / 2) + this.defense;
 	};
-	this.getEvasionPool = function() {
-		return Math.ceil((this.dexterity + this.dodge) / 2) + this.mobility;
+	this.getEvasionPool = function(specialty) {
+		if (specialty) return Math.ceil((this.dexterity + this.dodge + SPECIALTY_DIE_BONUS) / 2) + this.mobility;
+		else return Math.ceil((this.dexterity + this.dodge) / 2) + this.mobility;
 	};
-	this.getDefense = function() {
+	this.getDefense = function(specialty) {
 		if (isNaN(this.getWoundPenalty())) return 0;
-		else return Math.max(this.getParryPool(), this.getEvasionPool()) - this.onslaught;
+		else return Math.max(this.getParryPool(specialty), this.getEvasionPool(specialty), 0) - this.onslaught;
 	}
 	this.getRushPool = function() {
 		return this.dexterity + this.athletics;

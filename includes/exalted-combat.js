@@ -42,7 +42,7 @@ function resolveAttack(attack) {
 
 	var attackAuto = attack.attackStunt.auto, // presumably will add Charm hooks here eventually
 		attackPool = attack.attackModifiers + attack.attackStunt.dice,
-		targetDefense = attack.defender.getDefense() + attack.defendStunt.static;
+		targetDefense = attack.defender.getDefense(attack.defendSpecialty) + attack.defendStunt.static;
 
 		console.log("Attack modifiers:",attack.attackModifiers);
 		console.log("Attack stunt level:",attack.attackStunt);
@@ -54,6 +54,8 @@ function resolveAttack(attack) {
 
 	if (attack.isDecisive) attackPool += attack.attacker.getDecisivePool();
 	else attackPool += attack.attacker.getWitheringPool();
+
+	if (attack.attackSpecialty) attackPool += SPECIALTY_DIE_BONUS;
 
 	RESULTS_WINDOW.append(attack.attacker.name + " attempts a " + (attack.isDecisive ? "Decisive" : "Withering") + " Attack (" + attackPool + " dice) against " + attack.defender.name + " (" + targetDefense + " defense)!\n");
 
