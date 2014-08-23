@@ -29,7 +29,7 @@
 		.crashed{background-color:purple;}
 		.incapacitated{background-color:#FE5A1D;color:white;font-style:italic;}
 		.dead{background-color:red;color:white;font-style:italic;}
-		.initiative{font:500% Albertus;float:left;margin-right:.1em;}
+		.initiative{font:750% Missive;float:left;margin-right:.1em;}
 		.player{position:relative;border:1px solid black;border-radius:25px;margin:1em;vertical-align:middle;padding:1em;}
 		.randomize{background-image:url('/img/ten_sided_die_16.png');background-repeat:no-repeat;background-position:top left;width:20px;height:20px;}
 		.remove{position:absolute;top:50%;right:1em;transform:translateY(-50%);-moz-transform:translateY(-50%);-webkit-transform:translateY(-50%);}

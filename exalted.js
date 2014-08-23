@@ -110,9 +110,6 @@ $(function() {
 	});
 
 	$("body").on('click', '.debug', function() {
-		var debugForm,
-			id = $(this).parent().attr("id"),
-			lookup = lookupByID(SCENE.combatants);
 
 		DIALOG_FORM.html(
 			'<label for="active">Active: </label><input type="checkbox" id="active"/>' + '<br/>' +
@@ -149,6 +146,18 @@ $(function() {
 		$("#crashedBy").Ex3('populate', id, true);
 
 		DIALOG.dialog("open");
+	});
+
+	$("body").on('click', '.fullDefense', function() {
+		var id = $(this).parent().attr("id"),
+			lookup = lookupByID(SCENE.combatants);
+
+		lookup[id].onslaught -= FULL_DEFENSE_BONUS;
+		lookup[id].initiative -= 1;
+		lookup[id].active = false;
+		doRound();
+
+		RESULTS_WINDOW.append(lookup[id].name + " goes Full Defense!\n");
 	});
 
 	$("body").on('click', '.randomize', function() {

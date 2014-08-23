@@ -29,6 +29,7 @@ function Scene() {
 
 		for (i in this.combatants) {
 			var current = this.combatants[i],
+				inCrash = current.initiative < 1,
 				stats = '',
 				wound = current.getWoundPenalty();
 
@@ -58,16 +59,25 @@ function Scene() {
 						' &bull; Defense: ' + current.getDefense() +
 						' &bull; Rush: ' + current.getRushPool() +
 						' &bull; Disengage: ' + current.getDisengagePool() +
+						' &bull; Soak: ' + current.getSoak() +
+						' &bull; Hardness: ' + (inCrash ? '0' : current.hardness) +
 						'<br/>';
 			}
 			stats += '<b>Health:</b> ' + current.getHealthTrackHTML();
 			stats += '</span><br/>';
 			
-			stats += '<input type="button" class="attack" value="Attack"' + (isNaN(wound) ? ' disabled' : '') +'/>' +
-						'<input type="button" class="edit" value="Edit"/>' +
-						'<input type="button" class="debug" value="ST"/>' +
-						'<input type="button" class="remove" value="&#10006;"/>' +
-						'</td></tr>';
+			if (!isNaN(wound)) {
+				stats += '<input type="button" class="attack" value="Attack"/>';
+				stats += '<input type="button" class="fullDefense" value="Full Defense"' + (inCrash ? ' disabled' : '') +'/>';
+				stats += '<br/>';
+			}
+
+			stats +=
+				'<input type="button" class="edit" value="Edit"/>' +
+				'<input type="button" class="debug" value="ST"/>' +
+				'<input type="button" class="remove" value="&#10006;"/>';
+				
+			stats += '</td></tr>';
 
 			$("#combatants > tbody:last").append(stats);
 		}
@@ -239,7 +249,7 @@ function Combatant() {
 	};
 	this.getDefense = function(specialty) {
 		if (isNaN(this.getWoundPenalty())) return 0;
-		else return Math.max(this.getParryPool(specialty), this.getEvasionPool(specialty), 0) + this.onslaught;
+		else return Math.max(this.getParryPool(specialty), this.getEvasionPool(specialty), 0) - this.onslaught;
 	}
 	this.getRushPool = function() {
 		return this.dexterity + this.athletics;

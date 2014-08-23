@@ -31,7 +31,7 @@ function attack(id, target) {
 
 	attacker.active = false;
 
-	defender.onslaught--;
+	defender.onslaught++;
 		console.log(defender.name+" is now at "+defender.onslaught+" Onslaught penalty");
 
 	console.groupEnd();
@@ -268,7 +268,7 @@ function doRound() {
 		} else {
 			SCENE.resetActiveStatus();
 			SCENE.iterateCrashCounter();
-			SCENE.resetOnslaught();
+			SCENE.resetOnslaught(whoseTurn);
 			ROUND++;
 			RESULTS_WINDOW.append("--- ROUND "+ROUND+" ---\n");
 			doRound();
