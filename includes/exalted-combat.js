@@ -9,6 +9,7 @@ function attack(id, target) {
 		attackModifiers		= parseInt($("#attackModifiers").val()),
 		attackSpecialty		= $("#attackSpecialty").prop('checked'),
 		attackStunt			= parseInt($("input[name=attackStunt]:checked").val()),
+		attackTick			= parseInt($("#attackTick").val()),
 		attackWound			= attacker.getWoundPenalty(),
 		defendSpecialty		= $("#defendSpecialty").prop('checked'),
 		defendStunt			= parseInt($("input[name=defendStunt]:checked").val());
@@ -23,13 +24,15 @@ function attack(id, target) {
 	// add in attacker wound penalties if applicable (otherwise this function probably shouldn't be called in the first place)
 	if (!isNaN(attackWound)) attackModifiers += attackWound;
 
-	SCENE.pendingAttacks.push(new PendingAttack(attacker.initiative, attacker, defender, attackModifiers, attackStunt, defendStunt, attackIsDecisive, attackSpecialty, defendSpecialty));
+	if (attacker.initiative != attackTick) attacker.initiative += DELAYED_ATTACK_PENALTY;
+
+	SCENE.pendingAttacks.push(new PendingAttack(attackTick, attacker, defender, attackModifiers, attackStunt, defendStunt, attackIsDecisive, attackSpecialty, defendSpecialty));
 		console.log("new attack pushed:",SCENE.pendingAttacks);
 
 	attacker.active = false;
 
-	defender.onslaught++;
-		console.log(defender.name+" is now at -"+defender.onslaught+" Onslaught penalty");
+	defender.onslaught--;
+		console.log(defender.name+" is now at "+defender.onslaught+" Onslaught penalty");
 
 	console.groupEnd();
 
@@ -115,8 +118,8 @@ function makeAttackRoll(attacker, defender, attackAuto, attackPool, targetDefens
 		RESULTS_WINDOW.append(attacker.name + " fails! (" + attackRoll + ")\n");
 		if (isDecisive) {
 			var initLoss = (attacker.initiative > DECISIVE_MISS_PENALTY_THRESHOLD ? DECISIVE_MISS_PENALTY_HIGH : DECISIVE_MISS_PENALTY_LOW);
-			RESULTS_WINDOW.append(attacker.name + " loses " + initLoss + " Initiative!\n");
-			attacker.initiative -= initLoss;
+			RESULTS_WINDOW.append(attacker.name + " takes " + initLoss + " Initiative!\n");
+			attacker.initiative += initLoss;
 		}
 	}
 

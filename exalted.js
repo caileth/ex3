@@ -93,6 +93,7 @@ $(function() {
 			});
 	
 			$("#opponents").Ex3('populate', id);
+			$("#attackTick").Ex3('getDelayTicks', id);
 	
 			if (lookup[id].initiative < 1) $("#decisive").prop('disabled', true);
 	
@@ -283,6 +284,28 @@ $(function() {
 
 				eval(evalStr);
 			});
+		}
+
+		if (action === "getDelayTicks") {
+			console.groupCollapsed("getting valid ticks");
+
+			var ticks = new Array();
+
+			ticks.push(lookup[id].initiative);
+
+			for (i in lookup) {
+				if (lookup[i].initiative < lookup[id].initiative && lookup[i].initiative != ticks[ticks.length - 1]) {
+					ticks.push(lookup[i].initiative);
+				}
+			}
+
+			this.empty();
+				console.log("clearing out existing entries");
+
+			for (j in ticks) this.append('<option value="'+ticks[j]+'">'+ticks[j]+'</option>');
+
+			console.groupEnd();
+			return this;
 		}
 	};
 }(jQuery));

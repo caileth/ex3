@@ -1,14 +1,15 @@
 var CLASH_BONUS_WITHERING = 3,
 	CLASH_BONUS_DECISIVE = 1,
-	CLASH_PENALTY = 2,
-	DECISIVE_MISS_PENALTY_HIGH = 3,
-	DECISIVE_MISS_PENALTY_LOW = 2,
+	CLASH_PENALTY = -2,
+	DECISIVE_MISS_PENALTY_HIGH = -3,
+	DECISIVE_MISS_PENALTY_LOW = -2,
 	DECISIVE_MISS_PENALTY_THRESHOLD = 10,
 	DEFAULT_DIE_SIDE = 10,
 	DEFAULT_DOUBLES = 10,
 	DEFAULT_HEALTH_TRACK = ['-0', '-1', '-2', '-4', 'Incapacitated'],
 	DEFAULT_NUM_DICE = 5,
 	DEFAULT_TARGET = 7,
+	DELAYED_ATTACK_PENALTY = -2,
 	DIALOG = $("#dialog"),
 	DIALOG_FORM = $("#dialog-form"),
 	DIALOG_FORM_INPUTS = $("#dialog-form :input"),
@@ -38,6 +39,8 @@ var CLASH_BONUS_WITHERING = 3,
 
 var ATTACK_WINDOW =	'<label for="opponents">Target:</label>' +
 					'<select id="opponents"></select><br/>' +
+					'<label for="attackTick">Attack on tick:</label>' +
+					'<select id="attackTick"></select><br/>' +
 					'<label for="attackIsDecisive">Attack Type:</label>' +
 					'<input type="radio" name="attackIsDecisive" id="withering" value="false">Withering' +
 					'<input type="radio" name="attackIsDecisive" id="decisive" value="true">Decisive<br/>' +

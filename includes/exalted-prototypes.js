@@ -238,7 +238,7 @@ function Combatant() {
 	};
 	this.getDefense = function(specialty) {
 		if (isNaN(this.getWoundPenalty())) return 0;
-		else return Math.max(this.getParryPool(specialty), this.getEvasionPool(specialty), 0) - this.onslaught;
+		else return Math.max(this.getParryPool(specialty), this.getEvasionPool(specialty), 0) + this.onslaught;
 	}
 	this.getRushPool = function() {
 		return this.dexterity + this.athletics;
