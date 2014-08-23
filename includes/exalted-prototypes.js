@@ -12,6 +12,7 @@ function Scene() {
 			var current = this.combatants[j];
 			if (current.turnsInCrash >= INITIATIVE_RESET_TURNS) {
 				current.initiative = INITIATIVE_RESET_VALUE;
+				current.crashRecovery = ROUND;
 				current.turnsInCrash = 0;
 				RESULTS_WINDOW.append(current.name + " achieves Initiative Reset!\n");
 			}
@@ -65,7 +66,7 @@ function Scene() {
 			stats += '<input type="button" class="attack" value="Attack"' + (isNaN(wound) ? ' disabled' : '') +'/>' +
 						'<input type="button" class="edit" value="Edit"/>' +
 						'<input type="button" class="debug" value="ST"/>' +
-						'<input type="button" class="remove" value="&#x2718;"/>' +
+						'<input type="button" class="remove" value="&#9679;"/>' +
 						'</td></tr>';
 
 			$("#combatants > tbody:last").append(stats);

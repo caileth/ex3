@@ -173,7 +173,7 @@ function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
 
 		defender.recordDamage();
 	} else {
-		RESULTS_WINDOW.append("It doesn't penetrate" + defender.name + "'s Hardness!\n");
+		RESULTS_WINDOW.append("It doesn't penetrate " + defender.name + "'s Hardness!\n");
 		console.log(defender.name,"balls so hard motherfuckas wanna fine him");
 		for (var i = 0; i < 3; i++) console.log("That shit cray");
 	}
@@ -209,8 +209,11 @@ function resolveWitheringDamage(attacker, defender, damage) {
 	console.log("target is crashed now?",isTargetCrashed);
 
 	if (wasTargetCrashed != isTargetCrashed) {
-		attacker.initiative += INITIATIVE_BREAK_BONUS; // unless they've been recently crashed, fix this
-		RESULTS_WINDOW.append(attacker.name+" gains +" + INITIATIVE_BREAK_BONUS + " Initiative Break bonus!\n");
+		if (defender.crashRecovery && ROUND > defender.crashRecovery + 1) {
+			console.log("Round",ROUND,"is 2+ rounds beyond defender's last crash recovery of ",defender.crashRecovery);
+			attacker.initiative += INITIATIVE_BREAK_BONUS;
+			RESULTS_WINDOW.append(attacker.name+" gains +" + INITIATIVE_BREAK_BONUS + " Initiative Break bonus!\n");
+		}
 
 		if (wasAttackerCrashed && attacker.crashedBy === defender) {
 			// INITIATIVE SHIFT
@@ -224,6 +227,10 @@ function resolveWitheringDamage(attacker, defender, damage) {
 		}
 		defender.crashedBy = attacker;
 	}
+
+	var isAttackerCrashed = attacker.initiative < 1;
+
+	if (wasAttackerCrashed != isAttackerCrashed) attacker.crashRecovery = ROUND;
 
 	if (isTargetCrashed) defender.crashedAndWithered = true;
 }
