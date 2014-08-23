@@ -1,3 +1,25 @@
+function aim(id, target) {
+	console.groupCollapsed("Aim");
+
+	var lookup		= lookupByID(SCENE.combatants),
+		attacker	= lookup[id],
+		defender	= lookup[target];
+
+	attacker.isShifting = false;
+		console.log("setting attacker shift to false");
+
+	attacker.aimTarget = defender;
+		console.log("Setting",defender.name,"as",attacker.name,"'s Aim target");
+
+	attacker.active = false;
+	console.groupEnd();
+	DIALOG.dialog("close");
+
+	RESULTS_WINDOW.append(attacker.name + " takes Aim against " + defender.name + "&hellip;\n");
+
+	doRound();
+}
+
 function attack(id, target) {
 	console.groupCollapsed("Attack!");
 
@@ -21,8 +43,9 @@ function attack(id, target) {
 	defendStunt = stunt(defendStunt);
 		console.log("stunts:",attackStunt,"vs.",defendStunt);
 
-	// add in attacker wound penalties if applicable (otherwise this function probably shouldn't be called in the first place)
-	if (!isNaN(attackWound)) attackModifiers += attackWound;
+	if (!isNaN(attackWound)) attackModifiers += attackWound;			// apply wound penalties if applicable
+	if (attacker.aimTarget === defender) attackModifiers += AIM_BONUS;	// apply aim bonus if applicable
+	attacker.aimTarget = undefined;										// reset aim target for attacker either way
 
 	if (attacker.initiative != attackTick) attacker.initiative += DELAYED_ATTACK_PENALTY;
 

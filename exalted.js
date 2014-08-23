@@ -59,6 +59,49 @@ $(function() {
 		console.groupEnd();
 	});
 
+	$("body").on( "click", ".aim", function() {
+		console.groupCollapsed("Aim Button");
+		if (SCENE.combatants.length > 1) {	
+			DIALOG_FORM.html(AIM_WINDOW);
+
+			var aimForm,
+				id = $(this).parent().attr("id"),
+				lookup = lookupByID(SCENE.combatants);
+	
+			aimForm = DIALOG_FORM.on("submit", function(event) {
+				event.preventDefault();
+				aim(id, $("#aimTargets option:selected").val());
+			});
+	
+			DIALOG.dialog({
+				title: "Aim",
+				autoOpen: false,
+				height: "auto",
+				width: "auto",
+				modal: true,
+				buttons: {
+					Aim: function() {
+						aim(id, $("#aimTargets option:selected").val());
+					},
+					Cancel: function() {
+						DIALOG.dialog("close");
+					}
+				},
+				close: function() {
+					aimForm[0].reset();
+				}
+			});
+	
+			$("#aimTargets").Ex3('populate', id);
+	
+			DIALOG.dialog("open");
+		} else {
+			console.log("There's nobody to aim at!");
+		}
+		
+		console.groupEnd();
+	});
+
 	$("body").on( "click", ".attack", function() {
 		console.groupCollapsed("Attack Button");
 		if (SCENE.combatants.length > 1) {	
@@ -279,7 +322,10 @@ $(function() {
 			for (i in lookup) {
 				if (i != id && lookup[i].getWoundPenalty() != 'dead') {
 					console.log("adding id",i);
-					this.append('<option value="' + i + '">' + lookup[i].name + '</option>');
+					this.append(
+						'<option value="' + i + '">' +
+						(lookup[id].aimTarget === lookup[i] ? '* ' : '') +
+						lookup[i].name + '</option>');
 				} else {
 					console.log("skipping",i);
 				}

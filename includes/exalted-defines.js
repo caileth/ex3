@@ -1,4 +1,5 @@
-var CLASH_BONUS_WITHERING = 3,
+var AIM_BONUS = 3,
+	CLASH_BONUS_WITHERING = 3,
 	CLASH_BONUS_DECISIVE = 1,
 	CLASH_PENALTY = -2,
 	DECISIVE_MISS_PENALTY_HIGH = -3,
@@ -37,6 +38,9 @@ var CLASH_BONUS_WITHERING = 3,
 	WOUND_PENALTY_INJURED = -1,
 	WOUND_PENALTY_WOUNDED = -2,
 	WOUND_PENALTY_MAIMED = -4;
+
+var AIM_WINDOW =	'<label for="aimTargets">Target:</label>' +
+					'<select id="aimTargets"></select><br/>';
 
 var ATTACK_WINDOW =	'<label for="opponents">Target:</label>' +
 					'<select id="opponents"></select><br/>' +

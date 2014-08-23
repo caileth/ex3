@@ -67,7 +67,8 @@ function Scene() {
 			stats += '</span><br/>';
 			
 			if (!isNaN(wound)) {
-				stats += '<input type="button" class="attack" value="Attack"/>';
+				stats += '<input type="button" class="attack" value="Attack"/>' +
+						 '<input type="button" class="aim" value="Aim"/>';
 				stats += '<input type="button" class="fullDefense" value="Full Defense"' + (inCrash ? ' disabled' : '') +'/>';
 				stats += '<br/>';
 			}
