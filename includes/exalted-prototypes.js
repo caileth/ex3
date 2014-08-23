@@ -66,7 +66,7 @@ function Scene() {
 			stats += '<input type="button" class="attack" value="Attack"' + (isNaN(wound) ? ' disabled' : '') +'/>' +
 						'<input type="button" class="edit" value="Edit"/>' +
 						'<input type="button" class="debug" value="ST"/>' +
-						'<input type="button" class="remove" value="&#9679;"/>' +
+						'<input type="button" class="remove" value="&#10006;"/>' +
 						'</td></tr>';
 
 			$("#combatants > tbody:last").append(stats);

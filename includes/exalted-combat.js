@@ -209,7 +209,7 @@ function resolveWitheringDamage(attacker, defender, damage) {
 	console.log("target is crashed now?",isTargetCrashed);
 
 	if (wasTargetCrashed != isTargetCrashed) {
-		if (defender.crashRecovery && ROUND > defender.crashRecovery + 1) {
+		if (!defender.crashRecovery || ROUND > defender.crashRecovery + 1) {
 			console.log("Round",ROUND,"is 2+ rounds beyond defender's last crash recovery of ",defender.crashRecovery);
 			attacker.initiative += INITIATIVE_BREAK_BONUS;
 			RESULTS_WINDOW.append(attacker.name+" gains +" + INITIATIVE_BREAK_BONUS + " Initiative Break bonus!\n");
