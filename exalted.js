@@ -110,6 +110,9 @@ $(function() {
 	});
 
 	$("body").on('click', '.debug', function() {
+		var debugForm,
+			id = $(this).parent().attr("id"),
+			lookup = lookupByID(SCENE.combatants);
 
 		DIALOG_FORM.html(
 			'<label for="active">Active: </label><input type="checkbox" id="active"/>' + '<br/>' +
@@ -196,20 +199,34 @@ $(function() {
 	$("#joinBattle").click(function() {
 		console.groupCollapsed("joinBattle clicked");
 		console.log(SCENE.combatants.length,"combatants");
-		if (SCENE.combatants.length > 1) {
-			RESULTS_WINDOW.append("\n---\n");
+		if (SCENE.combatants.length > 0) {
+			ROUND = 1;
+			RESULTS_WINDOW.append("\n--- ROUND 1 ---\n");
 			for (i in SCENE.combatants) {
-				var joinBattlePool = SCENE.combatants[i].getJoinBattlePool(),
+				var current = SCENE.combatants[i],
+					joinBattlePool = current.getJoinBattlePool(),
 					joinBattleRoll = diceRoller(joinBattlePool),
 					joinBattleSuxx = Math.max(successChecker(joinBattleRoll, JB_TARGET, JB_DOUBLES), 0);
-				SCENE.combatants[i].initiative = joinBattleSuxx + JB_EXTRA_SUX;
-				RESULTS_WINDOW.append(SCENE.combatants[i].name + " joins battle at initiative " + SCENE.combatants[i].initiative + "\n");
+
+				current.initiative = joinBattleSuxx + JB_EXTRA_SUX;
+				current.active = true;
+				current.crashedAndWithered = false;
+				current.turnsInCrash = 0;
+				current.onslaught = 0;
+				current.bashing	= 0;
+				current.lethal = 0;
+				current.aggravated = 0;
+				current.crashedBy = undefined;
+				current.crashRecovery = undefined;
+				current.recordDamage();
+
+				RESULTS_WINDOW.append(current.name + " joins battle at initiative " + current.initiative + "\n");
 			}
-			scrollToBottom();
 			doRound();
 		} else {
 			RESULTS_WINDOW.append("\nNot enough combatants!");
 		}
+		scrollToBottom();
 		console.groupEnd();
 	});
 

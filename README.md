@@ -1,6 +1,7 @@
 ex3
 ===
 TO DO:
+- Fix results printout for dead/incap people (i.e., Initiative Reset)
 - Other Combat Actions
   - Aim
   - Draw/Ready Weapon
