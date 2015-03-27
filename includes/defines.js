@@ -102,7 +102,7 @@ var STATS_WINDOW =	'<input type="text" id="name" placeholder="New Player" autofo
 					'<label for="hardness">Armor Hardness: </label><input type="number" id="hardness" value="0" min="0" max="10"/><br/>' +
 					'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-2" max="0"/>';
 
-$.getJSON('./exaltedgear.json', function(data) {
+$.getJSON('./json/gear.json', function(data) {
 	// exaltedgear.json syntax:
 	// "GEAR_DATABASE" : {
 	//   "weapon" : { "mortal/artifact" : { "weight" : [accuracy, damage, overwhelming, defense] } },
@@ -112,7 +112,7 @@ $.getJSON('./exaltedgear.json', function(data) {
 	GEAR_DATABASE = data;
 });
 
-$.getJSON('./exaltedname.json', function(data) {
+$.getJSON('./json/names.json', function(data) {
 	// exaltedname.json syntax:
 	// (only two locales at the moment are "imperial" and "threshold")
 	// "NAMES_DATABASE" : {

@@ -5,9 +5,9 @@
 	<title>Exalted Stuff</title>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 	<style>
-		@font-face{font-family:Albertus;src:url(AlbertusMTStd.otf);}
-		@font-face{font-family:Missive;src:url(Missive.ttf);}
-		@font-face{font-family:Goudy;src:url(GoudyStd.otf);}
+		@font-face{font-family:Albertus;src:url(includes/AlbertusMTStd.otf);}
+		@font-face{font-family:Missive;src:url(includes/Missive.ttf);}
+		@font-face{font-family:Goudy;src:url(includes/GoudyStd.otf);}
 
 		h1,h2,h3{display:inline;}
 		h1{font:500% Albertus;text-transform:uppercase;}
@@ -38,13 +38,13 @@
 	</style>
 	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
-	<script src="./exalted-prototypes.js"></script>
-	<script src="./exalted-defines.js"></script>
-	<script src="./exalted-utils.js"></script>
-	<script src="./exalted-dialogs.js"></script>
-	<script src="./exalted-randomCrap.js"></script>
-	<script src="./exalted-combatants.js"></script>
-	<script src="./exalted-combat.js"></script>
+	<script src="./includes/prototypes.js"></script>
+	<script src="./includes/defines.js"></script>
+	<script src="./includes/utils.js"></script>
+	<script src="./includes/dialogs.js"></script>
+	<script src="./includes/randomCrap.js"></script>
+	<script src="./includes/combatants.js"></script>
+	<script src="./includes/combat.js"></script>
 	<script src="./exalted.js"></script>
 </head>
 <body>
