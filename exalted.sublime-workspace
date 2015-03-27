@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"look",
+				"lookup"
+			],
+			[
+				"cr",
+				"crashRecovery"
+			],
+			[
+				"defe",
+				"defender"
+			],
+			[
 				"tick",
 				"tickAnnounce"
 			],
@@ -22,10 +34,6 @@
 			[
 				"DI",
 				"DIALOG_FORM"
-			],
-			[
-				"look",
-				"lookupByID"
 			],
 			[
 				"pen",
@@ -364,10 +372,6 @@
 				"attackSuccesses"
 			],
 			[
-				"defe",
-				"defendStunt"
-			],
-			[
 				"atta",
 				"attackPool"
 			],
@@ -510,10 +514,6 @@
 			[
 				"con",
 				"conjuctive"
-			],
-			[
-				"nu",
-				"numTemplates"
 			]
 		]
 	},
@@ -523,23 +523,7 @@
 			"file": "includes/exalted-prototypes.js",
 			"settings":
 			{
-				"buffer_size": 11530,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "/D/Documents/Paradox Interactive/Europa Universalis IV/settings.txt",
-			"settings":
-			{
-				"buffer_size": 1631,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "includes/exalted-combat.js",
-			"settings":
-			{
-				"buffer_size": 10218,
+				"buffer_size": 12766,
 				"line_ending": "Windows"
 			}
 		},
@@ -563,7 +547,7 @@
 			"file": "includes/exalted-defines.js",
 			"settings":
 			{
-				"buffer_size": 6371,
+				"buffer_size": 7130,
 				"line_ending": "Windows"
 			}
 		},
@@ -571,7 +555,7 @@
 			"file": "exalted.php",
 			"settings":
 			{
-				"buffer_size": 3367,
+				"buffer_size": 3361,
 				"line_ending": "Windows"
 			}
 		},
@@ -592,10 +576,26 @@
 			}
 		},
 		{
+			"file": "README.md",
+			"settings":
+			{
+				"buffer_size": 476,
+				"line_ending": "Windows"
+			}
+		},
+		{
 			"file": "exalted.js",
 			"settings":
 			{
-				"buffer_size": 6682,
+				"buffer_size": 9051,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "includes/exalted-combat.js",
+			"settings":
+			{
+				"buffer_size": 12154,
 				"line_ending": "Windows"
 			}
 		},
@@ -603,15 +603,23 @@
 			"file": "includes/exalted-dialogs.js",
 			"settings":
 			{
-				"buffer_size": 2090,
+				"buffer_size": 2084,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "README.md",
+			"file": "includes/exalted-charms.js",
 			"settings":
 			{
-				"buffer_size": 442,
+				"buffer_size": 678017,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/cm_charlemagne_story_events.txt",
+			"settings":
+			{
+				"buffer_size": 60514,
 				"line_ending": "Windows"
 			}
 		}
@@ -648,6 +656,14 @@
 	},
 	"file_history":
 	[
+		"/D/Documents/Paradox Interactive/Europa Universalis IV/mod/GMod/history/provinces/169 - Armor.txt",
+		"/C/Users/Justin/AppData/Local/Temp/Rar$DIa0.868/read me   DeWatermarker advice.txt",
+		"/D/Downloads/Exalted 2nd Ed/Info.txt",
+		"/C/Program Files (x86)/Total War Rome II/steam_api.ini",
+		"/C/Users/Justin/Desktop/steam_api.ini",
+		"/D/Games/Total War Rome II Emperor Edition [RELOADED]/rld-towaroiiee/Crack/steam_api.ini",
+		"/C/Users/Justin/AppData/Local/Temp/85BD.tmp.txt",
+		"/D/Documents/Paradox Interactive/Europa Universalis IV/settings.txt",
 		"/D/Documents/GitHub/ex3/includes/jquery-exalted.js",
 		"/D/Documents/GitHub/ex3/includes/exalted-combatants.js",
 		"/D/Documents/GitHub/ex3/includes/exalted-defines.js",
@@ -706,7 +722,6 @@
 		"/C/Program Files (x86)/Steam/SteamApps/common/Europa Universalis IV/common/ideas/zz_group_ideas.txt",
 		"/C/Program Files (x86)/Steam/SteamApps/common/Europa Universalis IV/common/ideas/00_basic_ideas.txt",
 		"/D/Documents/Paradox Interactive/Europa Universalis IV/mod/GMod/common/ideas/00_country_ideas.txt",
-		"/C/Users/Justin/Desktop/steam_api.ini",
 		"/C/Program Files (x86)/Football Manager 2014/steam_api.ini",
 		"/C/Users/Justin/AppData/Local/Temp/scp40087/home/calith/caletges.com/eu4.php",
 		"/C/Users/Justin/AppData/Local/Temp/scp25036/home/calith/caletges.com/eu4.php",
@@ -768,14 +783,7 @@
 		"/D/Documents/Paradox Interactive/Crusader Kings II/save games/Byzantine_Empire896_07_16.ck2",
 		"/D/Documents/Paradox Interactive/Crusader Kings II/save games/autosave.ck2",
 		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/history/characters/persian.txt",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/history/characters/mongol.txt",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/common/cb_types/00_cb_types.txt",
-		"/C/Users/Justin/AppData/Roaming/.minecraft/options.txt",
-		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod/decisions/GMod.txt",
-		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod/events/lovers_events.txt",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/various_traits_events.txt",
-		"/C/Users/Justin/Desktop/minecraft server/logs/latest.log",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/lovers_events.txt"
+		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/history/characters/mongol.txt"
 	],
 	"find":
 	{
@@ -794,6 +802,57 @@
 		"case_sensitive": true,
 		"find_history":
 		[
+			"doRound",
+			"round",
+			"print",
+			"damage",
+			"disabled",
+			"join",
+			"doRound",
+			"addCombatant",
+			"printCombatants",
+			"doRound",
+			"print",
+			"reset scene",
+			"addCombatant",
+			"APPEND",
+			"populate",
+			"opponents",
+			".aim",
+			"print",
+			"print combat",
+			"Attack",
+			"attackForm",
+			"fullDef",
+			"Full Def",
+			"defend",
+			"'getStats'",
+			"this",
+			"SCENE.combatants[i]",
+			"join",
+			"reroll",
+			"hardness",
+			"full",
+			"defense",
+			"onslaught",
+			"attack",
+			"iterateCrashCounter",
+			"resetActiveStatus",
+			"resetOnslaught",
+			"onslaught",
+			"checkWithering",
+			"resolveClash",
+			"clash",
+			"initiative break",
+			"round",
+			"crashRec",
+			"INITIATIVE_RESET_VALUE",
+			"reset",
+			"crashedRound",
+			"initiative break",
+			"break",
+			"initiative break",
+			"hardness",
 			"- -",
 			"	",
 			"onslaught",
@@ -870,58 +929,7 @@
 			"versus",
 			"soak of",
 			"resolve",
-			"active = true",
-			"shift",
-			"resolveClashAttack",
-			"clash",
-			"shift",
-			"joinBattle",
-			"join",
-			"target",
-			"Target",
-			"active = false",
-			"crash",
-			"crashed",
-			"shift",
-			"combatants",
-			"resetActive",
-			"lookupByID",
-			"pendingAttack",
-			".length",
-			"lookupByID",
-			"record stats",
-			"getStats",
-			"lookup",
-			"refreshing dialog",
-			"pendingAttacksList",
-			"this",
-			"combatants",
-			"pending",
-			"pendingAttack",
-			"combatants",
-			"pendingAttacks",
-			"combatants",
-			"Combatants",
-			"combatants",
-			"Combatants",
-			"combatants",
-			"whose turn",
-			"whoseTurn",
-			"whoseTurns",
-			"resolving",
-			"pending attack",
-			"resolving pending attack",
-			"second",
-			"first",
-			"second",
-			"PendingAttack",
-			"whoseTurn",
-			"onslaught",
-			"onsalught",
-			"resetActive",
-			"whoseTurn",
-			"onslaught",
-			"onsalught"
+			"active = true"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -976,7 +984,7 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -985,89 +993,31 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 11530,
+						"buffer_size": 12766,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1170,
-								1170
+								1997,
+								1997
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 318.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/D/Documents/Paradox Interactive/Europa Universalis IV/settings.txt",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1631,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								5,
-								5
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
-					"file": "includes/exalted-combat.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 10218,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								890,
-								890
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": -0.0,
-						"translation.y": 225.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
+					"buffer": 1,
 					"file": "includes/exalted-randomCrap.js",
 					"semi_transient": false,
 					"settings":
@@ -1092,11 +1042,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 11,
+					"stack_index": 12,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 2,
 					"file": "includes/exalted-utils.js",
 					"semi_transient": false,
 					"settings":
@@ -1118,27 +1068,27 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1215.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
-					"buffer": 5,
+					"buffer": 3,
 					"file": "includes/exalted-defines.js",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6371,
+						"buffer_size": 7130,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								627,
-								627
+								358,
+								358
 							]
 						],
 						"settings":
@@ -1150,24 +1100,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
+					"buffer": 4,
 					"file": "exalted.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3367,
+						"buffer_size": 3361,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								882,
-								882
+								711,
+								711
 							]
 						],
 						"settings":
@@ -1179,11 +1129,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 5,
 					"file": "includes/exaltedgear.json",
 					"semi_transient": false,
 					"settings":
@@ -1209,11 +1159,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 6,
 					"file": "includes/exaltedname.json",
 					"semi_transient": false,
 					"settings":
@@ -1239,30 +1189,60 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 8,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 2,
+			"selected": 5,
 			"sheets":
 			[
 				{
-					"buffer": 9,
-					"file": "exalted.js",
+					"buffer": 7,
+					"file": "README.md",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6682,
+						"buffer_size": 476,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								476,
+								476
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "exalted.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9051,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								120,
+								120
 							]
 						],
 						"settings":
@@ -1274,7 +1254,36 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "includes/exalted-combat.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12154,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								12024,
+								12024
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 3761.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1283,7 +1292,65 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2090,
+						"buffer_size": 2084,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								440,
+								440
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "includes/exalted-charms.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 678017,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2078,
+								2078
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 180.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/cm_charlemagne_story_events.txt",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 60514,
 						"regions":
 						{
 						},
@@ -1296,38 +1363,7 @@
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				},
-				{
-					"buffer": 11,
-					"file": "README.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 442,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								288,
-								288
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -1372,7 +1408,7 @@
 		"rows":
 		[
 			0.0,
-			0.494594594595,
+			0.141352278295,
 			1.0
 		]
 	},
@@ -1384,7 +1420,7 @@
 	"project": "exalted.sublime-project",
 	"replace":
 	{
-		"height": 62.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1411,6 +1447,7 @@
 		],
 		"width": 0.0
 	},
+	"selected_group": 1,
 	"settings":
 	{
 	},

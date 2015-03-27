@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8"/>
+	<meta charset="UTF-8">
 	<title>Exalted Stuff</title>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 	<style>
-		@font-face{font-family:Albertus;src:url(includes/AlbertusMTStd.otf);}
-		@font-face{font-family:Missive;src:url(includes/Missive.ttf);}
-		@font-face{font-family:Goudy;src:url(includes/GoudyStd.otf);}
+		@font-face{font-family:Albertus;src:url(AlbertusMTStd.otf);}
+		@font-face{font-family:Missive;src:url(Missive.ttf);}
+		@font-face{font-family:Goudy;src:url(GoudyStd.otf);}
 
 		h1,h2,h3{display:inline;}
 		h1{font:500% Albertus;text-transform:uppercase;}
@@ -38,38 +38,38 @@
 	</style>
 	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
-	<script src="./includes/exalted-prototypes.js"></script>
-	<script src="./includes/exalted-defines.js"></script>
-	<script src="./includes/exalted-utils.js"></script>
-	<script src="./includes/exalted-dialogs.js"></script>
-	<script src="./includes/exalted-randomCrap.js"></script>
-	<script src="./includes/exalted-combatants.js"></script>
-	<script src="./includes/exalted-combat.js"></script>
+	<script src="./exalted-prototypes.js"></script>
+	<script src="./exalted-defines.js"></script>
+	<script src="./exalted-utils.js"></script>
+	<script src="./exalted-dialogs.js"></script>
+	<script src="./exalted-randomCrap.js"></script>
+	<script src="./exalted-combatants.js"></script>
+	<script src="./exalted-combat.js"></script>
 	<script src="./exalted.js"></script>
 </head>
 <body>
-	<h1>Ex3 Combat Toolkit</h1><br/>
+	<h1>Ex3 Combat Toolkit</h1><br>
 
 	<div>
-		<h2>Results</h2><br/>
+		<h2>Results</h2><br>
 		<textarea id="results" readonly tabindex="-1"></textarea>
 	</div>
 
-<!-- 	<div id="roller">	
-		<h3>Basic Die Roller</h3><br/>
-		<input type="number" id="numDice" value="10" min="1" max="25"/>
-		<input type="button" id="roll" value="d10"/>@ <input type="number" id="targetNumber" value="7" min="1" max="10"/>,
-		Difficulty <input type="number" id="difficulty" value="1" min="0" max="5"/><br/>		
-		Double Rule: <input type="radio" name="doubleRule" value="10" checked/>10s
-		<input type="radio" name="doubleRule" value="9"/>9s
-		<input type="radio" name="doubleRule" value="8"/>8s
-		<input type="radio" name="doubleRule" value="false"/>None
-	</div> -->
+	<div id="roller">	
+		<h3>Basic Die Roller</h3><br>
+		<input type="number" id="numDice" value="10" min="1" max="25">
+		<input type="button" id="roll" value="d10">@ <input type="number" id="targetNumber" value="7" min="1" max="10">,
+		Difficulty <input type="number" id="difficulty" value="1" min="0" max="5"><br>		
+		Double Rule: <input type="radio" name="doubleRule" value="10" checked>10s
+		<input type="radio" name="doubleRule" value="9">9s
+		<input type="radio" name="doubleRule" value="8">8s
+		<input type="radio" name="doubleRule" value="false">None
+	</div>
 
 	<div id="combatants">
-		<h3>Combatants</h3><br/>
-			<input type="button" id="addCombatant" value="Add Combatant"/>
-			<input type="button" id="joinBattle" value="Reset Scene"/>
+		<h3>Combatants</h3><br>
+			<input type="button" id="addCombatant" value="Add Combatant">
+			<input type="button" id="joinBattle" value="Join Battle!">
 		<table id="combatants"><tbody></tbody></table>
 	</div>
 

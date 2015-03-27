@@ -9,16 +9,17 @@ function editCombatant(id) {
 
 function addCombatant() {
 	var i = SCENE.combatants.length;
-	console.groupCollapsed("Adding combatant — current length of SCENE.combatants is",i);
+	console.log("Adding combatant — current length of SCENE.combatants is",i);
 
 	SCENE.combatants.push(new Combatant());
 	recordStats(SCENE.combatants[i].id, SCENE.combatants);
-	SCENE.combatants[i].initiative = SCENE.combatants[i].joinBattle();
 
-	RESULTS_WINDOW.append(SCENE.combatants[i].getName() + " joins battle at tick " + SCENE.combatants[i].initiative + "\n");
-	scrollToBottom();
+	if (ROUND > 0) {		
+		SCENE.combatants[i].initiative = SCENE.combatants[i].joinBattle();
 
-	console.groupEnd();
+		RESULTS_WINDOW.append(SCENE.combatants[i].getName() + " joins battle at tick " + SCENE.combatants[i].initiative + "\n");
+		scrollToBottom();
+	}
 
 	DIALOG.dialog("close");
 }

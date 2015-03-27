@@ -259,7 +259,7 @@ function resolveWitheringDamage(attacker, defender, damage) {
 }
 
 function doRound() {
-	console.groupCollapsed("Do Round");
+	console.group("Do Round");
 
 	RESULTS_WINDOW.refresh();
 

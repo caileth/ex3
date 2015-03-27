@@ -3,16 +3,16 @@ ex3
 TO DO:
 
 Minor:
-- Fix results printout for dead/incap people (i.e., Initiative Reset)
-- Disable Attack button for lone capacitated combatant
 - Double check that shifting attackers can only attack their shiftees or whatever
+- Reset Round to zero when all combatants are removed
+- Set Initiative to undefined when dead or incapped
 
 Major:
 - Other Combat Actions
-  - Aim
   - Draw/Ready Weapon
   - Defend Other
   - Misc Action
+- Flurry
 - Combat Movement & Range
   - Ranged Attacks
 - Complications

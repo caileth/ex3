@@ -3,8 +3,6 @@ $(function() {
 	DIALOG_FORM.refresh();
 	RESULTS_WINDOW.refresh();
 
-	RESULTS_WINDOW.append("--- ROUND "+ROUND+" ---\n");
-
 
 
 
@@ -38,7 +36,7 @@ $(function() {
 			DIALOG.dialog("option", "buttons", [
 				{ text: "Edit combatant", click: function() {
 					editCombatant(id);
-					doRound();
+					SCENE.printCombatants();
 				}},
 				{ text: "Cancel", click: function() {
 					DIALOG.dialog("close");
@@ -47,7 +45,7 @@ $(function() {
 			DIALOG.dialog("option", "buttons", [
 				{ text: "Add combatant", click: function() {
 					addCombatant();
-					doRound();
+					SCENE.printCombatants();
 				}},
 				{ text: "Cancel", click: function() {
 					DIALOG.dialog("close");
@@ -320,7 +318,7 @@ $(function() {
 			if (extra) this.append('<option value="undefined">None</option>');
 
 			for (i in lookup) {
-				if (i != id && lookup[i].getWoundPenalty() != 'dead') {
+				if (i != id && lookup[i].initiative != undefined) {
 					console.log("adding id",i);
 					this.append(
 						'<option value="' + i + '">' +

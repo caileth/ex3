@@ -10,7 +10,7 @@ function Scene() {
 
 		for (j in this.combatants) {
 			var current = this.combatants[j];
-			if (current.turnsInCrash >= INITIATIVE_RESET_TURNS) {
+			if (current.turnsInCrash >= INITIATIVE_RESET_TURNS && current.initiative != undefined) {
 				current.initiative = INITIATIVE_RESET_VALUE;
 				current.crashRecovery = ROUND;
 				current.turnsInCrash = 0;
@@ -44,7 +44,7 @@ function Scene() {
 
 			stats += '<td name="' + current.name + '" id="' + current.id + '" class="player">';			
 
-			if (wound != 'dead' && wound != 'incapacitated') stats += '<span class="initiative">' + current.initiative + '</span>';
+			if (current.initiative != undefined) stats += '<span class="initiative">' + current.initiative + '</span>';
 					
 			stats += '<span class="name">' + current.name;
 			if (wound === 'dead') stats += ' (DEAD) ';
@@ -52,7 +52,7 @@ function Scene() {
 			stats += '</span><br/>';
 			
 			stats += '<span class="stats">';
-			if (wound != 'dead' && wound != 'incapacitated') {
+			if (!isNaN(wound)) {
 				stats += 'Join Battle: ' + current.getJoinBattlePool() +
 						' &bull; Withering: ' + current.getWitheringPool() +
 						' &bull; Decisive: ' + current.getDecisivePool() +
@@ -66,7 +66,7 @@ function Scene() {
 			stats += '<b>Health:</b> ' + current.getHealthTrackHTML();
 			stats += '</span><br/>';
 			
-			if (!isNaN(wound)) {
+			if (current.initiative != undefined) {
 				stats += '<input type="button" class="attack" value="Attack"/>' +
 						 '<input type="button" class="aim" value="Aim"/>';
 				stats += '<input type="button" class="fullDefense" value="Full Defense"' + (inCrash ? ' disabled' : '') +'/>';
@@ -92,8 +92,7 @@ function Scene() {
 		console.log("Active status reset for all capacitated combatants");
 		for (i in this.combatants) {
 			var current = this.combatants[i];
-			if (isNaN(current.getWoundPenalty())) current.active = false;
-			else current.active = true;
+			if (!isNaN(current.getWoundPenalty())) current.active = true;
 			current.crashedAndWithered = false;
 		}
 	};
@@ -193,7 +192,6 @@ function Scene() {
 function Combatant() {
 	// from stack overflow @ http://goo.gl/imz8Cf
 	this.id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);});
-	this.initiative = 0;
 	this.active = true;
 
 	this.crashedAndWithered = false;
@@ -310,7 +308,10 @@ function Combatant() {
 
 		wound = this.getWoundPenalty();
 
-		if (isNaN(wound)) this.active = false;
+		if (isNaN(wound)) {
+			this.active = false;
+			this.initiative = undefined;
+		}
 
 		if (wound === 'incapacitated') RESULTS_WINDOW.append(this.name + " is Incapacitated!\n");
 		if (wound === 'dead') RESULTS_WINDOW.append(this.name + " is DEAD!\n");

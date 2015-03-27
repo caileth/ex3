@@ -30,7 +30,7 @@ var AIM_BONUS = 3,
 	JB_TARGET = 7,
 	NAMES_DATABASE,
 	RESULTS_WINDOW = $("#results"),
-	ROUND = 1,
+	ROUND = 0,
 	SCENE = new Scene(),
 	SPECIALTY_DIE_BONUS = 1,
 	WITHERING_PENALTY_INITIATIVE = 15,
@@ -102,7 +102,7 @@ var STATS_WINDOW =	'<input type="text" id="name" placeholder="New Player" autofo
 					'<label for="hardness">Armor Hardness: </label><input type="number" id="hardness" value="0" min="0" max="10"/><br/>' +
 					'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-2" max="0"/>';
 
-$.getJSON('./includes/exaltedgear.json', function(data) {
+$.getJSON('./exaltedgear.json', function(data) {
 	// exaltedgear.json syntax:
 	// "GEAR_DATABASE" : {
 	//   "weapon" : { "mortal/artifact" : { "weight" : [accuracy, damage, overwhelming, defense] } },
@@ -112,7 +112,7 @@ $.getJSON('./includes/exaltedgear.json', function(data) {
 	GEAR_DATABASE = data;
 });
 
-$.getJSON('./includes/exaltedname.json', function(data) {
+$.getJSON('./exaltedname.json', function(data) {
 	// exaltedname.json syntax:
 	// (only two locales at the moment are "imperial" and "threshold")
 	// "NAMES_DATABASE" : {
