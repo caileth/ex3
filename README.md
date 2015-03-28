@@ -4,13 +4,13 @@ TO DO:
 
 Minor:
 - Add a box for stunt descriptions
-- Double check that shifting attackers can only attack their shiftees or whatever
 - End combat when all combatants are removed
+- Misc Action
 
 Major:
-- Flurry
 - Combat Movement & Range
 - Ranged Attacks
+- Flurry
 - Other Combat Actions
   - Defend Other
   - Misc Action
@@ -35,10 +35,12 @@ Major:
 - Essence
 - Environmental Rules
 - Sample Antagonists
+- Strategic Warfare
 - Crippling
 - Intimacies
 - Uncountable damage
 - Ammunition
-- Charms
-- Strategic Warfare
+- Exalt Types
+- Anima Effects
 - Social Influence
+- Charms

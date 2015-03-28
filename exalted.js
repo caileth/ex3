@@ -14,13 +14,18 @@ $(function() {
 	$("body").on("click", ".edit, #addCombatant", function() {
 		console.groupCollapsed("Adding or editing");
 
-		DIALOG_FORM.html(STATS_WINDOW);console.log("Populating dialogbox");
+		DIALOG_FORM.html(STATS_WINDOW);
+
+		console.log("Populating dialogbox");
 
 		var addButtons, editButtons,
 			edit = false,
 			id = $(this).parent().attr("id");
 
-		if ($(this).attr("class") === "edit") edit = true;console.log("Edit?",edit);
+		if ($(this).attr("class") === "edit") {
+			edit = true;
+			console.log("Edit?",edit);
+		}
 
 		if (edit) $("#dialog-form :input").Ex3('getStats', id);
 
@@ -156,12 +161,13 @@ $(function() {
 			lookup = lookupByID(SCENE.combatants);
 
 		DIALOG_FORM.html(
-			'<label for="active">Active: </label><input type="checkbox" id="active"/>' + '<br/>' +
-			'<label for="initiative">Initiative: </label><input type="number" id="initiative"/>' + '<br/>' +
-			'<label for="crashedBy">Crashed By: </label><select id="crashedBy"></select>' + '<br/>' +
-			'<label for="bashing">Bashing: </label><input type="number" id="bashing"/>' + '<br/>' +
-			'<label for="lethal">Lethal: </label><input type="number" id="lethal"/>' + '<br/>' +
-			'<label for="aggravated">Aggravated: </label><input type="number" id="aggravated"/>'
+			'<label for="active">Active: </label><input type="checkbox" id="active">' + '<br>' +
+			'<label for="initiative">Initiative: </label><input type="number" id="initiative">' + '<br>' +
+			'<label for="crashedBy">Crashed By: </label><select id="crashedBy"></select>' + '<br>' +
+			'<label for="shiftTarget">Shifting Vs: </label><select id="shiftTarget"></select>' + '<br>' +
+			'<label for="bashing">Bashing: </label><input type="number" id="bashing">' + '<br>' +
+			'<label for="lethal">Lethal: </label><input type="number" id="lethal">' + '<br>' +
+			'<label for="aggravated">Aggravated: </label><input type="number" id="aggravated">'
 		);
 
 		DIALOG.dialog({
@@ -186,8 +192,8 @@ $(function() {
 		});
 
 		$("#dialog-form :input").Ex3('getStats', id);
-
 		$("#crashedBy").Ex3('populate', id, true);
+		$("#shiftTarget").Ex3('populate', id, true);
 
 		DIALOG.dialog("open");
 	});
@@ -317,16 +323,17 @@ $(function() {
 
 			if (extra) this.append('<option value="undefined">None</option>');
 
-			if (lookup[id].shiftTarget != undefined) {
+			if (lookup[id].shiftTarget != undefined && this.attr('id') === "opponents") {
 				console.log("adding shift target id",lookup[id].shiftTarget.id);
-				this.append('<option value="' + lookup[id].shiftTarget.id + '">' +	lookup[id].shiftTarget.name + '</option>');
+				this.append('<option value="' + lookup[id].shiftTarget.id + '">&raquo; ' +	lookup[id].shiftTarget.name + '</option>');
 			} else for (i in lookup) {
 				if (i != id && lookup[i].initiative != undefined) {
 					console.log("adding id",i);
 					this.append(
-						'<option value="' + i + '">' +
-						(lookup[id].aimTarget === lookup[i] ? '* ' : '') +
-						(lookup[id].crashedBy === lookup[i] ? '~ ' : '') +
+						'<option value="' + i +'">' +
+						(lookup[id].aimTarget	=== lookup[i] ? '* ' : '') +
+						(lookup[id].crashedBy	=== lookup[i] ? '~ ' : '') +
+						(lookup[id].shiftTarget	=== lookup[i] ? '&raquo; ' : '') +
 						lookup[i].name + '</option>');
 				} else {
 					console.log("skipping",i);

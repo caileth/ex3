@@ -49,7 +49,7 @@ function Scene() {
 			stats += '<span class="name">' + current.name;
 			if (wound === 'dead') stats += ' (DEAD) ';
 			if (wound === 'incapacitated') stats += ' (Incapacitated) ';
-			stats += '</span><br/>';
+			stats += '</span><br>';
 			
 			stats += '<span class="stats">';
 			if (!isNaN(wound)) {
@@ -61,22 +61,23 @@ function Scene() {
 						' &bull; Disengage: ' + current.getDisengagePool() +
 						' &bull; Soak: ' + current.getSoak() +
 						' &bull; Hardness: ' + (inCrash ? '0' : current.hardness) +
-						'<br/>';
+						'<br>';
 			}
 			stats += '<b>Health:</b> ' + current.getHealthTrackHTML();
-			stats += '</span><br/>';
+			stats += '</span><br>';
 			
 			if (current.initiative != undefined) {
-				stats += '<input type="button" class="attack" value="Attack"/>' +
-						 '<input type="button" class="aim" value="Aim"/>';
-				stats += '<input type="button" class="fullDefense" value="Full Defense"' + (inCrash ? ' disabled' : '') +'/>';
-				stats += '<br/>';
+				stats += '<input type="button" class="attack" value="Attack">' +
+						 '<input type="button" class="aim" value="Aim">';
+				stats += '<input type="button" class="fullDefense" value="Full Defense"' + (inCrash ? ' disabled' : '') +'>';
+				stats += '<input type="button" class="flurry" value="Flurry">';
+				stats += '<br>';
 			}
 
 			stats +=
-				'<input type="button" class="edit" value="Edit"/>' +
-				'<input type="button" class="debug" value="ST"/>' +
-				'<input type="button" class="remove" value="&#10006;"/>';
+				'<input type="button" class="edit" value="Edit">' +
+				'<input type="button" class="debug" value="ST">' +
+				'<input type="button" class="remove" value="&#10006;">';
 				
 			stats += '</td></tr>';
 
@@ -216,163 +217,178 @@ function Combatant() {
 		[0]		// incapacitated
 	];
 
-	this.getHealthTrackHTML = function() {
-		var result = '';
-		for (var i = 0; i < this.healthTrack.length; i++) {
-			var track = this.healthTrack[i];
-			result += DEFAULT_HEALTH_TRACK[i]+':';
-			for (var j = 0; j < track.length; j++) result += GLYPHS_HEALTH[track[j]];
-			result += ' ';
-		}
-		return result;
-	}
-	this.getName = function() {
-		return this.name;
-	};
-	this.getDamage = function() {
-		return this.strength + this.damage;
-	};
-	this.getJoinBattlePool = function() {
-		var pool = this.awareness + this.wits;
-			console.log("Join Battle pool:",pool);
-
-		return pool;
-	};
-	this.getWitheringPool = function() {
-		return this.dexterity + this.combat + this.accuracy;
-	};
-	this.getDecisivePool = function() {
-		return this.dexterity + this.combat;
-	};
-	this.getParryPool = function(specialty) {
-		if (specialty) return Math.ceil((this.dexterity + this.combat + SPECIALTY_DIE_BONUS) / 2) + this.defense;
-		else return Math.ceil((this.dexterity + this.combat) / 2) + this.defense;
-	};
-	this.getEvasionPool = function(specialty) {
-		if (specialty) return Math.ceil((this.dexterity + this.dodge + SPECIALTY_DIE_BONUS) / 2) + this.mobility;
-		else return Math.ceil((this.dexterity + this.dodge) / 2) + this.mobility;
-	};
-	this.getDefense = function(specialty) {
-		if (isNaN(this.getWoundPenalty())) return 0;
-		else return Math.max(this.getParryPool(specialty), this.getEvasionPool(specialty), 0) - this.onslaught;
-	}
-	this.getRushPool = function() {
-		return this.dexterity + this.athletics;
-	};
-	this.getDisengagePool = function() {
-		return this.dexterity + this.dodge;
-	};
-	this.getSoak = function() {
-		return this.stamina + this.armor;
-	};
-	this.joinBattle = function() {
-		console.groupCollapsed(this.name,"joins battle");
-
-		var pool = this.getJoinBattlePool(),
-			roll = diceRoller(pool, DEFAULT_DIE_SIDE),
-			suxx = Math.max(successChecker(roll, JB_TARGET, JB_DOUBLES), 0),
-			initiative = suxx + JB_EXTRA_SUX;
-		
-		console.log("JB sux:",suxx);
-		console.log("JB initiative:",initiative);
-		console.groupEnd();
-
-		return initiative;
-	};
-	this.resetHealthTrack = function() {
-		console.log("resetting health track");
-		for (i in this.healthTrack) {
-			for (j in this.healthTrack[i]) {
-				this.healthTrack[i][j] = 0;
-			}
-		}
-	};
-	this.recordDamage = function() {
-		console.groupCollapsed("Record Damage");
-
-		var lastHLTrackPos = this.healthTrack.length - 1,
-			lastHLPos = this.healthTrack[lastHLTrackPos].length - 1,
-			pending = new Array(),
-			wound;
-
-		pending[1] = this.bashing,
-		pending[2] = this.lethal,
-		pending[3] = this.aggravated;
-
-		console.log("pending:",pending);
-
-		this.resetHealthTrack();
-
-		doDamage(pending, 3, 0, this.healthTrack);
-		doDamage(pending, 2, 0, this.healthTrack);
-		doDamage(pending, 1, 0, this.healthTrack);
-
-		if (this.healthTrack[lastHLTrackPos][lastHLPos] === 1) {
-			doDamage(pending, 1, 1, this.healthTrack);
-				console.log("Upconverting extra bashing");
-		}
-
-		wound = this.getWoundPenalty();
-
-		if (isNaN(wound)) {
-			this.active = false;
-			this.initiative = undefined;
-		}
-
-		if (wound === 'incapacitated') RESULTS_WINDOW.append(this.name + " is Incapacitated!\n");
-		if (wound === 'dead') RESULTS_WINDOW.append(this.name + " is DEAD!\n");
-
-		console.groupEnd();
-
-		function doDamage(type, level, replacementLevel, healthTrack) {
-			console.groupCollapsed("Do Damage",type,level,replacementLevel);
-			for (i in healthTrack) {
-				var track = healthTrack[i];
-				for (j in track) {
-					console.log("cursor at healthTrack["+i+"]["+j+"]: "+track[j]);
-					if (track[j] === replacementLevel && type[level] > 0) {
-						console.log("wound at target level detected,",type[level],"damage to go");
-						if (level === replacementLevel) track[j] = replacementLevel + 1;
-						else track[j] = level;
-						type[level]--;
-						console.log("done.",type[level]," to go");
-					}
-				}
-			}
-			console.groupEnd();
-		}
-	}
-	this.getWoundPenalty = function() {
-		var lastNonEmpty = findLastGreaterThan(this.healthTrack, 0),
-			result;
-
-		if (!lastNonEmpty) result = 0;
-		else if (lastNonEmpty.track === 0) result = WOUND_PENALTY_BRUISED;
-		else if (lastNonEmpty.track === 1) result = WOUND_PENALTY_INJURED;
-		else if (lastNonEmpty.track === 2) result = WOUND_PENALTY_WOUNDED;
-		else if (lastNonEmpty.track === 3) result = WOUND_PENALTY_MAIMED;
-		else if (lastNonEmpty.track === 4 && lastNonEmpty.level > 1) result = "dead";
-		else result = "incapacitated";
-
-		console.log("Wound Penalty for",this.name,"is",result);
-
-		return result;
-
-		function findLastGreaterThan(array, value) {
-			for (var i = array.length - 1; i >= 0; i--) {
-				for (var j = array[i].length - 1; j >= 0; j--) {
-					if (array[i][j] > value) {
-						var result = {"track" : i, "wound" : j, "level" : array[i][j]};
-						console.log("found last wound:",result);
-						return result;
-					}
-				}
-			}
-			return false;
-		}
-	};
+	this.healthTrack[-1] = this.healthTrack[1];
+	this.healthTrack[-2] = this.healthTrack[2];
+	this.healthTrack[-4] = this.healthTrack[3];
+	this.healthTrack.inc = this.healthTrack[4];
 }
 
+Combatant.prototype.getHealthTrackHTML = function() {
+	var result = '';
+	for (var i = 0; i < this.healthTrack.length; i++) {
+		var track = this.healthTrack[i];
+		result += DEFAULT_HEALTH_TRACK[i]+':';
+		for (var j = 0; j < track.length; j++) result += GLYPHS_HEALTH[track[j]];
+		result += ' ';
+	}
+	return result;
+};
+
+Combatant.prototype.getDamage = function() {
+	return this.strength + this.damage;
+};
+
+Combatant.prototype.getJoinBattlePool = function() {
+	var pool = this.awareness + this.wits;
+		console.log("Join Battle pool:",pool);
+
+	return pool;
+};
+
+Combatant.prototype.getWitheringPool = function() {
+	return this.dexterity + this.combat + this.accuracy;
+};
+
+Combatant.prototype.getDecisivePool = function() {
+	return this.dexterity + this.combat;
+};
+
+Combatant.prototype.getParryPool = function(specialty) {
+	if (specialty) return Math.ceil((this.dexterity + this.combat + SPECIALTY_DIE_BONUS) / 2) + this.defense;
+	else return Math.ceil((this.dexterity + this.combat) / 2) + this.defense;
+};
+
+Combatant.prototype.getEvasionPool = function(specialty) {
+	if (specialty) return Math.ceil((this.dexterity + this.dodge + SPECIALTY_DIE_BONUS) / 2) + this.mobility;
+	else return Math.ceil((this.dexterity + this.dodge) / 2) + this.mobility;
+};
+
+Combatant.prototype.getDefense = function(specialty) {
+	if (isNaN(this.getWoundPenalty())) return 0;
+	else return Math.max(this.getParryPool(specialty), this.getEvasionPool(specialty), 0) - this.onslaught;
+}
+
+Combatant.prototype.getRushPool = function() {
+	return this.dexterity + this.athletics;
+};
+
+Combatant.prototype.getDisengagePool = function() {
+	return this.dexterity + this.dodge;
+};
+
+Combatant.prototype.getSoak = function() {
+	return this.stamina + this.armor;
+};
+
+Combatant.prototype.joinBattle = function() {
+	console.groupCollapsed(this.name,"joins battle");
+
+	var pool = this.getJoinBattlePool(),
+		roll = diceRoller(pool, DEFAULT_DIE_SIDE),
+		suxx = Math.max(successChecker(roll, JB_TARGET, JB_DOUBLES), 0),
+		initiative = suxx + JB_EXTRA_SUX;
+	
+	console.log("JB sux:",suxx);
+	console.log("JB initiative:",initiative);
+	console.groupEnd();
+
+	return initiative;
+};
+
+Combatant.prototype.resetHealthTrack = function() {
+	console.log("resetting health track");
+	for (i in this.healthTrack) {
+		for (j in this.healthTrack[i]) {
+			this.healthTrack[i][j] = 0;
+		}
+	}
+};
+
+Combatant.prototype.recordDamage = function() {
+	console.groupCollapsed("Record Damage");
+
+	var lastHLTrackPos = this.healthTrack.length - 1,
+		lastHLPos = this.healthTrack[lastHLTrackPos].length - 1,
+		pending = new Array(),
+		wound;
+
+	pending[1] = this.bashing,
+	pending[2] = this.lethal,
+	pending[3] = this.aggravated;
+
+	console.log("pending:",pending);
+
+	this.resetHealthTrack();
+
+	doDamage(pending, 3, 0, this.healthTrack);
+	doDamage(pending, 2, 0, this.healthTrack);
+	doDamage(pending, 1, 0, this.healthTrack);
+
+	if (this.healthTrack[lastHLTrackPos][lastHLPos] === 1) {
+		doDamage(pending, 1, 1, this.healthTrack);
+			console.log("Upconverting extra bashing");
+	}
+
+	wound = this.getWoundPenalty();
+
+	if (isNaN(wound)) {
+		this.active = false;
+		this.initiative = undefined;
+	}
+
+	if (wound === 'incapacitated') RESULTS_WINDOW.append(this.name + " is Incapacitated!\n");
+	if (wound === 'dead') RESULTS_WINDOW.append(this.name + " is DEAD!\n");
+
+	console.groupEnd();
+
+	function doDamage(type, level, replacementLevel, healthTrack) {
+		console.groupCollapsed("Do Damage",type,level,replacementLevel);
+		for (i in healthTrack) {
+			var track = healthTrack[i];
+			for (j in track) {
+				console.log("cursor at healthTrack["+i+"]["+j+"]: "+track[j]);
+				if (track[j] === replacementLevel && type[level] > 0) {
+					console.log("wound at target level detected,",type[level],"damage to go");
+					if (level === replacementLevel) track[j] = replacementLevel + 1;
+					else track[j] = level;
+					type[level]--;
+					console.log("done.",type[level]," to go");
+				}
+			}
+		}
+		console.groupEnd();
+	}
+}
+
+Combatant.prototype.getWoundPenalty = function() {
+	var lastNonEmpty = findLastGreaterThan(this.healthTrack, 0),
+		result;
+
+	if (!lastNonEmpty) result = 0;
+	else if (lastNonEmpty.track === 0) result = WOUND_PENALTY_BRUISED;
+	else if (lastNonEmpty.track === 1) result = WOUND_PENALTY_INJURED;
+	else if (lastNonEmpty.track === 2) result = WOUND_PENALTY_WOUNDED;
+	else if (lastNonEmpty.track === 3) result = WOUND_PENALTY_MAIMED;
+	else if (lastNonEmpty.track === 4 && lastNonEmpty.level > 1) result = "dead";
+	else result = "incapacitated";
+
+	console.log("Wound Penalty for",this.name,"is",result);
+
+	return result;
+
+	function findLastGreaterThan(array, value) {
+		for (var i = array.length - 1; i >= 0; i--) {
+			for (var j = array[i].length - 1; j >= 0; j--) {
+				if (array[i][j] > value) {
+					var result = {"track" : i, "wound" : j, "level" : array[i][j]};
+					console.log("found last wound:",result);
+					return result;
+				}
+			}
+		}
+		return false;
+	}
+};
 
 
 

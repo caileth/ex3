@@ -17,7 +17,7 @@ function addCombatant() {
 	if (ROUND > 0) {		
 		SCENE.combatants[i].initiative = SCENE.combatants[i].joinBattle();
 
-		RESULTS_WINDOW.append(SCENE.combatants[i].getName() + " joins battle at tick " + SCENE.combatants[i].initiative + "\n");
+		RESULTS_WINDOW.append(SCENE.combatants[i].name + " joins battle at tick " + SCENE.combatants[i].initiative + "\n");
 		scrollToBottom();
 	}
 
@@ -62,6 +62,7 @@ function recordStats(id) {
 		if (type === undefined) type = $(this).prop('tagName').toLowerCase();
 
 		if (stat === "crashedBy") lookup[id].crashedBy = lookup[value];
+		else if (stat === "shiftTarget") lookup[id].shiftTarget = lookup[value];
 		else if (stat) {
 			if (type === "text") {
 				evalStr = "lookup['"+id+"']."+stat+" = '"+sanitize(value)+"'";
