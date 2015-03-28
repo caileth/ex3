@@ -5,8 +5,8 @@ function aim(id, target) {
 		attacker	= lookup[id],
 		defender	= lookup[target];
 
-	attacker.isShifting = false;
-		console.log("setting attacker shift to false");
+	attacker.shiftTarget = undefined;
+		console.log("setting attacker shift target to undefined");
 
 	attacker.aimTarget = defender;
 		console.log("Setting",defender.name,"as",attacker.name,"'s Aim target");
@@ -36,8 +36,8 @@ function attack(id, target) {
 		defendSpecialty		= $("#defendSpecialty").prop('checked'),
 		defendStunt			= parseInt($("input[name=defendStunt]:checked").val());
 
-	attacker.isShifting = false;
-		console.log("setting attacker shift to false");
+	attacker.shiftTarget = undefined;
+		console.log("setting attacker shift target to undefined");
 
 	attackStunt = stunt(attackStunt);
 	defendStunt = stunt(defendStunt);
@@ -163,11 +163,8 @@ function checkWitheringDamage(attacker, defender, attackThreshold, clash) {
 		damage += CLASH_BONUS_WITHERING;
 	}		
 
-	if (damage > 0) {
-		attacker.initiative++;
-		RESULTS_WINDOW.append(attacker.name + " gains an Initiative for a successful Withering Attack.\n");
+	if (damage > 0)
 		resolveWitheringDamage(attacker, defender, damage);
-	}
 }
 
 function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
@@ -208,10 +205,14 @@ function checkDecisiveDamage(attacker, defender, attackThreshold, clash) {
 }
 
 function resolveWitheringDamage(attacker, defender, damage) {
+	console.log("attacker.initiative:",attacker.initiative);
+	console.log("defender.initiative:",defender.initiative);
+
 	var wasAttackerCrashed = attacker.initiative < 1,
 		wasTargetCrashed = defender.initiative < 1,
 		witheringPenalty = attacker.initiative >= WITHERING_PENALTY_INITIATIVE;
 
+	console.log("attacker was crashed before attack resolution?",wasAttackerCrashed);
 	console.log("target was crashed before attack resolution?",wasTargetCrashed);
 
 	if (defender.crashedAndWithered) {
@@ -244,9 +245,8 @@ function resolveWitheringDamage(attacker, defender, damage) {
 			console.log("Initiative shift!");
 			attacker.initiative = Math.max(attacker.initiative, INITIATIVE_RESET_VALUE);
 			attacker.initiative += attacker.joinBattle();
-			attacker.isShifting = true;
 			attacker.active = true;
-			// should only be able to use new turn for attacking same dude
+			attacker.shiftTarget = defender; // should only be able to use new turn for attacking same dude
 		}
 		defender.crashedBy = attacker;
 	}
@@ -256,10 +256,13 @@ function resolveWitheringDamage(attacker, defender, damage) {
 	if (wasAttackerCrashed != isAttackerCrashed) attacker.crashRecovery = ROUND;
 
 	if (isTargetCrashed) defender.crashedAndWithered = true;
+		
+	attacker.initiative++;
+	RESULTS_WINDOW.append(attacker.name + " gains an Initiative for a successful Withering Attack.\n");
 }
 
 function doRound() {
-	console.group("Do Round");
+	console.groupCollapsed("Do Round");
 
 	RESULTS_WINDOW.refresh();
 

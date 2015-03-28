@@ -3,23 +3,42 @@ ex3
 TO DO:
 
 Minor:
+- Add a box for stunt descriptions
 - Double check that shifting attackers can only attack their shiftees or whatever
-- Reset Round to zero when all combatants are removed
-- Set Initiative to undefined when dead or incapped
+- End combat when all combatants are removed
 
 Major:
-- Other Combat Actions
-  - Draw/Ready Weapon
-  - Defend Other
-  - Misc Action
 - Flurry
 - Combat Movement & Range
-  - Ranged Attacks
-- Complications
+- Ranged Attacks
+- Other Combat Actions
+  - Defend Other
+  - Misc Action
+- Mounted fighting
+- Gambits
+  - Disarm
+  - Unhorse
+  - Distract
+  - Grapple
+    - Savage
+    - Restrain/Drag
+    - Throw/Slam
+    - Release
+- Stealth
+  - Ambush
+  - Hold at bay
+  - Draw/Ready Weapon
+- Go to ground
 - Battle Groups
-- Strategic Warfare
-- Environmental Rules
+  - Command actions
 - Willpower
 - Essence
+- Environmental Rules
+- Sample Antagonists
+- Crippling
+- Intimacies
+- Uncountable damage
+- Ammunition
 - Charms
-- Stunt descriptions
+- Strategic Warfare
+- Social Influence

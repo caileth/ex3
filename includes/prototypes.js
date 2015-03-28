@@ -92,7 +92,13 @@ function Scene() {
 		console.log("Active status reset for all capacitated combatants");
 		for (i in this.combatants) {
 			var current = this.combatants[i];
-			if (!isNaN(current.getWoundPenalty())) current.active = true;
+
+			if (!isNaN(current.getWoundPenalty()))
+				current.active = true;
+
+			if (current.active === true && current.initiative > 0)
+				current.crashedBy = undefined;
+
 			current.crashedAndWithered = false;
 		}
 	};

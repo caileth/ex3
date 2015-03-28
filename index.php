@@ -1,9 +1,12 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
 	<meta charset="UTF-8">
 	<title>Exalted Stuff</title>
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
+
 	<style>
 		@font-face{font-family:Albertus;src:url(includes/AlbertusMTStd.otf);}
 		@font-face{font-family:Missive;src:url(includes/Missive.ttf);}
@@ -36,6 +39,7 @@
 		.twink{background-image:url('/img/cbe_16.png');background-repeat:no-repeat;background-position:top left;width:20px;height:20px;}
 		.ui-widget{font-size:.75em;}
 	</style>
+
 	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
 	<script src="./includes/prototypes.js"></script>
@@ -43,10 +47,10 @@
 	<script src="./includes/utils.js"></script>
 	<script src="./includes/dialogs.js"></script>
 	<script src="./includes/randomCrap.js"></script>
-	<script src="./includes/combatants.js"></script>
 	<script src="./includes/combat.js"></script>
 	<script src="./exalted.js"></script>
 </head>
+
 <body>
 	<h1>Ex3 Combat Toolkit</h1><br>
 
@@ -75,4 +79,5 @@
 
 	<div id="dialog"><form id="dialog-form"></form></div>
 </body>
+
 </html>

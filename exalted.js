@@ -317,12 +317,16 @@ $(function() {
 
 			if (extra) this.append('<option value="undefined">None</option>');
 
-			for (i in lookup) {
+			if (lookup[id].shiftTarget != undefined) {
+				console.log("adding shift target id",lookup[id].shiftTarget.id);
+				this.append('<option value="' + lookup[id].shiftTarget.id + '">' +	lookup[id].shiftTarget.name + '</option>');
+			} else for (i in lookup) {
 				if (i != id && lookup[i].initiative != undefined) {
 					console.log("adding id",i);
 					this.append(
 						'<option value="' + i + '">' +
 						(lookup[id].aimTarget === lookup[i] ? '* ' : '') +
+						(lookup[id].crashedBy === lookup[i] ? '~ ' : '') +
 						lookup[i].name + '</option>');
 				} else {
 					console.log("skipping",i);
