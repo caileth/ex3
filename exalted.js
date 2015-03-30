@@ -11,6 +11,29 @@ $(function() {
 
 
 
+	$("body").on("click", ".range", function() {
+		var id = $(this).attr('id'),
+			range = parseInt($(this).val());
+
+		switch (range) {
+			case 0:
+				$("label[for=" + id + "]").html("Close");
+				break;
+			case 1:
+				$("label[for=" + id + "]").html("Short");
+				break;
+			case 2:
+				$("label[for=" + id + "]").html("Medium");
+				break;
+			case 3:
+				$("label[for=" + id + "]").html("Long");
+				break;
+			default:
+				$("label[for=" + id + "]").html("Extreme");
+				break;
+		}
+	});
+
 	$("body").on("click", ".edit, #addCombatant", function() {
 		console.groupCollapsed("Adding or editing");
 
@@ -18,15 +41,11 @@ $(function() {
 
 		// generate range listing for existing characters
 
-		DIALOG_FORM.append('<br>\nRange:');
 		for (i in SCENE.combatants) {
 			var that = SCENE.combatants[i];
-			DIALOG_FORM.append('<br>\n' + that.name + ': ');
-			DIALOG_FORM.append('<input type="radio" name="range-' + that.id + '" value="0">Close');
-			DIALOG_FORM.append('<input type="radio" name="range-' + that.id + '" value="1">Short');
-			DIALOG_FORM.append('<input type="radio" name="range-' + that.id + '" value="2">Medium');
-			DIALOG_FORM.append('<input type="radio" name="range-' + that.id + '" value="3">Long');
-			DIALOG_FORM.append('<input type="radio" name="range-' + that.id + '" value="4">Extreme');
+			DIALOG_FORM.append('<br>\nRange to ' + that.name + ': ');
+			DIALOG_FORM.append('<input type="number" class="range" id="range-' + that.id + '" value="1" min="0">');
+			DIALOG_FORM.append('<label for="range-' + that.id + '">Short</label>');
 		}
 
 		console.log("Populating dialogbox");
@@ -372,7 +391,19 @@ $(function() {
 						(lookup[id].aimTarget	=== lookup[i] ? '* ' : '') +
 						(lookup[id].crashedBy	=== lookup[i] ? '~ ' : '') +
 						(lookup[id].shiftTarget	=== lookup[i] ? '&raquo; ' : '') +
-						lookup[i].name + '</option>');
+						lookup[i].name);
+
+					console.log("SCENE.ranges",SCENE.ranges);
+					for (j in SCENE.ranges) {
+						var range = SCENE.ranges[j];]
+
+						// I am not sure why this doesn't work
+						if ((range.a === lookup[id] && range.b === lookup[i]) || (range.b === lookup[id] && range.a === lookup[i])) {
+							this.append(' (' + range.range + ')');
+						}
+					}
+
+					this.append('</option>');
 				} else {
 					console.log("skipping",i);
 				}

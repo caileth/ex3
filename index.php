@@ -8,9 +8,9 @@
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.11.0/themes/smoothness/jquery-ui.css">
 
 	<style>
-		@font-face{font-family:Albertus;src:url(includes/AlbertusMTStd.otf);}
-		@font-face{font-family:Missive;src:url(includes/Missive.ttf);}
-		@font-face{font-family:Goudy;src:url(includes/GoudyStd.otf);}
+		@font-face{font-family:Albertus;src:url(assets/AlbertusMTStd.otf);}
+		@font-face{font-family:Missive;src:url(assets/Missive.ttf);}
+		@font-face{font-family:Goudy;src:url(assets/GoudyStd.otf);}
 
 		h1,h2,h3{display:inline;}
 		h1{font:500% Albertus;text-transform:uppercase;}

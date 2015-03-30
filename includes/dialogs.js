@@ -61,8 +61,16 @@ function recordStats(id) {
 
 		if (type === undefined) type = $(this).prop('tagName').toLowerCase();
 
-		if (stat === "crashedBy") lookup[id].crashedBy = lookup[value];
-		else if (stat === "shiftTarget") lookup[id].shiftTarget = lookup[value];
+		if (String(stat).match("^range-")) {
+			var target = String(stat).replace('range-', ''),
+				range = new Range(lookup[id], lookup[target], value);
+			
+			SCENE.ranges.push(range);
+			console.log(range);
+		} else if (stat === "crashedBy")
+			lookup[id].crashedBy = lookup[value];
+		else if (stat === "shiftTarget")
+			lookup[id].shiftTarget = lookup[value];
 		else if (stat) {
 			if (type === "text") {
 				evalStr = "lookup['"+id+"']."+stat+" = '"+sanitize(value)+"'";

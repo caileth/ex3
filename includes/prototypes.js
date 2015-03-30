@@ -1,5 +1,6 @@
 function Scene() {
 	this.combatants = new Array();
+	this.ranges = new Array();
 
 	this.iterateCrashCounter = function() {
 		for (i in this.combatants) {
