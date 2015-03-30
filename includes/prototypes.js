@@ -445,3 +445,17 @@ function sortByTiebreaker(a, b) {
 		else return 0;
 	}
 }
+
+
+
+
+
+
+
+
+
+function Range(a, b, range) {
+	this.a = a;
+	this.b = b;
+	this.range = range;
+}

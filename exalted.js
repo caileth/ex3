@@ -16,6 +16,19 @@ $(function() {
 
 		DIALOG_FORM.html(STATS_WINDOW);
 
+		// generate range listing for existing characters
+
+		DIALOG_FORM.append('<br>\nRange:');
+		for (i in SCENE.combatants) {
+			var that = SCENE.combatants[i];
+			DIALOG_FORM.append('<br>\n' + that.name + ': ');
+			DIALOG_FORM.append('<input type="radio" name="range-' + that.id + '" value="0">Close');
+			DIALOG_FORM.append('<input type="radio" name="range-' + that.id + '" value="1">Short');
+			DIALOG_FORM.append('<input type="radio" name="range-' + that.id + '" value="2">Medium');
+			DIALOG_FORM.append('<input type="radio" name="range-' + that.id + '" value="3">Long');
+			DIALOG_FORM.append('<input type="radio" name="range-' + that.id + '" value="4">Extreme');
+		}
+
 		console.log("Populating dialogbox");
 
 		var addButtons, editButtons,
@@ -194,6 +207,31 @@ $(function() {
 		$("#dialog-form :input").Ex3('getStats', id);
 		$("#crashedBy").Ex3('populate', id, true);
 		$("#shiftTarget").Ex3('populate', id, true);
+
+		DIALOG.dialog("open");
+	});
+
+	$("body").on('click', '.flurry', function() {
+		DIALOG_FORM.html(FLURRY_WINDOW);
+
+		DIALOG.dialog({
+			title: "McFlurry",
+			autoOpen: false,
+			height: "auto",
+			width: "auto",
+			modal: true,
+			buttons: {
+				"I Hate You": function() {
+					DIALOG.dialog("close");
+				},
+				"Delicious!": function() {
+					DIALOG.dialog("close");
+				}
+			},
+			close: function() {
+				DIALOG.dialog("close");
+			}
+		});
 
 		DIALOG.dialog("open");
 	});

@@ -66,6 +66,8 @@ var ATTACK_WINDOW =	'<label for="opponents">Target:</label>' +
 					'<label for="attackModifiers">Attack modifier(s): ' +
 					'<input type="number" id="attackModifiers" value="0" min="-5" max="0"/>';
 
+var FLURRY_WINDOW =	'<img src="http://wac.450f.edgecastcdn.net/80450F/thefw.com/files/2012/07/Pie-Mcflurry.png" alt="SEE WHAT I DID THERE" id="mcFlurry">';
+
 var STATS_WINDOW =	'<input type="text" id="name" placeholder="New Player" autofocus/>' +
 					'<input type="button" class="randomize"/>' +
 					'<input type="button" class="twink"/><br/>' +

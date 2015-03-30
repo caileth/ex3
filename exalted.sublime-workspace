@@ -4,6 +4,22 @@
 		"selected_items":
 		[
 			[
+				"DIA",
+				"DIALOG_FORM"
+			],
+			[
+				"trans",
+				"translateY"
+			],
+			[
+				"comb",
+				"combatants"
+			],
+			[
+				"Com",
+				"combatants"
+			],
+			[
 				"look",
 				"lookup"
 			],
@@ -498,22 +514,6 @@
 			[
 				"temp",
 				"template"
-			],
-			[
-				"adj",
-				"adjectivenounoftheadjectivenoun"
-			],
-			[
-				"noun",
-				"nounoftheadjectivenoun"
-			],
-			[
-				"ad",
-				"adjectivenounofthenoun"
-			],
-			[
-				"con",
-				"conjuctive"
 			]
 		]
 	},
@@ -552,12 +552,21 @@
 	},
 	"expanded_folders":
 	[
-		"/D/Documents/GitHub/ex3"
+		"/D/Documents/GitHub/ex3",
+		"/D/Documents/GitHub/ex3/includes",
+		"/D/Documents/GitHub/ex3/json"
 	],
 	"file_history":
 	[
+		"/D/Documents/GitHub/ex3/includes/prototypes.js",
 		"/D/Documents/GitHub/ex3/README.md",
 		"/D/Documents/GitHub/ex3/exalted.js",
+		"/D/Documents/GitHub/ex3/includes/defines.js",
+		"/D/Documents/GitHub/ex3/index.php",
+		"/D/Documents/GitHub/ex3/includes/dialogs.js",
+		"/D/Documents/Paradox Interactive/Hearts of Iron III/settings.txt",
+		"/D/Documents/GitHub/ex3/includes/combat.js",
+		"/D/Documents/GitHub/ex3/includes/utils.js",
 		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/cm_charlemagne_story_events.txt",
 		"/D/Documents/GitHub/ex3/includes/exalted-defines.js",
 		"/D/Documents/GitHub/ex3/includes/exalted-charms.js",
@@ -676,32 +685,75 @@
 		"/C/Users/Justin/Desktop/Vector Smart Object.html",
 		"/C/Users/Justin/AppData/Local/Temp/scp32815/home/calith/hw.caletges.com/index.php",
 		"/C/Users/Justin/AppData/Local/Temp/scp30179/home/calith/hw.caletges.com/index.php",
-		"/C/Users/Justin/AppData/Local/Temp/scp01313/home/calith/hw.caletges.com/slices.php",
-		"/C/Users/Justin/Google Drive/Harvest Wines/Curvare logo/Curvare-Placeholder.html",
-		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod/common/landed_titles/landed_titles.txt",
-		"/D/TV/Castle/Castle.2009.S06E21.720p.HDTV.X264-DIMENSION [PublicHD]/Downloaded From PublicHD.SE.txt",
-		"/C/Users/Justin/Google Drive/Harvest Wines/index.php",
-		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod/common/landed_titles/GMod.txt",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/decisions/succession_laws.txt",
-		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod/history/titles/e_byzantium.txt"
+		"/C/Users/Justin/AppData/Local/Temp/scp01313/home/calith/hw.caletges.com/slices.php"
 	],
 	"find":
 	{
-		"height": 22.0
+		"height": 34.0
 	},
 	"find_in_files":
 	{
 		"height": 90.0,
 		"where_history":
 		[
+			"D:\\Documents\\GitHub\\ex3",
 			""
 		]
 	},
 	"find_state":
 	{
-		"case_sensitive": true,
+		"case_sensitive": false,
 		"find_history":
 		[
+			"range",
+			"X",
+			"-50",
+			"translate",
+			"Y",
+			"this",
+			"SCENE.combatants.i",
+			"\"",
+			"STATS_WINDOW",
+			"addCombatant",
+			"getName",
+			"	this.",
+			"this.",
+			"	this.",
+			"crashedBy",
+			"shiftingVersus",
+			"editClose",
+			"shiftingAgainst",
+			"crashedBy",
+			"/>",
+			"combatant",
+			"/>",
+			"Full Defense",
+			"isShifting",
+			"initiative shift",
+			"initiative",
+			"group",
+			"resolveWitheringDamage",
+			"attacker",
+			"shift",
+			"resetActiveStatus",
+			"reset",
+			"crashedBy",
+			"shift",
+			"shiftTarget",
+			"Attack Button",
+			"opponents",
+			"ATTACK_WINDOW",
+			"attack",
+			"shift",
+			"doRound",
+			"generateID",
+			"health",
+			"scene",
+			"reset",
+			"url(",
+			"includes",
+			"json",
+			"./exalted-",
 			"doRound",
 			"round",
 			"print",
@@ -780,56 +832,7 @@
 			");",
 			";",
 			" +\n",
-			" +",
-			"join battle",
-			"resetting attacker",
-			"i",
-			"splice",
-			"pending attacks",
-			"pending",
-			"attacks before",
-			"shift",
-			"this.type()",
-			"recordStats",
-			"getStats",
-			"ex3",
-			"exalted",
-			"populate",
-			"$(\"#opponents\")",
-			"initiative",
-			"resolveClash",
-			"undefined",
-			"this[j]",
-			"this[i]",
-			"THIS",
-			"SCENE.SCENE",
-			"combatants.length",
-			"combatants",
-			"addClose",
-			"this[i]",
-			"current[i]",
-			"this",
-			"current",
-			"this[i]",
-			"this.combatants[i]",
-			"this",
-			"var i = 0; i < this.length; i++",
-			"PendingAttacksList.prototype",
-			"CombatantsList.prototype",
-			"combatant",
-			"pending",
-			"pendings",
-			"net successes",
-			"gains",
-			"combatants.whoseTurnIsIt()",
-			"shift",
-			"lookupByID",
-			"checkWithe",
-			"diceRoller",
-			"versus",
-			"soak of",
-			"resolve",
-			"active = true"
+			" +"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -837,6 +840,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			">",
 			"ROUND",
 			"\\1[\\2\\3],",
 			"\\1[\\2\\3]",
@@ -887,6 +891,11 @@
 			"sheets":
 			[
 			]
+		},
+		{
+			"sheets":
+			[
+			]
 		}
 	],
 	"incremental_find":
@@ -895,7 +904,7 @@
 	},
 	"input":
 	{
-		"height": 0.0
+		"height": 30.0
 	},
 	"layout":
 	{
@@ -906,6 +915,12 @@
 				0,
 				1,
 				1
+			],
+			[
+				0,
+				1,
+				1,
+				2
 			]
 		],
 		"cols":
@@ -916,6 +931,7 @@
 		"rows":
 		[
 			0.0,
+			0.5,
 			1.0
 		]
 	},
@@ -927,7 +943,7 @@
 	"project": "exalted.sublime-project",
 	"replace":
 	{
-		"height": 40.0
+		"height": 62.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -954,7 +970,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},
@@ -962,7 +978,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 150.0,
+	"side_bar_width": 234.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

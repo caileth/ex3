@@ -24,6 +24,7 @@
 		textarea{width:85em;height:30em;}
 		input[type=number]{width:3em;}
 		body > div{margin:1em;}
+		body > div.ui-widget-overlay.ui-front {margin:0em;}
 
 		#combatants{width:71em;}
 		#name {width:25em;}

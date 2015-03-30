@@ -4,6 +4,7 @@ TO DO:
 
 Minor:
 - Add a box for stunt descriptions
+- Add confirmation dialog on Join Battle! when battle is already joined
 - End combat when all combatants are removed
 - Misc Action
 
