@@ -386,24 +386,16 @@ $(function() {
 			} else for (i in lookup) {
 				if (i != id && lookup[i].initiative != undefined) {
 					console.log("adding id",i);
+					var range = checkRanges(lookup[id], lookup[i]);
+
 					this.append(
 						'<option value="' + i +'">' +
 						(lookup[id].aimTarget	=== lookup[i] ? '* ' : '') +
 						(lookup[id].crashedBy	=== lookup[i] ? '~ ' : '') +
 						(lookup[id].shiftTarget	=== lookup[i] ? '&raquo; ' : '') +
-						lookup[i].name);
-
-					console.log("SCENE.ranges",SCENE.ranges);
-					for (j in SCENE.ranges) {
-						var range = SCENE.ranges[j];]
-
-						// I am not sure why this doesn't work
-						if ((range.a === lookup[id] && range.b === lookup[i]) || (range.b === lookup[id] && range.a === lookup[i])) {
-							this.append(' (' + range.range + ')');
-						}
-					}
-
-					this.append('</option>');
+						lookup[i].name +
+						(range != undefined ? ' (' + range + ')' : '') +
+						'</option>');
 				} else {
 					console.log("skipping",i);
 				}
@@ -456,6 +448,24 @@ $(function() {
 
 			console.groupEnd();
 			return this;
+		}
+
+		
+
+
+		function checkRanges(a, b) {
+			console.log("SCENE.ranges",SCENE.ranges);
+
+			for (j in SCENE.ranges) {
+				var range = SCENE.ranges[j],
+					aIsThis = (range.a === a),
+					bIsThis = (range.b === a),
+					aIsThat = (range.a === b),
+					bIsThat = (range.b === b),
+					match = ((aIsThis && bIsThat) || (bIsThis && aIsThat));
+					
+				if (match) return range.range;
+			}
 		}
 	};
 }(jQuery));
