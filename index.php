@@ -43,7 +43,9 @@
 
 	<script src="https://code.jquery.com/jquery-2.1.0.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.11.0/jquery-ui.min.js"></script>
-	<script src="./includes/prototypes.js"></script>
+	<script src="./prototypes/prototypes.js"></script>
+	<script src="./prototypes/Scene.js"></script>
+	<script src="./prototypes/Combatant.js"></script>
 	<script src="./includes/defines.js"></script>
 	<script src="./includes/utils.js"></script>
 	<script src="./includes/dialogs.js"></script>
