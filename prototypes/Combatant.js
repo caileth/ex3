@@ -24,7 +24,7 @@ function Combatant() {
 	this.healthTrack[-4] = this.healthTrack[3];
 	this.healthTrack.inc = this.healthTrack[4];
 
-	this.ranges = new Array();
+	this.ranges = [];
 }
 
 Combatant.prototype.getHealthTrackHTML = function() {
@@ -206,9 +206,9 @@ Combatant.prototype.getRange = function(a) {
 Combatant.prototype.setRange = function(a, b) {
 	b = parseInt(b);
 
-	if (b === 0) {
-		this.ranges = a.ranges;
-	}
+	// if (b === 0) {
+	// 	this.ranges = a.ranges;
+	// }
 
 	if (this.getRange(a) === undefined) {
 		console.log("range is undefined, setting to",b);
@@ -224,13 +224,37 @@ Combatant.prototype.setRange = function(a, b) {
 }
 
 Combatant.prototype.getMaxRange = function() {
-	var result = -1;
+	console.groupCollapsed("getMaxRange");
+	var result = Number.MIN_VALUE;
 
 	for (var i in this.ranges) {
+		console.log("this.ranges[i].range.value",this.ranges[i].range.value,"&mdash; result",result);
 		if (this.ranges[i].range.value > result) {
 			result = this.ranges[i].range.value;
+			console.log("new result is",result);
 		}
 	}
 
+	console.log("returning",result);
+	console.groupEnd();
+
+	return result;
+}
+
+Combatant.prototype.getMinRange = function() {
+	console.groupCollapsed("getMaxRange");
+	var result = Number.MAX_VALUE;
+
+	for (var i in this.ranges) {
+		console.log("this.ranges[i].range.value",this.ranges[i].range.value,"&mdash; result",result);
+		if (this.ranges[i].range.value < result) {
+			result = this.ranges[i].range.value;
+			console.log("new result is",result);
+		}
+	}
+
+	console.log("returning",result);
+	console.groupEnd();
+	
 	return result;
 }

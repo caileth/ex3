@@ -128,7 +128,7 @@ $(function() {
 				}
 			});
 	
-			$("#aimTargets").Ex3('populate', id);
+			$("#aimTargets").Ex3('populate', id, "rangedAttack");
 	
 			DIALOG.dialog("open");
 		} else {
@@ -138,14 +138,16 @@ $(function() {
 		console.groupEnd();
 	});
 
-	$("body").on( "click", ".attack", function() {
+	$("body").on( "click", ".attack, .rangedAttack", function() {
 		console.groupCollapsed("Attack Button");
-		if (SCENE.combatants.length > 1) {	
-			DIALOG_FORM.html(ATTACK_WINDOW);
 
-			var attackForm,
-				id = $(this).parent().attr("id"),
-				lookup = lookupByID(SCENE.combatants);
+		var attackForm,
+			id = $(this).parent().attr("id"),
+			lookup = lookupByID(SCENE.combatants),
+			populateExtra = ($(this).prop('class') === "rangedAttack" ? "rangedAttack" : undefined);
+
+		if (SCENE.combatants.length > 1 && (populateExtra === "rangedAttack" || lookup[id].getMinRange() === 0)) {
+			DIALOG_FORM.html(ATTACK_WINDOW);
 	
 			attackForm = DIALOG_FORM.on("submit", function(event) {
 				event.preventDefault();
@@ -170,8 +172,7 @@ $(function() {
 					attackForm[0].reset();
 				}
 			});
-	
-			$("#opponents").Ex3('populate', id);
+			$("#opponents").Ex3('populate', id, populateExtra);
 			$("#attackTick").Ex3('getDelayTicks', id);
 	
 			if (lookup[id].initiative < 1) $("#decisive").prop('disabled', true);
@@ -297,6 +298,10 @@ $(function() {
 		console.groupEnd();
 	});
 
+	$("body").on('click', '.move', function() {
+		$("body").effect("shake");
+	});
+
 	$(document).on('change', '#armorPicker, #weaponPicker', function() {
 		doPickerStats();
 	});
@@ -376,7 +381,7 @@ $(function() {
 		if (action === 'populate') {
 			console.groupCollapsed("populating target list");
 
-			var maxRange = (extra === 'rangeAttack' ? lookup[id].getMaxRange() : 0);
+			var maxRange = (extra === 'rangedAttack' ? lookup[id].getMaxRange() : 0);
 			console.log("maxRange:",maxRange);
 
 			this.empty();
@@ -405,7 +410,7 @@ $(function() {
 							(lookup[id].crashedBy	=== lookup[i] ? '~ ' : '') +
 							(lookup[id].shiftTarget	=== lookup[i] ? '&raquo; ' : '') +
 							lookup[i].name +
-							(range != undefined && extra === 'rangeAttack' ? ' (' + range + ')' : '') +
+							(range != undefined && extra === 'rangedAttack' ? ' (' + range + ')' : '') +
 							'</option>');
 					} else {
 						console.log("skipping",i);

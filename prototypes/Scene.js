@@ -70,10 +70,12 @@ Scene.prototype.printCombatants = function() {
 		
 		if (current.initiative != undefined) {
 			stats += '<input type="button" class="attack" value="Attack">' +
-					 '<input type="button" class="aim" value="Aim">';
-			stats += '<input type="button" class="fullDefense" value="Full Defense"' + (inCrash ? ' disabled' : '') +'>';
-			stats += '<input type="button" class="flurry" value="Flurry">';
-			stats += '<br>';
+					 '<input type="button" class="rangedAttack" value="Ranged Attack">' +
+					 '<input type="button" class="aim" value="Aim">' +
+					 '<input type="button" class="fullDefense" value="Full Defense"' + (inCrash ? ' disabled' : '') +'>' +
+					 '<input type="button" class="move" value="Move">' +
+					 '<input type="button" class="flurry" value="Flurry">' +
+					 '<br>';
 		}
 
 		stats +=
