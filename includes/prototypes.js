@@ -1,6 +1,5 @@
 function Scene() {
 	this.combatants = new Array();
-	this.ranges = new Array();
 
 	this.iterateCrashCounter = function() {
 		for (i in this.combatants) {
@@ -222,6 +221,8 @@ function Combatant() {
 	this.healthTrack[-2] = this.healthTrack[2];
 	this.healthTrack[-4] = this.healthTrack[3];
 	this.healthTrack.inc = this.healthTrack[4];
+
+	this.ranges = new Array();
 }
 
 Combatant.prototype.getHealthTrackHTML = function() {
@@ -390,6 +391,30 @@ Combatant.prototype.getWoundPenalty = function() {
 		return false;
 	}
 };
+
+Combatant.prototype.getRange = function(a) {
+	for (var i in this.ranges) {
+		if (this.ranges[i].target === a) {
+			console.log("match! range to",this.ranges[i].target.name,"is",this.ranges[i].range.value);
+			return this.ranges[i].range.value;
+		}
+	} console.log("no match"); return undefined;
+}
+
+Combatant.prototype.setRange = function(a, b) {
+	if (this.getRange(a) === undefined) {
+		console.log("range is undefined, setting to",b);
+		var newRange = {value: b};
+		this.ranges.push({target: a, range: newRange});
+		a.ranges.push({target: this, range: newRange});
+	} else for (var i in this.ranges) {
+		if (this.ranges[i].target === a) {
+			console.log("setting range to",b);
+			this.ranges[i].range.value = b;
+		}
+	}
+}
+
 
 
 

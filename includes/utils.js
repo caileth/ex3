@@ -95,9 +95,9 @@ function dieRoller(sides) {
 
 
 function lookupByID(array) {
-	console.groupCollapsed("lookup by ID called for",array);
+	console.groupCollapsed("lookup by ID");
 	var result = {};
-	for (var i = 0, len = array.length; i < len; i++) {
+	for (var i = 0; i < array.length; i++) {
 		result[array[i].id] = array[i];
 		console.log("setting",array[i].name,"to lookup[",array[i].id,"]");
 	}

@@ -7,22 +7,14 @@ function randomStatsGenerator() {
 	console.groupCollapsed("Stats generator");
 	DIALOG_FORM_NUMBERS.refresh();
 	DIALOG_FORM_NUMBERS.each(function(){
-		var min = parseInt($(this).attr("min")),
-			max = parseInt($(this).attr("max")),
-			diff = max - min,
-			randomVal = ~~(Math.random() * diff) + min;
-
-		console.log("min:",min);
-		console.log("max:",max);
-		console.log("diff:",diff);
-		console.log("new value:",randomVal);
-
-		$(this).val(randomVal);
+		$(this).val(randomStats($(this)));
 	});
 
 	armorOptions.eq(randomArmor).prop('selected', true);
 	weaponOptions.eq(randomWeapon).prop('selected', true);
 	doPickerStats();
+
+	$(".range").trigger("change"); // update range display
 
 	console.groupEnd();
 }
@@ -77,12 +69,15 @@ function twinkStatsGenerator() {
 
 	DIALOG_FORM_NUMBERS.refresh();
 	DIALOG_FORM_NUMBERS.each(function(){
-		$(this).val(parseInt($(this).attr("max")));
+		if ($(this).attr('class') === 'range') $(this).val(randomStats($(this)));
+		else $(this).val(parseInt($(this).attr("max")));
 	});
 
 	armorOptions.eq(lastArmor).prop('selected', true);
 	weaponOptions.eq(lastWeapon).prop('selected', true);
 	doPickerStats();
+
+	$(".range").trigger("change"); // update range display
 }
 
 function doPickerStats() {
@@ -104,4 +99,18 @@ function doPickerStats() {
 	console.log("new value for #weaponPicker is",weaponVal,":",weaponStats);
 	console.log("new value for #armorPicker is",armorVal,":",armorStats);
 	console.groupEnd();
+}
+
+function randomStats(thing) {
+	var min = parseInt(thing.attr("min")),
+		max = parseInt(thing.attr("max")),
+		diff = max - min,
+		randomVal = ~~(Math.random() * diff) + min;
+
+	console.log("min:",min);
+	console.log("max:",max);
+	console.log("diff:",diff);
+	console.log("new value:",randomVal);
+
+	return randomVal;
 }

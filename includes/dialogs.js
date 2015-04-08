@@ -63,10 +63,11 @@ function recordStats(id) {
 
 		if (String(stat).match("^range-")) {
 			var target = String(stat).replace('range-', ''),
-				range = new Range(lookup[id], lookup[target], value);
+				range = {value: value};
+				// range = {new Range(lookup[id], lookup[target], value)};
 			
-			SCENE.ranges.push(range);
-			console.log(range);
+			// SCENE.ranges.push(range);
+			lookup[id].setRange(lookup[target], value);
 		} else if (stat === "crashedBy")
 			lookup[id].crashedBy = lookup[value];
 		else if (stat === "shiftTarget")

@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"random",
+				"randomVal"
+			],
+			[
 				"DIA",
 				"DIALOG_FORM"
 			],
@@ -174,10 +178,6 @@
 			[
 				"chek",
 				"checked"
-			],
-			[
-				"random",
-				"randomNumber"
 			],
 			[
 				"name",
@@ -519,11 +519,64 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "exalted.js",
+			"settings":
+			{
+				"buffer_size": 11245,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "includes/prototypes.js",
+			"settings":
+			{
+				"buffer_size": 13273,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "includes/utils.js",
+			"settings":
+			{
+				"buffer_size": 3783,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "includes/dialogs.js",
+			"settings":
+			{
+				"buffer_size": 2372,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "includes/randomCrap.js",
+			"settings":
+			{
+				"buffer_size": 3863,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "README.md",
+			"settings":
+			{
+				"buffer_size": 757,
+				"line_ending": "Windows"
+			}
+		}
 	],
 	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
 	"command_palette":
 	{
 		"height": 380.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -558,13 +611,18 @@
 	],
 	"file_history":
 	[
+		"/C/Program Files (x86)/Steam/SteamApps/common/Victoria 2/mod/KMod/history/provinces/soviet/677 - Balti.txt",
+		"/C/Program Files (x86)/Steam/SteamApps/common/Victoria 2/mod/KMod/history/provinces/soviet/678 - Izmail.txt",
+		"/C/Program Files (x86)/Steam/SteamApps/common/Victoria 2/mod/KMod/history/provinces/soviet/676 - Chisinau.txt",
+		"/C/Program Files/AMD/CIM/Reports/Report.xml",
+		"/D/Documents/Paradox Interactive/Hearts of Iron III/settings.txt",
+		"/C/Users/Justin/Desktop/insurance",
 		"/D/Documents/GitHub/ex3/includes/prototypes.js",
 		"/D/Documents/GitHub/ex3/README.md",
 		"/D/Documents/GitHub/ex3/exalted.js",
 		"/D/Documents/GitHub/ex3/includes/defines.js",
 		"/D/Documents/GitHub/ex3/index.php",
 		"/D/Documents/GitHub/ex3/includes/dialogs.js",
-		"/D/Documents/Paradox Interactive/Hearts of Iron III/settings.txt",
 		"/D/Documents/GitHub/ex3/includes/combat.js",
 		"/D/Documents/GitHub/ex3/includes/utils.js",
 		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/cm_charlemagne_story_events.txt",
@@ -680,12 +738,7 @@
 		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod/common/cb_types/00_cb_types.txt",
 		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/soa_jewish_events.txt",
 		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod/history/characters/GMod.txt",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/common/traits/02_traits.txt",
-		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod.mod",
-		"/C/Users/Justin/Desktop/Vector Smart Object.html",
-		"/C/Users/Justin/AppData/Local/Temp/scp32815/home/calith/hw.caletges.com/index.php",
-		"/C/Users/Justin/AppData/Local/Temp/scp30179/home/calith/hw.caletges.com/index.php",
-		"/C/Users/Justin/AppData/Local/Temp/scp01313/home/calith/hw.caletges.com/slices.php"
+		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/common/traits/02_traits.txt"
 	],
 	"find":
 	{
@@ -705,6 +758,23 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"RUS",
+			"SCENE.ranges",
+			"us ===",
+			"us",
+			"us\\",
+			"var ys",
+			"us ===",
+			"that",
+			"range",
+			"range-",
+			"accuracy number",
+			"class",
+			"$(this)",
+			"range",
+			"random",
+			"randomName",
+			"random",
 			"range",
 			"X",
 			"-50",
@@ -815,24 +885,7 @@
 			"resultLines",
 			"resultLastLineBreak",
 			"doRound",
-			"round",
-			"Round",
-			"round",
-			"ROUND",
-			"round",
-			"doRound();",
-			"doRound",
-			"Tick",
-			"doRound",
-			"round",
-			"Debug",
-			"damage",
-			"debug",
-			";\n",
-			");",
-			";",
-			" +\n",
-			" +"
+			"round"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -888,13 +941,190 @@
 	"groups":
 	[
 		{
+			"selected": 3,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "exalted.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 11245,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								10318,
+								10318
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 5545.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "includes/prototypes.js",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 13273,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13273,
+								13273
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": -0.0,
+						"translation.y": 5545.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "includes/utils.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3783,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3783,
+								3783
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1386.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "includes/dialogs.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2372,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1703,
+								1703
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 630.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "includes/randomCrap.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3863,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3251,
+								3251
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 135.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
 			]
 		},
 		{
+			"selected": 0,
 			"sheets":
 			[
+				{
+					"buffer": 5,
+					"file": "README.md",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 757,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								757,
+								757
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Markdown/Markdown.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 124.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -931,7 +1161,7 @@
 		"rows":
 		[
 			0.0,
-			0.5,
+			0.47035766781,
 			1.0
 		]
 	},
@@ -940,6 +1170,7 @@
 	{
 		"height": 0.0
 	},
+	"pinned_build_system": "",
 	"project": "exalted.sublime-project",
 	"replace":
 	{
@@ -949,6 +1180,7 @@
 	"select_file":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -957,6 +1189,7 @@
 	"select_project":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -965,12 +1198,13 @@
 	"select_symbol":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
 		"width": 0.0
 	},
-	"selected_group": 1,
+	"selected_group": 0,
 	"settings":
 	{
 	},
@@ -978,7 +1212,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 234.0,
+	"side_bar_width": 195.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
