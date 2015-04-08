@@ -11,7 +11,7 @@ $(function() {
 
 
 
-	$("body").on("click", ".range", function() {
+	$("body").on("change", ".range", function() {
 		var id = $(this).attr('id'),
 			range = parseInt($(this).val());
 
@@ -39,20 +39,21 @@ $(function() {
 
 		DIALOG_FORM.html(STATS_WINDOW);
 
-		// generate range listing for existing characters
-
-		for (i in SCENE.combatants) {
-			var that = SCENE.combatants[i];
-			DIALOG_FORM.append('<br>\nRange to ' + that.name + ': ');
-			DIALOG_FORM.append('<input type="number" class="range" id="range-' + that.id + '" value="1" min="0">');
-			DIALOG_FORM.append('<label for="range-' + that.id + '">Short</label>');
-		}
-
-		console.log("Populating dialogbox");
-
 		var addButtons, editButtons,
 			edit = false,
-			id = $(this).parent().attr("id");
+			id = $(this).parent().attr("id"),
+			lookup = lookupByID(SCENE.combatants);
+
+		for (i in SCENE.combatants) {
+			var them = SCENE.combatants[i],
+				us = lookup[id];
+
+			if (us != them) {
+				DIALOG_FORM.append('<br>\nRange to ' + them.name + ': ');
+				DIALOG_FORM.append('<input type="number" class="range" id="range-' + them.id + '" value="1" min="0" max="4">');
+				DIALOG_FORM.append('<label for="range-' + them.id + '">Short</label>');
+			}
+		}
 
 		if ($(this).attr("class") === "edit") {
 			edit = true;
@@ -385,8 +386,8 @@ $(function() {
 				this.append('<option value="' + lookup[id].shiftTarget.id + '">&raquo; ' +	lookup[id].shiftTarget.name + '</option>');
 			} else for (i in lookup) {
 				if (i != id && lookup[i].initiative != undefined) {
-					console.log("adding id",i);
-					var range = checkRanges(lookup[id], lookup[i]);
+					var range = lookup[id].getRange(lookup[i]);
+					console.log("adding",lookup[i].name);
 
 					this.append(
 						'<option value="' + i +'">' +
@@ -411,15 +412,19 @@ $(function() {
 					type = $(this).attr('type');
 
 				if (type === undefined) type = $(this).prop('tagName').toLowerCase();
-				
-				if (stat) {
-					if (type === "checkbox") {
+
+				if (String(stat).match("^range-")) {
+					var target = String(stat).replace('range-', ''),
+						range = lookup[id].getRange(lookup[target]);
+
+					$(this).val(range);
+					
+					$(".range").trigger("change");
+				} else if (stat) {
+					if (type === "checkbox")
 						evalStr = "$(this).prop('checked', lookup['"+id+"']."+stat+")";
-					} else if (type === "select") {
-						// do nothing
-					} else {
+					else if (type != "select")
 						evalStr = "$(this).val(lookup['"+id+"']."+stat+")";
-					}
 				}
 				
 				console.log(stat,type,evalStr);
@@ -435,37 +440,19 @@ $(function() {
 
 			ticks.push(lookup[id].initiative);
 
-			for (i in lookup) {
-				if (lookup[i].initiative < lookup[id].initiative && lookup[i].initiative != ticks[ticks.length - 1]) {
-					ticks.push(lookup[i].initiative);
+			for (j in lookup) {
+				if (lookup[j].initiative < lookup[id].initiative && lookup[j].initiative != ticks[ticks.length - 1]) {
+					ticks.push(lookup[j].initiative);
 				}
 			}
 
 			this.empty();
 				console.log("clearing out existing entries");
 
-			for (j in ticks) this.append('<option value="'+ticks[j]+'">'+ticks[j]+'</option>');
+			for (k in ticks) this.append('<option value="'+ticks[k]+'">'+ticks[k]+'</option>');
 
 			console.groupEnd();
 			return this;
-		}
-
-		
-
-
-		function checkRanges(a, b) {
-			console.log("SCENE.ranges",SCENE.ranges);
-
-			for (j in SCENE.ranges) {
-				var range = SCENE.ranges[j],
-					aIsThis = (range.a === a),
-					bIsThis = (range.b === a),
-					aIsThat = (range.a === b),
-					bIsThat = (range.b === b),
-					match = ((aIsThis && bIsThat) || (bIsThis && aIsThat));
-					
-				if (match) return range.range;
-			}
 		}
 	};
 }(jQuery));
