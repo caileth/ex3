@@ -75,12 +75,10 @@ function recordStats(id) {
 		else if (stat) {
 			if (type === "text") {
 				evalStr = "lookup['"+id+"']."+stat+" = '"+sanitize(value)+"'";
-			} else if (type === "select") {
-				// do nothing
 			} else if (type === "checkbox") {
 				value = $(this).prop('checked');
 				evalStr = "lookup['"+id+"']."+stat+" = "+value;
-			} else {
+			} else if (type != "select") {
 				evalStr = "lookup['"+id+"']."+stat+" = parseInt("+value+")";
 			}
 

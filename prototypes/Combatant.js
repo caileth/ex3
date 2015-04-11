@@ -203,23 +203,46 @@ Combatant.prototype.getRange = function(a) {
 	} console.log("no match"); return undefined;
 }
 
+Combatant.prototype.getRangeHTML = function() {
+	var result = '';
+	if (this.ranges.length > 0) {
+		result += '<b>Ranges:</b><br>';
+		for (var i in this.ranges) {
+			result += this.ranges[i].target.name;
+			result += ': ';
+			result += this.ranges[i].range.value;
+			result += '<br>';
+		}
+	}
+	return result;
+};
+
 Combatant.prototype.setRange = function(a, b) {
 	b = parseInt(b);
+	var newRange = {value: b};
 
-	// if (b === 0) {
-	// 	this.ranges = a.ranges;
-	// }
+	// check if b or this.getRange(a) is 0
 
-	if (this.getRange(a) === undefined) {
-		console.log("range is undefined, setting to",b);
-		var newRange = {value: b};
+	if (this.ranges.length < 1 && a.ranges.length < 1 && b === 0) {
+		this.ranges.push({target: a, range: newRange});
+		this.ranges.push({target: this, range: newRange});
+		a.ranges = this.ranges;
+	} else if (b === 0 && this.getRange(a) != 0) {
+		this.ranges = a.ranges;
+		if (this.getRange(a) === undefined)
+			this.ranges.push({target: a, range: newRange});
+		if (this.getRange(this) === undefined)
+			this.ranges.push({target: this, range: newRange});
+	} else if (this.getRange(a) === 0 && b != 0) {
+		this.ranges = this.ranges.slice();
+		if (this.ranges[i].target === a)
+			this.ranges[i].range.value = b;
+	} else if (this.getRange(a) === undefined) {
 		this.ranges.push({target: a, range: newRange});
 		a.ranges.push({target: this, range: newRange});
 	} else for (var i in this.ranges) {
-		if (this.ranges[i].target === a) {
-			console.log("setting range to",b);
+		if (this.ranges[i].target === a)
 			this.ranges[i].range.value = b;
-		}
 	}
 }
 

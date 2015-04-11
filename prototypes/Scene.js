@@ -78,6 +78,8 @@ Scene.prototype.printCombatants = function() {
 					 '<br>';
 		}
 
+		stats += current.getRangeHTML();
+
 		stats +=
 			'<input type="button" class="edit" value="Edit">' +
 			'<input type="button" class="debug" value="ST">' +
