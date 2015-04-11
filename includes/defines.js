@@ -29,6 +29,7 @@ var AIM_BONUS = 3,
 	JB_EXTRA_SUX = 3,
 	JB_TARGET = 7,
 	NAMES_DATABASE,
+	RANGE_TRACK = ['Close','Short','Medium','Long','Extreme'],
 	RESULTS_WINDOW = $("#results"),
 	ROUND = 0,
 	SCENE = new Scene(),
@@ -40,45 +41,50 @@ var AIM_BONUS = 3,
 	WOUND_PENALTY_MAIMED = -4;
 
 var AIM_WINDOW =	'<label for="aimTargets">Target:</label>' +
-					'<select id="aimTargets"></select><br/>';
+					'<select id="aimTargets"></select><br>';
 
 var ATTACK_WINDOW =	'<label for="opponents">Target:</label>' +
-					'<select id="opponents"></select><br/>' +
+					'<select id="opponents"></select><br>' +
 					'<label for="attackTick">Attack on tick:</label>' +
-					'<select id="attackTick"></select><br/>' +
+					'<select id="attackTick"></select><br>' +
 					'<label for="attackIsDecisive">Attack Type:</label>' +
 					'<input type="radio" name="attackIsDecisive" id="withering" value="false">Withering' +
-					'<input type="radio" name="attackIsDecisive" id="decisive" value="true">Decisive<br/>' +
+					'<input type="radio" name="attackIsDecisive" id="decisive" value="true">Decisive<br>' +
 					'<label for="attackStunt">Attacking Stunt:</label>' +
-					'<input type="radio" name="attackStunt" id="stuntAttackNone" value="0"/>None' +
-					'<input type="radio" name="attackStunt" id="stuntAttackOne" value="1"/>1-point' +
-					'<input type="radio" name="attackStunt" id="stuntAttackTwo" value="2"/>2-point' +
-					'<input type="radio" name="attackStunt" id="stuntAttackThree" value="3"/>3-point<br/>' +
+					'<input type="radio" name="attackStunt" id="stuntAttackNone" value="0">None' +
+					'<input type="radio" name="attackStunt" id="stuntAttackOne" value="1">1-point' +
+					'<input type="radio" name="attackStunt" id="stuntAttackTwo" value="2">2-point' +
+					'<input type="radio" name="attackStunt" id="stuntAttackThree" value="3">3-point<br>' +
 					'<label for="defendStunt">Defending Stunt:</label>' +
-					'<input type="radio" name="defendStunt" id="stuntDefendNone" value="0"/>None' +
-					'<input type="radio" name="defendStunt" id="stuntDefendOne" value="1"/>1-point' +
-					'<input type="radio" name="defendStunt" id="stuntDefendTwo" value="2"/>2-point' +
-					'<input type="radio" name="defendStunt" id="stuntDefendThree" value="3"/>3-point<br/>' +
+					'<input type="radio" name="defendStunt" id="stuntDefendNone" value="0">None' +
+					'<input type="radio" name="defendStunt" id="stuntDefendOne" value="1">1-point' +
+					'<input type="radio" name="defendStunt" id="stuntDefendTwo" value="2">2-point' +
+					'<input type="radio" name="defendStunt" id="stuntDefendThree" value="3">3-point<br>' +
 					'<label for="attackSpecialty">Applicable specialty on attack?</label>' +
-					'<input type="checkbox" id="specialtyAttack"/><br/>' +
+					'<input type="checkbox" id="specialtyAttack"><br>' +
 					'<label for="defenseSpecialty">Applicable specialty on defense?</label>' +
-					'<input type="checkbox" id="specialtyDefense"/><br/>' +
+					'<input type="checkbox" id="specialtyDefense"><br>' +
 					'<label for="attackModifiers">Attack modifier(s): ' +
-					'<input type="number" id="attackModifiers" value="0" min="-5" max="0"/>';
+					'<input type="number" id="attackModifiers" value="0" min="-5" max="0">';
 
 var FLURRY_WINDOW =	'<img src="http://wac.450f.edgecastcdn.net/80450F/thefw.com/files/2012/07/Pie-Mcflurry.png" alt="SEE WHAT I DID THERE" id="mcFlurry">';
 
-var STATS_WINDOW =	'<input type="text" id="name" placeholder="New Player" autofocus/>' +
-					'<input type="button" class="randomize"/>' +
-					'<input type="button" class="twink"/><br/>' +
-					'<label for="strength">Strength: </label><input type="number" id="strength" value="1" min="1" max="5"/><br/>' +
-					'<label for="dexterity">Dexterity: </label><input type="number" id="dexterity" value="1" min="1" max="5"/><br/>' +
-					'<label for="stamina">Stamina: </label><input type="number" id="stamina" value="1" min="1" max="5"/><br/>' +
-					'<label for="wits">Wits: </label><input type="number" id="wits" value="1" min="1" max="5"/><br/>' +
-					'<label for="athletics">Athletics: </label><input type="number" id="athletics" value="0" min="0" max="5"/><br/>' +
-					'<label for="awareness">Awareness: </label><input type="number" id="awareness" value="0" min="0" max="5"/><br/>' +
-					'<label for="dodge">Dodge: </label><input type="number" id="dodge" value="0" min="0" max="5"/><br/>' +
-					'<label for="combat">Combat Ability: </label><input type="number" id="combat" value="0" min="0" max="5"/><br/>' +
+var MOVE_WINDOW =	'<label for="moveTargets">Target:</label><select id="moveTargets"></select><br>' +
+					'<label for="moveDirection">Direction:</label>' +
+					'<input type="radio" name="moveDirection" id="moveTowards" value="true">Towards ' +
+					'<input type="radio" name="moveDirection" id="moveAway" value="false">Away';
+
+var STATS_WINDOW =	'<input type="text" id="name" placeholder="New Player" autofocus>' +
+					'<input type="button" class="randomize">' +
+					'<input type="button" class="twink"><br>' +
+					'<label for="strength">Strength: </label><input type="number" id="strength" value="1" min="1" max="5"><br>' +
+					'<label for="dexterity">Dexterity: </label><input type="number" id="dexterity" value="1" min="1" max="5"><br>' +
+					'<label for="stamina">Stamina: </label><input type="number" id="stamina" value="1" min="1" max="5"><br>' +
+					'<label for="wits">Wits: </label><input type="number" id="wits" value="1" min="1" max="5"><br>' +
+					'<label for="athletics">Athletics: </label><input type="number" id="athletics" value="0" min="0" max="5"><br>' +
+					'<label for="awareness">Awareness: </label><input type="number" id="awareness" value="0" min="0" max="5"><br>' +
+					'<label for="dodge">Dodge: </label><input type="number" id="dodge" value="0" min="0" max="5"><br>' +
+					'<label for="combat">Combat Ability: </label><input type="number" id="combat" value="0" min="0" max="5"><br>' +
 					'<label for="weaponPicker">Weapon: </label><select id="weaponPicker">' +
 					'<option value="weapon.mortal.light">Unarmed</option>' +
 					'<option value="weapon.mortal.light">Light Mortal Weapon</option>' +
@@ -86,7 +92,7 @@ var STATS_WINDOW =	'<input type="text" id="name" placeholder="New Player" autofo
 					'<option value="weapon.mortal.heavy">Heavy Mortal Weapon</option>' +
 					'<option value="weapon.artifact.light">Light Artifact Weapon</option>' +
 					'<option value="weapon.artifact.medium">Medium Artifact Weapon</option>' +
-					'<option value="weapon.artifact.heavy">Heavy Artifact Weapon</option></select><br/>' +
+					'<option value="weapon.artifact.heavy">Heavy Artifact Weapon</option></select><br>' +
 					'<label for="armorPicker">Armor: </label><select id="armorPicker">' +
 					'<option value="armor.none.unarmored">Unarmored</option>' +
 					'<option value="armor.mortal.light">Light Mortal Armor</option>' +
@@ -94,15 +100,15 @@ var STATS_WINDOW =	'<input type="text" id="name" placeholder="New Player" autofo
 					'<option value="armor.mortal.heavy">Heavy Mortal Armor</option>' +
 					'<option value="armor.artifact.light">Light Artifact Armor</option>' +
 					'<option value="armor.artifact.medium">Medium Artifact Armor</option>' +
-					'<option value="armor.artifact.heavy">Heavy Artifact Armor</option></select><br/>' +
-					'<label for="accuracy">Weapon Accuracy: </label><input type="number" id="accuracy" value="4" min="0" max="5"/><br/>' +
-					'<label for="damage">Weapon Damage: </label><input type="number" id="damage" value="7" min="7" max="14"/>' +
-					'<input type="checkbox" id="doesLethal"/><label for="doesLethal"> Lethal?</label><br/>' +
-					'<label for="overwhelming">Weapon Overwhelming: </label><input type="number" id="overwhelming" value="0" min="-1" max="4"/><br/>' +
-					'<label for="defense">Weapon Defense: </label><input type="number" id="defense" value="0" min="-1" max="1"/><br/>' +
-					'<label for="armor">Armor Soak: </label><input type="number" id="armor" value="0" min="0" max="12"/><br/>' +
-					'<label for="hardness">Armor Hardness: </label><input type="number" id="hardness" value="0" min="0" max="10"/><br/>' +
-					'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-2" max="0"/>';
+					'<option value="armor.artifact.heavy">Heavy Artifact Armor</option></select><br>' +
+					'<label for="accuracy">Weapon Accuracy: </label><input type="number" id="accuracy" value="4" min="0" max="5"><br>' +
+					'<label for="damage">Weapon Damage: </label><input type="number" id="damage" value="7" min="7" max="14">' +
+					'<input type="checkbox" id="doesLethal"><label for="doesLethal"> Lethal?</label><br>' +
+					'<label for="overwhelming">Weapon Overwhelming: </label><input type="number" id="overwhelming" value="0" min="-1" max="4"><br>' +
+					'<label for="defense">Weapon Defense: </label><input type="number" id="defense" value="0" min="-1" max="1"><br>' +
+					'<label for="armor">Armor Soak: </label><input type="number" id="armor" value="0" min="0" max="12"><br>' +
+					'<label for="hardness">Armor Hardness: </label><input type="number" id="hardness" value="0" min="0" max="10"><br>' +
+					'<label for="mobility">Mobility Penalty: </label><input type="number" id="mobility" value="0" min="-2" max="0">';
 
 $.getJSON('./json/gear.json', function(data) {
 	// exaltedgear.json syntax:

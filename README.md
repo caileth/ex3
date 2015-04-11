@@ -5,11 +5,17 @@ TO DO:
 Minor:
 - Add a box for stunt descriptions
 - Add confirmation dialog on Join Battle! when battle is already joined
+- Combat landmarks
 - End combat when all combatants are removed
 - Misc Action
 
 Major:
 - Combat Movement & Range
+  - Move
+  - Rush
+  - Disengage
+  - Rise From Prone
+  - Take Cover
 - Ranged Attacks
 - Flurry
 - Other Combat Actions

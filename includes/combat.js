@@ -20,6 +20,14 @@ function aim(id, target) {
 	doRound();
 }
 
+
+
+
+
+
+
+
+
 function attack(id, target) {
 	console.groupCollapsed("Attack!");
 
@@ -260,6 +268,26 @@ function resolveWitheringDamage(attacker, defender, damage) {
 	attacker.initiative++;
 	RESULTS_WINDOW.append(attacker.name + " gains an Initiative for a successful Withering Attack.\n");
 }
+
+
+
+
+
+
+
+
+
+function move() {
+	// stuff happens
+}
+
+
+
+
+
+
+
+
 
 function doRound() {
 	console.groupCollapsed("Do Round");

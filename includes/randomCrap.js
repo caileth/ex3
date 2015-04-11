@@ -114,33 +114,3 @@ function randomStats(thing) {
 
 	return randomVal;
 }
-
-function quake() {
-	var qDuration = 600;
-	
-	// the horizontal displacement
-	var deltaX = 1;
-
-	// make sure the browser support the moveBy method
-	if (window.moveBy) {
-		for (var qCounter = 0; qCounter < qDuration; qCounter++) {
-			if ((qCounter % 4) === 0) {
-				window.moveBy(deltaX, 0); // shake left
-			} else if ((qCounter % 4) === 2) { 
-				window.moveBy(-deltaX, 0); // shake right
-			}
-			// speed up or slow down every X cycles
-			if ((qCounter % 30) === 0) {
-				// speed up halfway 
-				if (qCounter < qDuration / 2) { 
-					deltaX++;
-				} else {
-					// slow down after halfway of the duration
-					deltaX--;
-				}
-			}
-		}
-	} else {
-		alert("this is stupid");
-	}
-}
