@@ -23,17 +23,9 @@ function dialogAddCombatant() {
 			}}]);
 	} else {
 		console.groupCollapsed("Adding");
-		for (var i in SCENE.combatants) {
-			var lookup = lookupByID(SCENE.combatants),
-				them = SCENE.combatants[i],
-				us = lookup[id];
-	
-			if (us != them) {
-				DIALOG_FORM.append('<br>\nRange to ' + them.name + ': ');
-				DIALOG_FORM.append('<input type="number" class="range" id="range-' + them.id + '" value="1" min="0" max="4">');
-				DIALOG_FORM.append('<label for="range-' + them.id + '">Short</label>');
-			}
-		}
+		
+		dialogVertices(id);
+		
 		DIALOG.dialog("option", "buttons", [
 			{ text: "Add combatant", click: function() {
 				addCombatant();
@@ -50,8 +42,7 @@ function dialogAddCombatant() {
 }
 
 function dialogDebug() {
-	var id = $(this).parent().attr("id"),
-		lookup = lookupByID(SCENE.combatants);
+	var id = $(this).parent().attr("id");
 
 	DIALOG_FORM.html(
 		'<label for="active">Active: </label><input type="checkbox" id="active">' + '<br>' +
@@ -63,16 +54,7 @@ function dialogDebug() {
 		'<label for="aggravated">Aggravated: </label><input type="number" id="aggravated">'
 	);
 
-	for (i in SCENE.combatants) {
-		var them = SCENE.combatants[i],
-			us = lookup[id];
-
-		if (us != them) {
-			DIALOG_FORM.append('<br>\nRange to ' + them.name + ': ');
-			DIALOG_FORM.append('<input type="number" class="range" id="range-' + them.id + '" value="1" min="0" max="4">');
-			DIALOG_FORM.append('<label for="range-' + them.id + '">Short</label>');
-		}
-	}
+	dialogVertices(id);
 
 	DIALOG.dialog({
 		title: "Debug", autoOpen: false, height: "auto", width: "auto", modal: true,
@@ -93,8 +75,8 @@ function dialogDebug() {
 	});
 
 	$("#dialog-form :input").Ex3('getStats', id);
-	$("#crashedBy").Ex3('populate', id, 'addNone');
-	$("#shiftTarget").Ex3('populate', id, 'addNone');
+	$("#crashedBy").Ex3('populate', id, undefined);
+	$("#shiftTarget").Ex3('populate', id, undefined);
 
 	DIALOG.dialog("open");
 }
@@ -159,10 +141,10 @@ function recordStats(id) {
 		if (String(stat).match("^range-")) {
 			var target = String(stat).replace('range-', ''),
 				range = {value: value};
-				// range = {new Range(lookup[id], lookup[target], value)};
-			
-			// SCENE.ranges.push(range);
+				
 			lookup[id].setRange(lookup[target], value);
+		} else if (String(stat).match("^hostile-")) {
+			// uhh I'll figure this out later
 		} else if (stat === "crashedBy")
 			lookup[id].crashedBy = lookup[value];
 		else if (stat === "shiftTarget")
@@ -223,7 +205,7 @@ function dialogAim() {
 			}
 		});
 
-		$("#aimTargets").Ex3('populate', id, "rangedAttack");
+		$("#aimTargets").Ex3('populate', id, 0);
 
 		DIALOG.dialog("open");
 	} else {
@@ -247,9 +229,10 @@ function dialogAttack() {
 	var attackForm,
 		id = $(this).parent().attr("id"),
 		lookup = lookupByID(SCENE.combatants),
-		populateExtra = ($(this).prop('class') === "rangedAttack" ? "rangedAttack" : undefined);
+		minRange = 0,
+		maxRange = ($(this).prop('class') === "rangedAttack" ? undefined : 0);
 
-	if (SCENE.combatants.length > 1 && (populateExtra === "rangedAttack" || lookup[id].getMinRange() === 0)) {
+	if (lookup[id].getMinRange() >= minRange && (maxRange === undefined || lookup[id].getMaxRange() <= maxRange)) {
 		DIALOG_FORM.html(ATTACK_WINDOW);
 
 		attackForm = DIALOG_FORM.on("submit", function(event) {
@@ -275,7 +258,7 @@ function dialogAttack() {
 				attackForm[0].reset();
 			}
 		});
-		$("#opponents").Ex3('populate', id, populateExtra);
+		$("#opponents").Ex3('populate', id, minRange, maxRange);
 		$("#attackTick").Ex3('getDelayTicks', id);
 
 		if (lookup[id].initiative < 1) $("#decisive").prop('disabled', true);
@@ -286,7 +269,7 @@ function dialogAttack() {
 		$("#stuntAttackOne").prop('checked', true);
 		$("#stuntDefendOne").prop('checked', true);
 	} else {
-		console.log("There's nobody to attack!");
+		$.alert("There's nobody to attack!", "Nope");
 	}
 	
 	console.groupEnd();
@@ -349,6 +332,32 @@ function dialogRange() {
 
 
 
+function dialogVertices(id) {
+	for (var i in SCENE.combatants) {
+		var lookup = lookupByID(SCENE.combatants),
+			them = SCENE.combatants[i],
+			us = lookup[id];
+
+		if (us != them) {
+			DIALOG_FORM.append(
+				'<br>\n' + them.name + ': ' + 'Range ' +
+				'<input type="number" class="range" id="range-' + them.id + '" value="1" min="0" max="4">' +
+				'<label for="range-' + them.id + '">Short</label>'
+				/*+'<label for="hostile-"' + them.id + '>Hostile?</label>'+
+				'<input type="checkbox" id="hostile-' + them.id + '">'*/
+			);
+		}
+	}
+}
+
+
+
+
+
+
+
+
+
 function joinBattle() {
 	console.groupCollapsed("joinBattle clicked");
 	console.log(SCENE.combatants.length,"combatants");
@@ -364,6 +373,7 @@ function joinBattle() {
 			current.initiative = joinBattleSuxx + JB_EXTRA_SUX;
 			current.active = true;
 			current.crashedAndWithered = false;
+			current.hasMoved = false;
 			current.turnsInCrash = 0;
 			current.onslaught = 0;
 			current.bashing	= 0;

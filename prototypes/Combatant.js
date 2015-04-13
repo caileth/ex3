@@ -288,6 +288,7 @@ Combatant.prototype.getMaxRange = function() {
 	var result = Number.MIN_VALUE;
 
 	for (var i in this.vectors) {
+		console.log("this.vectors[i].range.value",this.vectors[i].range.value,"— result",result);
 		if (this.vectors[i].range.value > result) {
 			result = this.vectors[i].range.value;
 			console.log("new result is",result);
@@ -305,6 +306,7 @@ Combatant.prototype.getMinRange = function() {
 	var result = Number.MAX_VALUE;
 
 	for (var i in this.vectors) {
+		console.log("this.vectors[i].range.value",this.vectors[i].range.value,"— result",result);
 		if (this.vectors[i].range.value < result) {
 			result = this.vectors[i].range.value;
 			console.log("new result is",result);

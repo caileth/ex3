@@ -28,6 +28,32 @@ function aim(id, target) {
 
 
 
+function move(id, target) {
+	// console.groupCollapsed("Move");
+
+	var lookup = lookupByID(SCENE.combatants),
+		us = lookup[id],
+		them = lookup[target];
+
+	var currentRange = us.getRange(them),
+		newRange = currentRange - 1;
+
+	us.setRange(them, newRange);
+	us.hasMoved = true;
+	DIALOG.dialog("close");
+	SCENE.printCombatants();
+
+	// console.groupEnd();
+}
+
+
+
+
+
+
+
+
+
 function attack(id, target) {
 	console.groupCollapsed("Attack!");
 
@@ -35,7 +61,7 @@ function attack(id, target) {
 		attacker	= lookup[id],
 		defender	= lookup[target];
 
-	var attackIsDecisive	= $("input[name=attackIsDecisive]:checked").val() == "true",
+	var attackIsDecisive	= $("input[name=attackIsDecisive]:checked").val() === "true",
 		attackModifiers		= parseInt($("#attackModifiers").val()),
 		attackSpecialty		= $("#attackSpecialty").prop('checked'),
 		attackStunt			= parseInt($("input[name=attackStunt]:checked").val()),
@@ -267,18 +293,6 @@ function resolveWitheringDamage(attacker, defender, damage) {
 		
 	attacker.initiative++;
 	RESULTS_WINDOW.append(attacker.name + " gains an Initiative for a successful Withering Attack.\n");
-}
-
-
-
-
-
-
-
-
-
-function move() {
-	// stuff happens
 }
 
 

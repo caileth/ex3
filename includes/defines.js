@@ -67,12 +67,17 @@ var ATTACK_WINDOW =	'<label for="opponents">Target:</label>' +
 					'<label for="attackModifiers">Attack modifier(s): ' +
 					'<input type="number" id="attackModifiers" value="0" min="-5" max="0">';
 
+var DEBUG_WINDOW =	'<label for="active">Active: </label><input type="checkbox" id="active">' + '<br>' +
+					'<label for="initiative">Initiative: </label><input type="number" id="initiative">' + '<br>' +
+					'<label for="crashedBy">Crashed By: </label><select id="crashedBy"></select>' + '<br>' +
+					'<label for="shiftTarget">Shifting Vs: </label><select id="shiftTarget"></select>' + '<br>' +
+					'<label for="bashing">Bashing: </label><input type="number" id="bashing">' + '<br>' +
+					'<label for="lethal">Lethal: </label><input type="number" id="lethal">' + '<br>' +
+					'<label for="aggravated">Aggravated: </label><input type="number" id="aggravated">';
+
 var FLURRY_WINDOW =	'<img src="http://wac.450f.edgecastcdn.net/80450F/thefw.com/files/2012/07/Pie-Mcflurry.png" alt="SEE WHAT I DID THERE" id="mcFlurry">';
 
-var MOVE_WINDOW =	'<label for="moveTargets">Target:</label><select id="moveTargets"></select><br>' +
-					'<label for="moveDirection">Direction:</label>' +
-					'<input type="radio" name="moveDirection" id="moveTowards" value="true">Towards ' +
-					'<input type="radio" name="moveDirection" id="moveAway" value="false">Away';
+var MOVE_WINDOW =	'<label for="moveTargets">Target:</label><select id="moveTargets"></select>';
 
 var STATS_WINDOW =	'<input type="text" id="name" placeholder="New Player" autofocus>' +
 					'<input type="button" class="randomize">' +

@@ -38,25 +38,32 @@ $(function() {
 	});
 
 	$('body').on('click', '.move', function() {
+		var id = $(this).parent().attr("id"),
+			moveForm;
+
 		DIALOG_FORM.html(MOVE_WINDOW);
+
+		moveForm = DIALOG_FORM.on("submit", function(event) {
+			event.preventDefault();
+			move(id, $("#opponents option:selected").val());
+		});
 
 		DIALOG.dialog({
 			title: 'Move', autoOpen: false, height: 'auto', width: 'auto', modal: true,
 			buttons: {
-				Edit: function() {
-					move(id);
-					SCENE.printCombatants();
+				Move: function() {
+					move(id, $("#moveTargets option:selected").val());
 				},
 				Cancel: function() {
 					DIALOG.dialog('close');
 				}
 			},
 			close: function() {
-				move(id);
+				moveForm[0].reset();
 			}
 		});
 
-		$('#moveTargets').Ex3('populate', id);
+		$('#moveTargets').Ex3('populate', id, 1); // can't move to a target at range 0, you're already there
 
 		DIALOG.dialog('open');
 	});
@@ -73,14 +80,17 @@ $(function() {
 
 		var id = $(this).parent().attr('id');
 
-		for (var i in SCENE.combatants) {
-			for (var j in SCENE.combatants[i].ranges)
-				if (SCENE.combatants[i].ranges[j].target === id)
-					SCENE.combatants[i].ranges.splice(j, 1);
+		for (var i in SCENE.combatants)
+			for (var j in SCENE.combatants[i].vectors)
+				if (SCENE.combatants[i].vectors[j].target.id === id)
+					SCENE.combatants[i].vectors.splice(j,1);
 			
-			if (SCENE.combatants[i].id === id)
-				SCENE.combatants.splice(i,1);
-		}
+		for (var k in SCENE.combatants)
+			if (SCENE.combatants[k].id === id)
+				SCENE.combatants.splice(k,1);
+
+		if (SCENE.combatants.length === 0)
+			ROUND = 0;
 
 		doRound();
 		console.groupEnd();
@@ -93,6 +103,23 @@ $(function() {
 		console.groupEnd();
 	});
 });
+
+
+
+
+
+
+
+
+
+$.extend({alert: function(message, title) {
+	$("<div></div>").dialog({
+		buttons: { "OK": function() { $(this).dialog("close"); } },
+		close: function(event, ui) { $(this).remove(); },
+		height: 'auto', width: 'auto',
+		resizable: false, title: title, modal: true
+	}).text(message);
+}});
 
 
 
@@ -119,19 +146,19 @@ $(function() {
 
 
 
-	$.fn.Ex3 = function(action, id, extra) {
+	$.fn.Ex3 = function(action, id, x, y) {
 		var lookup = lookupByID(SCENE.combatants);		
 
 		if (action === 'populate') {
 			console.groupCollapsed('populate');
 
-			var maxRange = (extra === 'rangedAttack' ? lookup[id].getMaxRange() : 0);
+			var maxRange = (y != undefined ? y : lookup[id].getMaxRange());
 			console.log('maxRange:',maxRange);
 
 			this.empty();
 				console.log('clearing out existing entries');
 
-			if (extra === 'addNone') this.append('<option value="undefined">None</option>');
+			if (x === undefined) this.append('<option value="undefined">None</option>');
 
 			if (lookup[id].shiftTarget != undefined && this.attr('id') === 'opponents') {
 				console.log('adding shift target id',lookup[id].shiftTarget.id);
@@ -154,7 +181,7 @@ $(function() {
 							(lookup[id].crashedBy	=== lookup[i] ? '~ ' : '') +
 							(lookup[id].shiftTarget	=== lookup[i] ? '&raquo; ' : '') +
 							lookup[i].name +
-							(range != undefined && extra === 'rangedAttack' ? ' (' + range + ')' : '') +
+							(range != undefined && x === 'rangedAttack' ? ' (' + range + ')' : '') +
 							'</option>');
 					} else {
 						console.log("skipping",i);
