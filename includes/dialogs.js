@@ -317,6 +317,55 @@ function dialogFlurry() {
 
 
 
+function dialogMove() {
+	DIALOG_FORM.html(MOVE_WINDOW);
+	$("#moveTargets, label[for=moveTargets]").hide();
+
+	var id = $(this).parent().attr("id"),
+		lookup = lookupByID(SCENE.combatants),
+		target = $("#moveTargets option:selected"),
+		moveForm;
+
+	moveForm = DIALOG_FORM.on("submit", function(event) {
+		event.preventDefault();
+		move(id, target.val());
+	});
+
+	DIALOG.dialog({
+		title: 'Move', autoOpen: false, height: 'auto', width: 'auto', modal: true,
+		buttons: {
+			Move: function() {
+				move(id, target.val());
+			},
+			Cancel: function() {
+				DIALOG.dialog('close');
+			}
+		},
+		close: function() {
+			moveForm[0].reset();
+		}
+	});
+
+	if (lookup[id].getMinRange === 0) $("#move").prop('disabled') = true; // can't Move normally if Engaged
+	$('#moveTargets').Ex3('populate', id, 1); // can't move to a target at range 0, you're already there
+
+	DIALOG.dialog('open');
+}
+
+function dialogMoveType() {
+	var type = $('input[name=moveType]:checked');
+
+	if (type.val() === 'move') $("#moveTargets, label[for=moveTargets]").show();
+}
+
+
+
+
+
+
+
+
+
 function dialogRange() {
 	var id = $(this).attr('id'),
 		range = parseInt($(this).val());

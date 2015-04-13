@@ -14,7 +14,9 @@ $(function() {
 	$('body').on('click', '.debug', dialogDebug);
 	$('body').on('click', '.edit', dialogAddCombatant);
 	$('body').on('click', '.flurry', dialogFlurry);
-	$('body').on('click', '.rangedAttack', dialogAttack);
+	$('body').on('click', '.move', dialogMove);
+	$('body').on('click', '.rangedAttack', dialogAttack);	
+	$('body').on('click', 'input[name=moveType]', dialogMoveType);
 
 	$('body').on('click', '#roll', function() {		
 		var difficulty = $('#difficulty').val(),
@@ -35,37 +37,6 @@ $(function() {
 		doRound();
 
 		RESULTS_WINDOW.append(lookup[id].name + " goes Full Defense!\n");
-	});
-
-	$('body').on('click', '.move', function() {
-		var id = $(this).parent().attr("id"),
-			moveForm;
-
-		DIALOG_FORM.html(MOVE_WINDOW);
-
-		moveForm = DIALOG_FORM.on("submit", function(event) {
-			event.preventDefault();
-			move(id, $("#opponents option:selected").val());
-		});
-
-		DIALOG.dialog({
-			title: 'Move', autoOpen: false, height: 'auto', width: 'auto', modal: true,
-			buttons: {
-				Move: function() {
-					move(id, $("#moveTargets option:selected").val());
-				},
-				Cancel: function() {
-					DIALOG.dialog('close');
-				}
-			},
-			close: function() {
-				moveForm[0].reset();
-			}
-		});
-
-		$('#moveTargets').Ex3('populate', id, 1); // can't move to a target at range 0, you're already there
-
-		DIALOG.dialog('open');
 	});
 
 	$('body').on('click', '.randomize', function() {
@@ -147,7 +118,7 @@ $.extend({alert: function(message, title) {
 
 
 	$.fn.Ex3 = function(action, id, x, y) {
-		var lookup = lookupByID(SCENE.combatants);		
+		var lookup = lookupByID(SCENE.combatants);
 
 		if (action === 'populate') {
 			console.groupCollapsed('populate');
