@@ -308,7 +308,7 @@ function doRound() {
 
 	RESULTS_WINDOW.refresh();
 
-	if (SCENE.combatants.length > 1 && SCENE.isAnybodyOutThere()) {
+	if (SCENE.combatants.length > 1 && SCENE.isAnybodyOutThere() && ROUND > 0) {
 		var whoseTurn = SCENE.whoseTurnIsIt();
 			console.log(">1 combatant detected. Highest tick is",whoseTurn);
 

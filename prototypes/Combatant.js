@@ -283,14 +283,16 @@ Combatant.prototype.mergeRangeBands = function(a) {
 	} console.groupEnd();
 }
 
-Combatant.prototype.getMaxRange = function() {
-	console.groupCollapsed("getMaxRange");
-	var result = Number.MIN_VALUE;
+Combatant.prototype.getRangeMinMax = function(operator) {	
+	var result;
+
+	console.groupCollapsed("getRangeMinMax",operator);
 
 	for (var i in this.vectors) {
-		console.log("this.vectors[i].range.value",this.vectors[i].range.value,"— result",result);
-		if (this.vectors[i].range.value > result) {
-			result = this.vectors[i].range.value;
+		var curVal = this.vectors[i].range.value;
+		console.log("curVal",curVal,"— result",result);
+		if (result === undefined || (operator === '>' && curVal > result) || (operator === '<' && curVal < result)) {
+			result = curVal;
 			console.log("new result is",result);
 		}
 	}
@@ -301,20 +303,10 @@ Combatant.prototype.getMaxRange = function() {
 	return result;
 }
 
+Combatant.prototype.getMaxRange = function() {
+	return this.getRangeMinMax('>');
+}
+
 Combatant.prototype.getMinRange = function() {
-	console.groupCollapsed("getMaxRange");
-	var result = Number.MAX_VALUE;
-
-	for (var i in this.vectors) {
-		console.log("this.vectors[i].range.value",this.vectors[i].range.value,"— result",result);
-		if (this.vectors[i].range.value < result) {
-			result = this.vectors[i].range.value;
-			console.log("new result is",result);
-		}
-	}
-
-	console.log("returning",result);
-	console.groupEnd();
-	
-	return result;
+	return this.getRangeMinMax('<');
 }

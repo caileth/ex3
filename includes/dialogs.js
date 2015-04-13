@@ -42,7 +42,8 @@ function dialogAddCombatant() {
 }
 
 function dialogDebug() {
-	var id = $(this).parent().attr("id");
+	var id = $(this).parent().attr("id"),
+		lookup = lookupByID(SCENE.combatants);
 
 	DIALOG_FORM.html(
 		'<label for="active">Active: </label><input type="checkbox" id="active">' + '<br>' +
