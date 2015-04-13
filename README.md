@@ -6,7 +6,6 @@ Minor:
 - Add a box for stunt descriptions
 - Add confirmation dialog on Join Battle! when battle is already joined
 - Combat landmarks
-- End combat when all combatants are removed
 - Misc Action
 
 Major:
@@ -16,6 +15,7 @@ Major:
   - Disengage
   - Rise From Prone
   - Take Cover
+- Hostile vs. Nonhostile
 - Ranged Attacks
 - Flurry
 - Other Combat Actions

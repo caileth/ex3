@@ -69,11 +69,15 @@ Scene.prototype.printCombatants = function() {
 		stats += '</span><br>';
 		
 		if (current.initiative != undefined) {
-			stats += '<input type="button" class="attack" value="Attack">' +
+			stats += '<input type="button" class="attack" value="Attack"';
+			if (current.getMinRange() != 0) stats += ' disabled';
+			stats += '>' +
 					 '<input type="button" class="rangedAttack" value="Ranged Attack">' +
 					 '<input type="button" class="aim" value="Aim">' +
 					 '<input type="button" class="fullDefense" value="Full Defense"' + (inCrash ? ' disabled' : '') +'>' +
-					 '<input type="button" class="move" value="Move">' +
+					 '<input type="button" class="move" value="Move"';
+			if (current.hasMoved === true) stats += ' disabled';
+			stats += '>' +
 					 '<input type="button" class="flurry" value="Flurry">' +
 					 '<br>';
 		}
@@ -107,6 +111,8 @@ Scene.prototype.resetActiveStatus = function() {
 			current.crashedBy = undefined;
 
 		current.crashedAndWithered = false;
+
+		current.hasMoved = false;
 	}
 };
 
@@ -190,3 +196,39 @@ Scene.prototype.clashAttackCheck = function(tick, attacker) {
 	console.groupEnd();
 	return false;
 };
+
+
+
+
+
+
+
+
+
+function sortByInitiative(a, b) {
+	if (a.getWoundPenalty() != 'dead' && b.getWoundPenalty() === 'dead') return -1;
+	else if (a.getWoundPenalty() === 'dead' && b.getWoundPenalty() != 'dead') return 1;
+	else {
+		if (a.getWoundPenalty() != 'incapacitated' && b.getWoundPenalty() === 'incapacitated') return -1;
+		else if (a.getWoundPenalty() === 'incapacitated' && b.getWoundPenalty() != 'incapacitated') return 1;
+		else {
+			if (a.active && !b.active) return -1;
+			else if (!a.active && b.active) return 1;
+			else {
+				if (a.initiative > b.initiative) return -1;
+				else if (a.initiative < b.initiative) return 1;
+				else return 0;
+			}
+		}
+	}
+}
+
+function sortByTiebreaker(a, b) {
+	if (a.tick > b.tick) return -1;
+	else if (a.tick < b.tick) return 1;
+	else {
+		if (a.tiebreaker > b.tiebreaker) return -1;
+		else if (a.tiebreaker < b.tiebreaker) return 1;
+		else return 0;
+	}
+}

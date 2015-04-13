@@ -24,7 +24,7 @@ function Combatant() {
 	this.healthTrack[-4] = this.healthTrack[3];
 	this.healthTrack.inc = this.healthTrack[4];
 
-	this.ranges = new Array();
+	this.vectors = new Array();
 }
 
 Combatant.prototype.getHealthTrackHTML = function() {
@@ -195,24 +195,25 @@ Combatant.prototype.getWoundPenalty = function() {
 };
 
 Combatant.prototype.getRange = function(a) {
-	for (var i in this.ranges) {
-		if (this.ranges[i].target === a) {
-			console.log("getRange: match! range to",this.ranges[i].target.name,"is",this.ranges[i].range.value);
-			return this.ranges[i].range.value;
+	for (var i in this.vectors) {
+		if (this.vectors[i].target === a) {
+			console.log("getRange: match! range to",this.vectors[i].target.name,"is",this.vectors[i].range.value);
+			return this.vectors[i].range.value;
 		}
 	} console.log("getRange: no match"); return undefined;
 }
 
 Combatant.prototype.getRangeHTML = function() {
 	var result = '';
-	if (this.ranges.length > 0) {
-		result += '<b>Ranges:</b><br>';
-		for (var i in this.ranges) {
-			result += this.ranges[i].target.name;
+	if (this.vectors.length > 0) {
+		result += '<b>Ranges:</b> ';
+		for (var i = 0; i < this.vectors.length; i++) {
+			result += this.vectors[i].target.name;
 			result += ': ';
-			result += this.ranges[i].range.value;
-			result += '<br>';
+			result += this.vectors[i].range.value;
+			result += (i + 1 < this.vectors.length ? '; ' : '');
 		}
+		result += '<br>';
 	}
 	return result;
 };
@@ -229,13 +230,13 @@ Combatant.prototype.setRange = function(a, b) {
 
 	console.group("normal range behavior:");
 	if (oldRange === undefined) {
-		this.ranges.push({target: a, range: newRange});
-		a.ranges.push({target: this, range: newRange});
-		console.log("range is undefined; pushing new ranges for both combatants");
-	} else for (var i in this.ranges) {
+		this.vectors.push({target: a, range: newRange});
+		a.vectors.push({target: this, range: newRange});
+		console.log("range is undefined; pushing new vectors for both combatants");
+	} else for (var i in this.vectors) {
 		console.log("range exists; setting to",b);
-		if (this.ranges[i].target === a)
-			this.ranges[i].range.value = b;
+		if (this.vectors[i].target === a)
+			this.vectors[i].range.value = b;
 	} console.groupEnd();
 	
 	if (oldRange != 0 && b === 0)
@@ -246,14 +247,14 @@ Combatant.prototype.setRange = function(a, b) {
 
 Combatant.prototype.refreshRangeBands = function() {
 	console.group("moving out of zero range:");
-	for (var i in this.ranges) {
-		var currentRange = this.ranges[i];
+	for (var i in this.vectors) {
+		var currentRange = this.vectors[i];
 		if (currentRange.range.value != 0) {
 			var refresh = {value: currentRange.range.value};
 			console.log("refreshing current range");
 			currentRange.range = refresh;
-			for (var j in currentRange.target.ranges) {
-				var targetRange = currentRange.target.ranges[j];
+			for (var j in currentRange.target.vectors) {
+				var targetRange = currentRange.target.vectors[j];
 				if (targetRange.target === this) {
 					console.log("refreshing target range");
 					targetRange.range = refresh;
@@ -265,16 +266,16 @@ Combatant.prototype.refreshRangeBands = function() {
 
 Combatant.prototype.mergeRangeBands = function(a) {
 	console.group("moving into zero range");
-	for (var i in this.ranges) {
-		for (var j in a.ranges) {
-			if (this.ranges[i].target === a.ranges[j].target) {
-				console.log("matching this.ranges to a.ranges");
-				this.ranges[i].range = a.ranges[j].range;
-				var target = this.ranges[i].target;
-				for (var k in target.ranges) {
-					console.log("matching target ranges to a.ranges");
-					if (target.ranges[k].target === this) {
-						target.ranges[k].range = a.ranges[j].range;
+	for (var i in this.vectors) {
+		for (var j in a.vectors) {
+			if (this.vectors[i].target === a.vectors[j].target) {
+				console.log("matching this.vectors to a.vectors");
+				this.vectors[i].range = a.vectors[j].range;
+				var target = this.vectors[i].target;
+				for (var k in target.vectors) {
+					console.log("matching target vectors to a.vectors");
+					if (target.vectors[k].target === this) {
+						target.vectors[k].range = a.vectors[j].range;
 					}
 				}
 			}
@@ -286,10 +287,9 @@ Combatant.prototype.getMaxRange = function() {
 	console.groupCollapsed("getMaxRange");
 	var result = Number.MIN_VALUE;
 
-	for (var i in this.ranges) {
-		console.log("this.ranges[i].range.value",this.ranges[i].range.value,"&mdash; result",result);
-		if (this.ranges[i].range.value > result) {
-			result = this.ranges[i].range.value;
+	for (var i in this.vectors) {
+		if (this.vectors[i].range.value > result) {
+			result = this.vectors[i].range.value;
 			console.log("new result is",result);
 		}
 	}
@@ -304,10 +304,9 @@ Combatant.prototype.getMinRange = function() {
 	console.groupCollapsed("getMaxRange");
 	var result = Number.MAX_VALUE;
 
-	for (var i in this.ranges) {
-		console.log("this.ranges[i].range.value",this.ranges[i].range.value,"&mdash; result",result);
-		if (this.ranges[i].range.value < result) {
-			result = this.ranges[i].range.value;
+	for (var i in this.vectors) {
+		if (this.vectors[i].range.value < result) {
+			result = this.vectors[i].range.value;
 			console.log("new result is",result);
 		}
 	}
