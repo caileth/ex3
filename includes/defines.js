@@ -78,11 +78,11 @@ var DEBUG_WINDOW =	'<label for="active">Active: </label><input type="checkbox" i
 var FLURRY_WINDOW =	'<img src="http://wac.450f.edgecastcdn.net/80450F/thefw.com/files/2012/07/Pie-Mcflurry.png" alt="SEE WHAT I DID THERE" id="mcFlurry">';
 
 var MOVE_WINDOW =	'<label for="moveType">Action:</label>' +
-					'<input type="radio" name="moveType" value="move" id="move">Move' +
-					'<input type="radio" name="moveType" value="rush" id="rush">Rush' +
-					'<input type="radio" name="moveType" value="disengage" id="disengage">Disengage' +
-					'<input type="radio" name="moveType" value="riseFromProne" id="riseFromProne">Rise from Prone' +
-					'<input type="radio" name="moveType" value="takeCover" id="takeCover">Take Cover' +
+					'<input type="radio" name="moveType" value="move" id="move"><label for="move">Move</label>' +
+					'<input type="radio" name="moveType" value="rush" id="rush"><label for="rush">Rush</label>' +
+					'<input type="radio" name="moveType" value="disengage" id="disengage"><label for="disengage">Disengage</label>' +
+					'<input type="radio" name="moveType" value="riseFromProne" id="riseFromProne"><label for="riseFromProne">Rise from Prone</label>' +
+					'<input type="radio" name="moveType" value="takeCover" id="takeCover"><label for="takeCover">Take Cover</label>' +
 					'<br><label for="moveTargets">Target:</label><select id="moveTargets"></select>';
 
 var STATS_WINDOW =	'<input type="text" id="name" placeholder="New Player" autofocus>' +

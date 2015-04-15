@@ -318,24 +318,22 @@ function dialogFlurry() {
 
 
 function dialogMove() {
-	DIALOG_FORM.html(MOVE_WINDOW);
-	$("#moveTargets, label[for=moveTargets]").hide();
-
 	var id = $(this).parent().attr("id"),
 		lookup = lookupByID(SCENE.combatants),
-		target = $("#moveTargets option:selected"),
-		moveForm;
-
-	moveForm = DIALOG_FORM.on("submit", function(event) {
-		event.preventDefault();
-		move(id, target.val());
-	});
+		moveForm = DIALOG_FORM.on("submit", function(event) {
+			event.preventDefault();
+			move(id, $("#moveTargets option:selected").val());
+		});
+	
+	DIALOG_FORM.html(MOVE_WINDOW);
+	
+	$("#moveTargets, label[for=moveTargets]").hide();
 
 	DIALOG.dialog({
 		title: 'Move', autoOpen: false, height: 'auto', width: 'auto', modal: true,
 		buttons: {
 			Move: function() {
-				move(id, target.val());
+				move(id, $("#moveTargets option:selected").val());
 			},
 			Cancel: function() {
 				DIALOG.dialog('close');
@@ -346,7 +344,7 @@ function dialogMove() {
 		}
 	});
 
-	if (lookup[id].getMinRange === 0) $("#move").prop('disabled') = true; // can't Move normally if Engaged
+	if (lookup[id].getMaxRange() < 1) $("#move, label[for=move]").hide(); // can't Move normally if Engaged
 	$('#moveTargets').Ex3('populate', id, 1); // can't move to a target at range 0, you're already there
 
 	DIALOG.dialog('open');
