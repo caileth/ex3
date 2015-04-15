@@ -368,8 +368,11 @@ function dialogRange() {
 	var id = $(this).attr('id'),
 		range = parseInt($(this).val());
 
-	range = Math.max(range, RANGE_TRACK.length + 1);
-	$('label[for=' + id + ']').html(RANGE_TRACK[range]);
+	console.log("dialogRange, id",id,"range",range);
+	range = Math.min(range, RANGE_TRACK.length);
+	console.log("displayed range",range,RANGE_TRACK[range]);
+
+	$('label[for="' + id + '"]').html(RANGE_TRACK[range]);
 }
 
 
