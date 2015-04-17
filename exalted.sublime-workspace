@@ -4,60 +4,24 @@
 		"selected_items":
 		[
 			[
-				"eva",
-				"evalStr"
+				"pro",
+				"prop"
 			],
 			[
-				"Com",
-				"Combatant"
+				"getM",
+				"getMinRange"
 			],
 			[
-				"curren",
-				"currentRange"
+				"pop",
+				"populateExtra"
 			],
 			[
-				"setRan",
-				"setRangeFromZero"
-			],
-			[
-				"group",
+				"gro",
 				"groupCollapsed"
 			],
 			[
-				"setRa",
-				"setRangeUndefined"
-			],
-			[
-				"new",
-				"newRanges"
-			],
-			[
-				"target",
-				"targetInitiativeIsSet"
-			],
-			[
-				"targ",
-				"targetInitiativeIsSet"
-			],
-			[
-				"max",
-				"maxRange"
-			],
-			[
-				"fun",
-				"function"
-			],
-			[
-				"sort",
-				"sortRange"
-			],
-			[
-				"pro",
-				"prototype"
-			],
-			[
-				"random",
-				"randomVal"
+				"b",
+				"b"
 			],
 			[
 				"DIA",
@@ -69,6 +33,10 @@
 			],
 			[
 				"comb",
+				"combatants"
+			],
+			[
+				"Com",
 				"combatants"
 			],
 			[
@@ -106,6 +74,10 @@
 			[
 				"pen",
 				"pendingAttacks"
+			],
+			[
+				"group",
+				"groupCollapsed"
 			],
 			[
 				"damage",
@@ -192,6 +164,14 @@
 				"source"
 			],
 			[
+				"target",
+				"targetDefense"
+			],
+			[
+				"targ",
+				"targetDefense"
+			],
+			[
 				"DEF",
 				"DEFAULT_HEALTH_TRACK"
 			],
@@ -214,6 +194,10 @@
 			[
 				"chek",
 				"checked"
+			],
+			[
+				"random",
+				"randomNumber"
 			],
 			[
 				"name",
@@ -356,12 +340,20 @@
 				"sourceID"
 			],
 			[
+				"sort",
+				"sortByTiebreaker"
+			],
+			[
 				"pending",
 				"pendingAttacks"
 			],
 			[
 				"Pen",
 				"PendingAttack"
+			],
+			[
+				"curren",
+				"currentInitiative"
 			],
 			[
 				"weapon",
@@ -390,6 +382,10 @@
 			[
 				"results",
 				"resultsWindow"
+			],
+			[
+				"new",
+				"newTiebreaker"
 			],
 			[
 				"ti",
@@ -514,16 +510,20 @@
 			[
 				"numWo",
 				"numWordGroups"
+			],
+			[
+				"num",
+				"numTemplateGroups"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "includes/randomCrap.js",
+			"file": "index.php",
 			"settings":
 			{
-				"buffer_size": 3863,
+				"buffer_size": 3384,
 				"line_ending": "Windows"
 			}
 		},
@@ -531,18 +531,16 @@
 			"file": "exalted.js",
 			"settings":
 			{
-				"buffer_size": 6433,
+				"buffer_size": 5808,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"contents": "Searching 23 files for \"addNone\"\n\nD:\\Documents\\GitHub\\ex3\\exalted.js:\n  154  				console.log('clearing out existing entries');\n  155  \n  156: 			if (x === 'addNone') this.append('<option value=\"undefined\">None</option>');\n  157  \n  158  			if (lookup[id].shiftTarget != undefined && this.attr('id') === 'opponents') {\n\nD:\\Documents\\GitHub\\ex3\\includes\\dialogs.js:\n   76  \n   77  	$(\"#dialog-form :input\").Ex3('getStats', id);\n   78: 	$(\"#crashedBy\").Ex3('populate', id, 'addNone');\n   79: 	$(\"#shiftTarget\").Ex3('populate', id, 'addNone');\n   80  \n   81  	DIALOG.dialog(\"open\");\n\n3 matches across 2 files\n\n\nSearching 23 files for \"'rangedAttack'\"\n\nD:\\Documents\\GitHub\\ex3\\exalted.js:\n  148  			console.groupCollapsed('populate');\n  149  \n  150: 			var maxRange = (x === 'rangedAttack' ? lookup[id].getMaxRange() : 0);\n  151  			console.log('maxRange:',maxRange);\n  152  \n  ...\n  177  							(lookup[id].shiftTarget	=== lookup[i] ? '&raquo; ' : '') +\n  178  							lookup[i].name +\n  179: 							(range != undefined && x === 'rangedAttack' ? ' (' + range + ')' : '') +\n  180  							'</option>');\n  181  					} else {\n\n2 matches in 1 file\n\n\nSearching 23 files for \"populate\"\n\nD:\\Documents\\GitHub\\ex3\\exalted.js:\n   59  		});\n   60  \n   61: 		$('#moveTargets').Ex3('populate', id);\n   62  \n   63  		DIALOG.dialog('open');\n   ..\n  145  		var lookup = lookupByID(SCENE.combatants);		\n  146  \n  147: 		if (action === 'populate') {\n  148: 			console.groupCollapsed('populate');\n  149  \n  150  			var maxRange = (x === 'rangedAttack' ? lookup[id].getMaxRange() : 0);\n\nD:\\Documents\\GitHub\\ex3\\includes\\charms.js:\n  584  		'duration': 'One scene',\n  585  		'prereqs': 'Sensory Acuity Prana',\n  586: 		'desc': 'The Exalt’s sense of taste and smell are capable of flawless identification of flavors, textures, and scent profiles. This Charm represents an array of mechanical benefits, as well as two distinct functions of the senses taste and smell. The Solar can recognize an individual by scent alone, and she can tell older scents from new ones, enabling her to tell how recently an individual was present. Add +2 successes to Survival rolls to hunt for food, track a character, or find water, using her sense of smell. This Charm automatically extends the range of these actions to (Essence * 200) yards.	This Charm also creates a library of scents which your character can reference. Upon learning this Charm, the library is populated with the scents of any Major or Defining intimacy the character may have, but it can also include scents outside the confines of intimacies if the Storyteller deems them reasonable, including any scent the character has encountered in the last 24 hours, the smell of a favorite food or drink, or scents linked to strong memories such as love or pain. Entries in a Solar’s scent library can be used to aid in Investigation and Survival rolls, as well as in the smell-based Awareness Charms further up the tree.	This Charm also creates a taste index. Similar to the scent library, the taste index allows the Exalt to immediately recognize any taste she has experienced within the realm of reason. The Solar can identify obscure, complex, or similar flavors, she can deconstruct a meal she has eaten to its basic ingredients, so long as she has experienced most of the flavors at some point in time. The taste index isn’t populated the same way as the scent library; most characters do not have Major or Defining intimacies for flavors. Rather, the Solar may perfectly recognize any flavor the Storyteller considers reasonable. If the character has been a master chef all of her life, her palate is going to be considerably more robust than that of an islander with little contact with the outside world. Conversely, those who have lived or traveled in remote locations may have had access to rare and exotic food, drink, and poison.	This Charm follows the special activation rules of Keen Sight Technique.'\n  587  	}, {\n  588  		'name': 'Genius Palate Summation',\n\nD:\\Documents\\GitHub\\ex3\\includes\\dialogs.js:\n   76  \n   77  	$(\"#dialog-form :input\").Ex3('getStats', id);\n   78: 	$(\"#crashedBy\").Ex3('populate', id, undefined);\n   79: 	$(\"#shiftTarget\").Ex3('populate', id, undefined);\n   80  \n   81  	DIALOG.dialog(\"open\");\n   ..\n  206  		});\n  207  \n  208: 		$(\"#aimTargets\").Ex3('populate', id, 0);\n  209  \n  210  		DIALOG.dialog(\"open\");\n  ...\n  259  			}\n  260  		});\n  261: 		$(\"#opponents\").Ex3('populate', id, x, y);\n  262  		$(\"#attackTick\").Ex3('getDelayTicks', id);\n  263  \n\n9 matches across 3 files\n\n\nSearching 23 files for \"populate\"\n\nD:\\Documents\\GitHub\\ex3\\exalted.js:\n   59  		});\n   60  \n   61: 		$('#moveTargets').Ex3('populate', id, 1);\n   62  \n   63  		DIALOG.dialog('open');\n   ..\n  145  		var lookup = lookupByID(SCENE.combatants);		\n  146  \n  147: 		if (action === 'populate') {\n  148: 			console.groupCollapsed('populate');\n  149  \n  150  			var maxRange = (x === 'rangedAttack' ? lookup[id].getMaxRange() : 0);\n\nD:\\Documents\\GitHub\\ex3\\includes\\charms.js:\n  584  		'duration': 'One scene',\n  585  		'prereqs': 'Sensory Acuity Prana',\n  586: 		'desc': 'The Exalt’s sense of taste and smell are capable of flawless identification of flavors, textures, and scent profiles. This Charm represents an array of mechanical benefits, as well as two distinct functions of the senses taste and smell. The Solar can recognize an individual by scent alone, and she can tell older scents from new ones, enabling her to tell how recently an individual was present. Add +2 successes to Survival rolls to hunt for food, track a character, or find water, using her sense of smell. This Charm automatically extends the range of these actions to (Essence * 200) yards.	This Charm also creates a library of scents which your character can reference. Upon learning this Charm, the library is populated with the scents of any Major or Defining intimacy the character may have, but it can also include scents outside the confines of intimacies if the Storyteller deems them reasonable, including any scent the character has encountered in the last 24 hours, the smell of a favorite food or drink, or scents linked to strong memories such as love or pain. Entries in a Solar’s scent library can be used to aid in Investigation and Survival rolls, as well as in the smell-based Awareness Charms further up the tree.	This Charm also creates a taste index. Similar to the scent library, the taste index allows the Exalt to immediately recognize any taste she has experienced within the realm of reason. The Solar can identify obscure, complex, or similar flavors, she can deconstruct a meal she has eaten to its basic ingredients, so long as she has experienced most of the flavors at some point in time. The taste index isn’t populated the same way as the scent library; most characters do not have Major or Defining intimacies for flavors. Rather, the Solar may perfectly recognize any flavor the Storyteller considers reasonable. If the character has been a master chef all of her life, her palate is going to be considerably more robust than that of an islander with little contact with the outside world. Conversely, those who have lived or traveled in remote locations may have had access to rare and exotic food, drink, and poison.	This Charm follows the special activation rules of Keen Sight Technique.'\n  587  	}, {\n  588  		'name': 'Genius Palate Summation',\n\nD:\\Documents\\GitHub\\ex3\\includes\\dialogs.js:\n   76  \n   77  	$(\"#dialog-form :input\").Ex3('getStats', id);\n   78: 	$(\"#crashedBy\").Ex3('populate', id, undefined);\n   79: 	$(\"#shiftTarget\").Ex3('populate', id, undefined);\n   80  \n   81  	DIALOG.dialog(\"open\");\n   ..\n  206  		});\n  207  \n  208: 		$(\"#aimTargets\").Ex3('populate', id, 0);\n  209  \n  210  		DIALOG.dialog(\"open\");\n  ...\n  259  			}\n  260  		});\n  261: 		$(\"#opponents\").Ex3('populate', id, x, y);\n  262  		$(\"#attackTick\").Ex3('getDelayTicks', id);\n  263  \n\n9 matches across 3 files\n\n\nSearching 23 files for \"mdash\"\n\nD:\\Documents\\GitHub\\ex3\\includes\\combat.js:\n  153  		first.onslaught += CLASH_PENALTY;\n  154  	} else {\n  155: 		RESULTS_WINDOW.append(first.name+\" and \"+second.name+\" Clash&mdash;but it's indecisive!\\n\");\n  156  		RESULTS_WINDOW.append(\"Clash indecisive!\\n\");\n  157  	}\n\nD:\\Documents\\GitHub\\ex3\\prototypes\\Combatant.js:\n  289  \n  290  	for (var i in this.vectors) {\n  291: 		console.log(\"this.vectors[i].range.value\",this.vectors[i].range.value,\"&mdash; result\",result);\n  292  		if (this.vectors[i].range.value > result) {\n  293  			result = this.vectors[i].range.value;\n  ...\n  307  \n  308  	for (var i in this.vectors) {\n  309: 		console.log(\"this.vectors[i].range.value\",this.vectors[i].range.value,\"&mdash; result\",result);\n  310  		if (this.vectors[i].range.value < result) {\n  311  			result = this.vectors[i].range.value;\n\n3 matches across 2 files\n",
+			"file": "includes/defines.js",
 			"settings":
 			{
-				"buffer_size": 8832,
-				"line_ending": "Windows",
-				"name": "Find Results",
-				"scratch": true
+				"buffer_size": 8660,
+				"line_ending": "Windows"
 			}
 		},
 		{
@@ -554,26 +552,26 @@
 			}
 		},
 		{
-			"file": "includes/defines.js",
+			"file": "includes/dialogs.js",
 			"settings":
 			{
-				"buffer_size": 8035,
+				"buffer_size": 10018,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "includes/utils.js",
+			"file": "README.md",
 			"settings":
 			{
-				"buffer_size": 3398,
+				"buffer_size": 890,
 				"line_ending": "Windows"
 			}
 		},
 		{
-			"file": "index.php",
+			"file": "includes/combat.js",
 			"settings":
 			{
-				"buffer_size": 3384,
+				"buffer_size": 12823,
 				"line_ending": "Windows"
 			}
 		},
@@ -582,30 +580,6 @@
 			"settings":
 			{
 				"buffer_size": 7321,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "includes/dialogs.js",
-			"settings":
-			{
-				"buffer_size": 8983,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "includes/combat.js",
-			"settings":
-			{
-				"buffer_size": 12652,
-				"line_ending": "Windows"
-			}
-		},
-		{
-			"file": "README.md",
-			"settings":
-			{
-				"buffer_size": 823,
 				"line_ending": "Windows"
 			}
 		}
@@ -647,32 +621,24 @@
 	},
 	"expanded_folders":
 	[
-		"/D/Documents/GitHub/ex3",
-		"/D/Documents/GitHub/ex3/includes",
-		"/D/Documents/GitHub/ex3/json",
-		"/D/Documents/GitHub/ex3/prototypes"
+		"/C/Users/Justin/Documents/GitHub/ex3",
+		"/C/Users/Justin/Documents/GitHub/ex3/includes",
+		"/C/Users/Justin/Documents/GitHub/ex3/json",
+		"/C/Users/Justin/Documents/GitHub/ex3/prototypes"
 	],
 	"file_history":
 	[
-		"/D/Documents/GitHub/ex3/includes/charms.js",
-		"/D/Documents/GitHub/ex3/exalted.js",
-		"/D/Documents/GitHub/ex3/includes/randomCrap.js",
-		"/D/Documents/GitHub/ex3/prototypes/prototypes.js",
-		"/D/Documents/GitHub/ex3/prototypes/Combatant.js",
-		"/D/Documents/GitHub/ex3/prototypes/Scene.js",
-		"/D/Documents/GitHub/ex3/index.php",
-		"/D/Documents/GitHub/ex3/includes/utils.js",
-		"/D/Documents/GitHub/ex3/includes/dialogs.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/includes/randomCrap.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/includes/prototypes.js",
 		"/D/Documents/GitHub/ex3/includes/prototypes.js",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Victoria 2/mod/KMod/history/provinces/soviet/677 - Balti.txt",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Victoria 2/mod/KMod/history/provinces/soviet/678 - Izmail.txt",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Victoria 2/mod/KMod/history/provinces/soviet/676 - Chisinau.txt",
-		"/C/Program Files/AMD/CIM/Reports/Report.xml",
-		"/D/Documents/Paradox Interactive/Hearts of Iron III/settings.txt",
-		"/C/Users/Justin/Desktop/insurance",
 		"/D/Documents/GitHub/ex3/README.md",
+		"/D/Documents/GitHub/ex3/exalted.js",
 		"/D/Documents/GitHub/ex3/includes/defines.js",
+		"/D/Documents/GitHub/ex3/index.php",
+		"/D/Documents/GitHub/ex3/includes/dialogs.js",
+		"/D/Documents/Paradox Interactive/Hearts of Iron III/settings.txt",
 		"/D/Documents/GitHub/ex3/includes/combat.js",
+		"/D/Documents/GitHub/ex3/includes/utils.js",
 		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/cm_charlemagne_story_events.txt",
 		"/D/Documents/GitHub/ex3/includes/exalted-defines.js",
 		"/D/Documents/GitHub/ex3/includes/exalted-charms.js",
@@ -781,7 +747,15 @@
 		"/C/Users/Justin/AppData/Local/Temp/scp10040/home/calith/hw.caletges.com/index.php",
 		"/C/Program Files (x86)/Steam/skins/skins_readme.txt",
 		"/C/Users/Justin/AppData/Local/Temp/scp06404/home/calith/hw.caletges.com/index.php",
-		"/C/Users/Justin/AppData/Local/Temp/scp06551/home/calith/hw.caletges.com/index2.php"
+		"/C/Users/Justin/AppData/Local/Temp/scp06551/home/calith/hw.caletges.com/index2.php",
+		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/decisions/realm_decisions.txt",
+		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod/common/cb_types/00_cb_types.txt",
+		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/events/soa_jewish_events.txt",
+		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod/history/characters/GMod.txt",
+		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/common/traits/02_traits.txt",
+		"/D/Documents/Paradox Interactive/Crusader Kings II/mod/GMod.mod",
+		"/C/Users/Justin/Desktop/Vector Smart Object.html",
+		"/C/Users/Justin/AppData/Local/Temp/scp32815/home/calith/hw.caletges.com/index.php"
 	],
 	"find":
 	{
@@ -792,6 +766,7 @@
 		"height": 90.0,
 		"where_history":
 		[
+			"",
 			"D:\\Documents\\GitHub\\ex3",
 			""
 		]
@@ -801,134 +776,134 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"getRange",
-			"currentRange",
-			"doRound",
-			"debug",
-			"value",
-			"this.vectors[i].range.value",
-			">",
-			"join",
-			"move",
-			"attack",
-			"dialogMove",
-			"move",
-			"resetActive",
-			"doRound",
-			"maxRange:",
-			"y",
-			"x",
-			"mdash",
-			"getMaxRange",
-			"getMax",
-			"maxRange",
-			"populate",
-			"populateExtra",
-			"rangedAttack",
-			"'rangedAttack'",
-			"'addNone'",
-			"addNone",
-			"extra",
-			"print",
-			"hostile",
-			"sort",
-			"hostile",
-			"				\n",
-			"autoOpen",
-			"DIALOG.dialog",
-			"dialogRange",
-			"Range",
-			"range",
-			"recordStats",
-			"record",
-			"dialogRange",
-			"lookup",
-			" +\n",
-			" +",
-			"' + '",
-			"	for (var i in SCENE.combatants) {\n		var lookup = lookupByID(SCENE.combatants),\n			them = SCENE.combatants[i],\n			us = lookup[id];\n\n		if (us != them) {\n			DIALOG_FORM.append(\n				'<br>\\n' + them.name + ': ' + 'Range ' +\n				'<input type=\"number\" class=\"range\" id=\"range-' + them.id + '\" value=\"1\" min=\"0\" max=\"4\">' +\n				'<label for=\"range-' + them.id + '\">Short</label>, ' +\n				'<label for=\"hostile\">Hostile?</label>' +\n				'<input type=\"checkbox\" id=\"hostile\">');\n		}\n	}",
-			"for (var i in SCENE.combatants) {\n			var lookup = lookupByID(SCENE.combatants),\n				them = SCENE.combatants[i],\n				us = lookup[id];\n	\n			if (us != them) {\n				DIALOG_FORM.append(\n					'<br>\\n' + them.name + ': ' + 'Range ' +\n					'<input type=\"number\" class=\"range\" id=\"range-' + them.id + '\" value=\"1\" min=\"0\" max=\"4\">' +\n					'<label for=\"range-' + them.id + '\">Short</label>, ' +\n					'<label for=\"hostile\">Hostile?</label>' +\n					'<input type=\"checkbox\" id=\"hostile\">');\n			}\n		}",
-			"		for (var i in SCENE.combatants) {\n			var lookup = lookupByID(SCENE.combatants),\n				them = SCENE.combatants[i],\n				us = lookup[id];\n	\n			if (us != them) {\n				DIALOG_FORM.append(\n					'<br>\\n' + them.name + ': ' + 'Range ' +\n					'<input type=\"number\" class=\"range\" id=\"range-' + them.id + '\" value=\"1\" min=\"0\" max=\"4\">' +\n					'<label for=\"range-' + them.id + '\">Short</label>, ' +\n					'<label for=\"hostile\">Hostile?</label>' +\n					'<input type=\"checkbox\" id=\"hostile\">');\n			}\n		}",
-			"checkbox",
-			"hostile",
-			"remove",
-			"vectors",
-			"ranges",
-			"move",
-			"\"",
-			"k",
-			"range",
-			"remove",
-			"dialogR",
-			"remove",
-			"\"",
-			"doPicker",
-			"picker",
-			"doPicker",
-			"\"",
-			"joinBattle",
-			"[i]",
-			"i",
-			"recordStats",
-			"editCombatant",
-			"recordStats",
-			"editCom",
-			"editCombatant(",
-			"recordStats",
-			"(",
-			"editCombatant",
-			"editCombatant(",
-			"editCombatant",
-			"editClose",
-			"addClose",
-			"print",
-			"addButtons",
-			"322",
-			"addCombatant",
-			"close",
-			"debug",
-			".attack",
-			".move",
-			".edit",
-			".move",
-			"debug",
-			"edit",
-			"move",
-			"/>",
-			"setRangeFromZero",
-			"in this.ranges",
-			"setRange",
-			"this.getRange(a)",
+			"eval",
 			"evalStr",
-			"stat,type,evalStr",
-			"thisRange",
-			"this.ranges[i]",
-			"oldRange",
-			"getHealthTrackHTML",
-			"health",
-			" ",
-			"newRange",
-			"this.getRange(a)",
-			"setRange",
-			"maxRange",
-			"prototypes.js",
-			"protoypes",
-			"\n\n	this.",
-			"	this.",
-			"print",
+			"eval(evalStr)",
+			"eval",
+			"moveTargets",
+			"radio",
+			"id",
+			"$(\"#moveTargets option:selected\")",
+			"opponents",
+			"$(\"#opponents option:selected\")",
+			"lookup",
+			"move",
+			"id=\"move\"",
+			"move",
+			"ranges",
+			"extra",
+			"ranged",
+			"rangeAttack",
+			"lookup[i]",
+			"lookup[id]",
+			"This",
+			"bIsThis",
+			"aIsThis",
+			"range.a === lookup[id]",
+			"range",
+			"SCENE.ranges.j",
 			"attack",
-			"Attack",
+			"range",
+			"this",
+			"includes",
+			"range",
+			"X",
+			"-50",
+			"translate",
+			"Y",
+			"this",
+			"SCENE.combatants.i",
 			"\"",
-			"addNone",
-			"\"",
-			"addBlank",
+			"STATS_WINDOW",
+			"addCombatant",
+			"getName",
+			"	this.",
+			"this.",
+			"	this.",
+			"crashedBy",
+			"shiftingVersus",
+			"editClose",
+			"shiftingAgainst",
+			"crashedBy",
+			"/>",
+			"combatant",
+			"/>",
+			"Full Defense",
+			"isShifting",
+			"initiative shift",
+			"initiative",
+			"group",
+			"resolveWitheringDamage",
+			"attacker",
+			"shift",
+			"resetActiveStatus",
+			"reset",
+			"crashedBy",
+			"shift",
+			"shiftTarget",
+			"Attack Button",
+			"opponents",
+			"ATTACK_WINDOW",
+			"attack",
+			"shift",
+			"doRound",
+			"generateID",
+			"health",
+			"scene",
+			"reset",
+			"url(",
+			"includes",
+			"json",
+			"./exalted-",
+			"doRound",
+			"round",
+			"print",
+			"damage",
+			"disabled",
+			"join",
+			"doRound",
+			"addCombatant",
+			"printCombatants",
+			"doRound",
+			"print",
+			"reset scene",
+			"addCombatant",
+			"APPEND",
 			"populate",
-			"sourceIsNotTarget",
-			"sortRange",
-			"sortbyInitiative",
-			"sort",
-			"i",
-			"for"
+			"opponents",
+			".aim",
+			"print",
+			"print combat",
+			"Attack",
+			"attackForm",
+			"fullDef",
+			"Full Def",
+			"defend",
+			"'getStats'",
+			"this",
+			"SCENE.combatants[i]",
+			"join",
+			"reroll",
+			"hardness",
+			"full",
+			"defense",
+			"onslaught",
+			"attack",
+			"iterateCrashCounter",
+			"resetActiveStatus",
+			"resetOnslaught",
+			"onslaught",
+			"checkWithering",
+			"resolveClash",
+			"clash",
+			"initiative break",
+			"round",
+			"crashRec",
+			"INITIATIVE_RESET_VALUE",
+			"reset",
+			"crashedRound",
+			"initiative break",
+			"break"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -936,12 +911,6 @@
 		"regex": false,
 		"replace_history":
 		[
-			"undefined",
-			"vectors",
-			"closeEdit",
-			"closeAdd",
-			">",
-			"sortByInitiative",
 			">",
 			"ROUND",
 			"\\1[\\2\\3],",
@@ -990,36 +959,36 @@
 	"groups":
 	[
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "includes/randomCrap.js",
+					"file": "index.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3863,
+						"buffer_size": 3384,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2230,
-								2230
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 924.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1028,15 +997,44 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6433,
+						"buffer_size": 5808,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								645,
-								645
+								4548,
+								4548
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": -0.0,
+						"translation.y": 784.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "includes/defines.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8660,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4685,
+								4685
 							]
 						],
 						"settings":
@@ -1045,156 +1043,10 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 897.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 8832,
-						"regions":
-						{
-							"match":
-							{
-								"flags": 112,
-								"regions":
-								[
-									[
-										156,
-										163
-									],
-									[
-										471,
-										478
-									],
-									[
-										529,
-										536
-									],
-									[
-										770,
-										784
-									],
-									[
-										1024,
-										1038
-									],
-									[
-										1264,
-										1272
-									],
-									[
-										1413,
-										1421
-									],
-									[
-										1460,
-										1468
-									],
-									[
-										2419,
-										2427
-									],
-									[
-										3348,
-										3356
-									],
-									[
-										4128,
-										4136
-									],
-									[
-										4186,
-										4194
-									],
-									[
-										4310,
-										4318
-									],
-									[
-										4430,
-										4438
-									],
-									[
-										4664,
-										4672
-									],
-									[
-										4816,
-										4824
-									],
-									[
-										4863,
-										4871
-									],
-									[
-										5822,
-										5830
-									],
-									[
-										6751,
-										6759
-									],
-									[
-										7531,
-										7539
-									],
-									[
-										7589,
-										7597
-									],
-									[
-										7713,
-										7721
-									],
-									[
-										7833,
-										7841
-									],
-									[
-										8149,
-										8154
-									],
-									[
-										8423,
-										8428
-									],
-									[
-										8681,
-										8686
-									]
-								],
-								"scope": ""
-							}
-						},
-						"selection":
-						[
-							[
-								8425,
-								8425
-							]
-						],
-						"settings":
-						{
-							"detect_indentation": false,
-							"line_numbers": false,
-							"output_tag": 5,
-							"result_base_dir": "",
-							"result_file_regex": "^([A-Za-z\\\\/<].*):$",
-							"result_line_regex": "^ +([0-9]+):",
-							"scroll_past_end": true,
-							"syntax": "Packages/Default/Find Results.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 2086.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 6,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1210,8 +1062,8 @@
 						"selection":
 						[
 							[
-								8292,
-								8292
+								6592,
+								6592
 							]
 						],
 						"settings":
@@ -1220,94 +1072,95 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3730.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "includes/dialogs.js",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10018,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4196,
+								4196
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1607.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "includes/defines.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 8035,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								200,
-								200
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 84.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
 					"buffer": 5,
-					"file": "includes/utils.js",
+					"file": "README.md",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3398,
+						"buffer_size": 890,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								593,
-								593
+								890,
+								890
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/Markdown/Markdown.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 6,
-					"file": "index.php",
-					"semi_transient": true,
+					"file": "includes/combat.js",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 3384,
+						"buffer_size": 12823,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1795,
-								1795
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 351.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 7,
@@ -1326,114 +1179,20 @@
 						"selection":
 						[
 							[
-								4600,
-								4600
+								0,
+								0
 							]
 						],
 						"settings":
 						{
 							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
 							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 1553.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 1,
-			"sheets":
-			[
-				{
-					"buffer": 8,
-					"file": "includes/dialogs.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 8983,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1170,
-								1170
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 462.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
-					"file": "includes/combat.js",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 12652,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								11437,
-								11437
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 3972.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 10,
-					"file": "README.md",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 823,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								148,
-								148
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Markdown/Markdown.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 5,
 					"type": "text"
 				}
 			]
@@ -1456,12 +1215,6 @@
 				0,
 				1,
 				1
-			],
-			[
-				0,
-				1,
-				1,
-				2
 			]
 		],
 		"cols":
@@ -1472,7 +1225,6 @@
 		"rows":
 		[
 			0.0,
-			0.430671239589,
 			1.0
 		]
 	},
@@ -1485,7 +1237,7 @@
 	"project": "exalted.sublime-project",
 	"replace":
 	{
-		"height": 82.0
+		"height": 62.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1519,11 +1271,11 @@
 	"settings":
 	{
 	},
-	"show_minimap": true,
+	"show_minimap": false,
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 195.0,
+	"side_bar_width": 186.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

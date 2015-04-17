@@ -132,8 +132,7 @@ function recordStats(id) {
 	console.log(DIALOG_FORM_INPUTS);
 
 	DIALOG_FORM_INPUTS.each(function() {
-		var evalStr,
-			stat = $(this).attr('id'),
+		var stat = $(this).attr('id'),
 			type = $(this).attr('type'),
 			value = $(this).val();
 
@@ -152,17 +151,15 @@ function recordStats(id) {
 			lookup[id].shiftTarget = lookup[value];
 		else if (stat) {
 			if (type === "text") {
-				evalStr = "lookup['"+id+"']."+stat+" = '"+sanitize(value)+"'";
+				lookup[id][stat] = sanitize(value);
 			} else if (type === "checkbox") {
 				value = $(this).prop('checked');
-				evalStr = "lookup['"+id+"']."+stat+" = "+value;
+				lookup[id][stat] = value;
 			} else if (type != "select") {
-				evalStr = "lookup['"+id+"']."+stat+" = parseInt("+value+")";
+				lookup[id][stat] = parseInt(value);
 			}
 
-			console.log(stat,type,value,evalStr);
-
-			eval(evalStr);
+			console.log(stat,type,value);
 		}
 	});
 
