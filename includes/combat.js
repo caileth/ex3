@@ -29,21 +29,30 @@ function aim(id, target) {
 
 
 function move(id, target) {
-	// console.groupCollapsed("Move");
+	console.groupCollapsed("Move");
 
 	var lookup = lookupByID(SCENE.combatants),
 		us = lookup[id],
 		them = lookup[target];
 
 	var currentRange = us.getRange(them),
-		newRange = currentRange - 1;
+		newRange = Math.max(currentRange - 1, 0);
+
+	for (var i in us.vectors) {
+		if (us.vectors[i].range.value === 0) {
+			console.log("setting zero range to 1");
+			us.setRange(us.vectors[i].target, 1);
+		}
+	}
 
 	us.setRange(them, newRange);
 	us.hasMoved = true;
+
 	DIALOG.dialog("close");
+
 	SCENE.printCombatants();
 
-	// console.groupEnd();
+	console.groupEnd();
 }
 
 

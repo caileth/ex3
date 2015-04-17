@@ -24,7 +24,7 @@ function dialogAddCombatant() {
 	} else {
 		console.groupCollapsed("Adding");
 		
-		dialogVertices(id);
+		dialogVectors(id);
 		
 		DIALOG.dialog("option", "buttons", [
 			{ text: "Add combatant", click: function() {
@@ -55,7 +55,7 @@ function dialogDebug() {
 		'<label for="aggravated">Aggravated: </label><input type="number" id="aggravated">'
 	);
 
-	dialogVertices(id);
+	dialogVectors(id);
 
 	DIALOG.dialog({
 		title: "Debug", autoOpen: false, height: "auto", width: "auto", modal: true,
@@ -383,7 +383,7 @@ function dialogRange() {
 
 
 
-function dialogVertices(id) {
+function dialogVectors(id) {
 	for (var i in SCENE.combatants) {
 		var lookup = lookupByID(SCENE.combatants),
 			them = SCENE.combatants[i],
