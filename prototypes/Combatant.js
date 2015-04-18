@@ -24,7 +24,7 @@ function Combatant() {
 	this.healthTrack[-4] = this.healthTrack[3];
 	this.healthTrack.inc = this.healthTrack[4];
 
-	this.vectors = new Array();
+	this.vectors = [];
 }
 
 Combatant.prototype.getHealthTrackHTML = function() {
@@ -113,7 +113,7 @@ Combatant.prototype.recordDamage = function() {
 
 	var lastHLTrackPos = this.healthTrack.length - 1,
 		lastHLPos = this.healthTrack[lastHLTrackPos].length - 1,
-		pending = new Array(),
+		pending = [],
 		wound;
 
 	pending[1] = this.bashing,
