@@ -195,9 +195,7 @@ $.extend({alert: function(message, title) {
 		if (action === 'getDelayTicks') {
 			console.groupCollapsed('getDelayTicks');
 
-			var ticks = new Array();
-
-			ticks.push(lookup[id].initiative);
+			var ticks = [lookup[id].initiative];
 
 			for (var j in lookup) {
 				if (lookup[j].initiative < lookup[id].initiative && lookup[j].initiative != ticks[ticks.length - 1]) {

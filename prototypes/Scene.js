@@ -1,6 +1,6 @@
 function Scene() {
-	this.combatants = new Array();
-	this.pendingAttacks = new Array();
+	this.combatants = [];
+	this.pendingAttacks = [];
 }
 
 Scene.prototype.iterateCrashCounter = function() {
