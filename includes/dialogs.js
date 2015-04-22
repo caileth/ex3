@@ -36,6 +36,9 @@ function dialogAddCombatant() {
 			}}]);
 	}
 
+	randomNameGenerator(NAMES_DATABASE);
+	randomStatsGenerator();
+
 	DIALOG.dialog("open");
 
 	console.groupEnd();
@@ -227,48 +230,43 @@ function dialogAttack() {
 	var attackForm,
 		id = $(this).parent().attr("id"),
 		lookup = lookupByID(SCENE.combatants),
-		minRange = 0,
 		maxRange = ($(this).prop('class') === "rangedAttack" ? undefined : 0);
 
-	if (lookup[id].getMinRange() >= minRange && (maxRange === undefined || lookup[id].getMaxRange() <= maxRange)) {
-		DIALOG_FORM.html(ATTACK_WINDOW);
+	DIALOG_FORM.html(ATTACK_WINDOW);
 
-		attackForm = DIALOG_FORM.on("submit", function(event) {
-			event.preventDefault();
-			attack(id, $("#opponents option:selected").val());
-		});
+	attackForm = DIALOG_FORM.on("submit", function(event) {
+		event.preventDefault();
+		attack(id, $("#opponents option:selected").val());
+	});
 
-		DIALOG.dialog({
-			title: "Attack",
-			autoOpen: false,
-			height: "auto",
-			width: "auto",
-			modal: true,
-			buttons: {
-				Attack: function() {
-					attack(id, $("#opponents option:selected").val());
-				},
-				Cancel: function() {
-					DIALOG.dialog("close");
-				}
+	DIALOG.dialog({
+		title: "Attack",
+		autoOpen: false,
+		height: "auto",
+		width: "auto",
+		modal: true,
+		buttons: {
+			Attack: function() {
+				attack(id, $("#opponents option:selected").val());
 			},
-			close: function() {
-				attackForm[0].reset();
+			Cancel: function() {
+				DIALOG.dialog("close");
 			}
-		});
-		$("#opponents").Ex3('populate', id, minRange, maxRange);
-		$("#attackTick").Ex3('getDelayTicks', id);
+		},
+		close: function() {
+			attackForm[0].reset();
+		}
+	});
+	$("#opponents").Ex3('populate', id, 0, maxRange);
+	$("#attackTick").Ex3('getDelayTicks', id);
 
-		if (lookup[id].initiative < 1) $("#decisive").prop('disabled', true);
+	if (lookup[id].initiative < 1) $("#decisive").prop('disabled', true);
 
-		DIALOG.dialog("open");
+	DIALOG.dialog("open");
 
-		$("#withering").prop('checked', true);
-		$("#stuntAttackOne").prop('checked', true);
-		$("#stuntDefendOne").prop('checked', true);
-	} else {
-		$.alert("There's nobody to attack!", "Nope");
-	}
+	$("#withering").prop('checked', true);
+	$("#stuntAttackOne").prop('checked', true);
+	$("#stuntDefendOne").prop('checked', true);
 	
 	console.groupEnd();
 }
@@ -330,7 +328,7 @@ function dialogMove() {
 		title: 'Move', autoOpen: false, height: 'auto', width: 'auto', modal: true,
 		buttons: {
 			Move: function() {
-				move(id, $("#moveTargets option:selected").val());
+				move(id, $('input[name=moveType]:checked').val(), $("#moveTargets option:selected").val());
 			},
 			Cancel: function() {
 				DIALOG.dialog('close');
@@ -341,7 +339,9 @@ function dialogMove() {
 		}
 	});
 
-	if (lookup[id].getMaxRange() < 1) $("#move, label[for=move]").hide(); // can't Move normally if Engaged
+	if (lookup[id].getMinRange() < 1) $("#move, label[for=move]").hide(); // can't Move normally if Engaged
+	else $("#disengage, label[for=disengage]").hide();
+
 	$('#moveTargets').Ex3('populate', id, 1); // can't move to a target at range 0, you're already there
 
 	DIALOG.dialog('open');
@@ -351,6 +351,21 @@ function dialogMoveType() {
 	var type = $('input[name=moveType]:checked');
 
 	if (type.val() === 'move') $("#moveTargets, label[for=moveTargets]").show();
+}
+
+
+
+
+
+
+
+
+
+function dialogRandom() {
+	console.groupCollapsed('Random Button');
+	randomNameGenerator(NAMES_DATABASE);
+	randomStatsGenerator();
+	console.groupEnd();
 }
 
 

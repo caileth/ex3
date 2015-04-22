@@ -28,56 +28,21 @@ function aim(id, target) {
 
 
 
-function move(id, target) {
-	console.groupCollapsed("Move");
-
-	var lookup = lookupByID(SCENE.combatants),
-		us = lookup[id],
-		them = lookup[target];
-
-	var currentRange = us.getRange(them),
-		newRange = Math.max(currentRange - 1, 0);
-
-	for (var i in us.vectors) {
-		if (us.vectors[i].range.value === 0) {
-			console.log("setting zero range to 1");
-			us.setRange(us.vectors[i].target, 1);
-		}
-	}
-
-	us.setRange(them, newRange);
-	us.hasMoved = true;
-
-	DIALOG.dialog("close");
-
-	SCENE.printCombatants();
-
-	console.groupEnd();
-}
-
-
-
-
-
-
-
-
-
 function attack(id, target) {
 	console.groupCollapsed("Attack!");
 
-	var lookup		= lookupByID(SCENE.combatants),
-		attacker	= lookup[id],
-		defender	= lookup[target];
+	var lookup = lookupByID(SCENE.combatants),
+		attacker = lookup[id],
+		defender = lookup[target];
 
-	var attackIsDecisive	= $("input[name=attackIsDecisive]:checked").val() === "true",
-		attackModifiers		= parseInt($("#attackModifiers").val()),
-		attackSpecialty		= $("#attackSpecialty").prop('checked'),
-		attackStunt			= parseInt($("input[name=attackStunt]:checked").val()),
-		attackTick			= parseInt($("#attackTick").val()),
-		attackWound			= attacker.getWoundPenalty(),
-		defendSpecialty		= $("#defendSpecialty").prop('checked'),
-		defendStunt			= parseInt($("input[name=defendStunt]:checked").val());
+	var attackIsDecisive = $("input[name=attackIsDecisive]:checked").val() === "true",
+		attackModifiers = parseInt($("#attackModifiers").val()),
+		attackSpecialty = $("#attackSpecialty").prop('checked'),
+		attackStunt = parseInt($("input[name=attackStunt]:checked").val()),
+		attackTick = parseInt($("#attackTick").val()),
+		attackWound = attacker.getWoundPenalty(),
+		defendSpecialty = $("#defendSpecialty").prop('checked'),
+		defendStunt = parseInt($("input[name=defendStunt]:checked").val());
 
 	attacker.shiftTarget = undefined;
 		console.log("setting attacker shift target to undefined");
@@ -357,4 +322,40 @@ function doRound() {
 	console.groupEnd();
 	SCENE.printCombatants();
 	scrollToBottom();
+}
+
+
+
+
+
+
+
+
+
+function move(id, type, target) {
+	console.groupCollapsed("Move: target is",target);
+
+	var lookup = lookupByID(SCENE.combatants),
+		us = lookup[id],
+		them = lookup[target];
+
+	var currentRange = us.getRange(them),
+		newRange = Math.max(currentRange - 1, 0);
+
+	for (var i in us.vectors) {
+		if (us.vectors[i].range.value === 0) {
+			console.log("setting zero range to 1");
+			us.setRange(us.vectors[i].target, 1);
+		}
+	}
+
+	if (type === 'move') us.setRange(them, newRange);
+	
+	us.hasMoved = true;
+
+	DIALOG.dialog("close");
+
+	SCENE.printCombatants();
+
+	console.groupEnd();
 }

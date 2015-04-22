@@ -218,29 +218,29 @@ Combatant.prototype.getRangeHTML = function() {
 	return result;
 };
 
-Combatant.prototype.setRange = function(a, b) {
-	console.group("setRange");
+Combatant.prototype.setRange = function(target, range) {
+	console.group("setRange target:",target.name,"range:",range);
 
-	b = parseInt(b);
-	var newRange = {value: b},
-		oldRange = this.getRange(a);
+	range = parseInt(range);
+	var newRange = {value: range},
+		oldRange = this.getRange(target);
 
-	if (oldRange === 0 && b != 0)
+	if (oldRange === 0 && range != 0)
 		this.refreshRangeBands();
 
 	console.group("normal range behavior:");
 	if (oldRange === undefined) {
-		this.vectors.push({target: a, range: newRange});
-		a.vectors.push({target: this, range: newRange});
+		this.vectors.push({target: target, range: newRange});
+		target.vectors.push({target: this, range: newRange});
 		console.log("range is undefined; pushing new vectors for both combatants");
 	} else for (var i in this.vectors) {
-		console.log("range exists; setting to",b);
-		if (this.vectors[i].target === a)
-			this.vectors[i].range.value = b;
+		console.log("range exists; setting to",range);
+		if (this.vectors[i].target === target)
+			this.vectors[i].range.value = range;
 	} console.groupEnd();
 	
-	if (oldRange != 0 && b === 0)
-		this.mergeRangeBands(a);
+	if (oldRange != 0 && range === 0)
+		this.mergeRangeBands(target);
 
 	console.groupEnd();
 }

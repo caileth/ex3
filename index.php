@@ -55,7 +55,7 @@
 </head>
 
 <body>
-	<h1>Ex3 Combat Toolkit</h1><br>
+	<h1>Exalted 3rd Combat Simulator</h1><br>
 
 	<div>
 		<h2>Results</h2><br>

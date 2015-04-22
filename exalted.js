@@ -15,6 +15,7 @@ $(function() {
 	$('body').on('click', '.edit', dialogAddCombatant);
 	$('body').on('click', '.flurry', dialogFlurry);
 	$('body').on('click', '.move', dialogMove);
+	$('body').on('click', '.randomize', dialogRandom);
 	$('body').on('click', '.rangedAttack', dialogAttack);	
 	$('body').on('click', 'input[name=moveType]', dialogMoveType);
 
@@ -37,13 +38,6 @@ $(function() {
 		doRound();
 
 		RESULTS_WINDOW.append(lookup[id].name + " goes Full Defense!\n");
-	});
-
-	$('body').on('click', '.randomize', function() {
-		console.groupCollapsed('Random Button');
-		randomNameGenerator(NAMES_DATABASE);
-		randomStatsGenerator();
-		console.groupEnd();
 	});
 
 	$('body').on('click', '.remove', function() {
@@ -121,9 +115,11 @@ $.extend({alert: function(message, title) {
 		var lookup = lookupByID(SCENE.combatants);
 
 		if (action === 'populate') {
-			console.groupCollapsed('populate');
+			console.groupCollapsed('populate: x =',x,'and y =',y);
 
-			var maxRange = (y != undefined ? y : lookup[id].getMaxRange());
+			var minRange = (x != undefined ? x : lookup[id].getMinRange()),
+				maxRange = (y != undefined ? y : lookup[id].getMaxRange());
+			
 			console.log('maxRange:',maxRange);
 
 			this.empty();
@@ -133,8 +129,13 @@ $.extend({alert: function(message, title) {
 
 			if (lookup[id].shiftTarget != undefined && this.attr('id') === 'opponents') {
 				console.log('adding shift target id',lookup[id].shiftTarget.id);
-				this.append('<option value="' + lookup[id].shiftTarget.id + '">&raquo; ' +	lookup[id].shiftTarget.name + '</option>');
-			} else for (var h = 0; h <= maxRange; h++) {
+
+				this.append('<option value="' + lookup[id].shiftTarget.id + '">&raquo; ' +
+					lookup[id].shiftTarget.name + '</option>');
+			} else for (var h = minRange; h <= maxRange; h++) {
+				console.log("populating target list; minRange is",minRange,"maxRange is",maxRange);
+				
+				// using for in because lookup isn't an array lol
 				for (var i in lookup) {
 					var range = lookup[id].getRange(lookup[i]),
 						sourceIsNotTarget = (i != id),
