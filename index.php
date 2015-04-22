@@ -73,7 +73,7 @@
 		<input type="radio" name="doubleRule" value="false">None
 	</div>
 
-	<div id="combatants">
+	<div>
 		<h3>Combatants</h3><br>
 			<input type="button" id="addCombatant" value="Add Combatant">
 			<input type="button" id="joinBattle" value="Join Battle!">

@@ -115,10 +115,10 @@ $.extend({alert: function(message, title) {
 		var lookup = lookupByID(SCENE.combatants);
 
 		if (action === 'populate') {
-			console.groupCollapsed('populate: x =',x,'and y =',y);
+			console.groupCollapsed('populate: x',x,'y',y);
 
-			var minRange = (x != undefined ? x : lookup[id].getMinRange()),
-				maxRange = (y != undefined ? y : lookup[id].getMaxRange());
+			var minRange = x || lookup[id].getMinRange(),
+				maxRange = y || lookup[id].getMaxRange();
 			
 			console.log('maxRange:',maxRange);
 
