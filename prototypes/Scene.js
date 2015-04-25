@@ -30,29 +30,68 @@ Scene.prototype.printCombatants = function() {
 	this.combatants.sort(sortByInitiative);
 
 	for (i in this.combatants) {
-		var current = this.combatants[i],		
-			wound = current.getWoundPenalty(),
-			playerBubble = $('<tr class="playerBubble"></tr>'),
-			player = $('<td class="player"></td>'),
-			initiative = $('<span class="initiative">' + current.getInitiative() + '</span>'),
-			name = $('<span class="name">' + current.name + '</span>'),
-			stats = $('<span class="stats">' + current.getStatBlock() + '</span>');
+		var current = this.combatants[i],
+			inCrash = current.initiative < 1,
+			stats = '',
+			wound = current.getWoundPenalty();
 
-		if (wound === 'dead') playerBubble.addClass('dead');
-		else if (wound === 'incapacitated') playerBubble.addClass('incapacitated');
-		else if (!current.active) playerBubble.addClass('inactive');
-		else if (current.initiative < 1) playerBubble.addClass('crashed');
+		console.log("printing",current.name);
 
-		player.attr('name', current.name);
-		player.attr('id', current.id);
-		player.data('combatant', current);
+		stats += '<tr class="';
+		if (wound === 'dead') stats += 'dead ';
+		else if (wound === 'incapacitated') stats += 'incapacitated ';
+		else if (!current.active) stats += 'inactive ';
+		else if (current.initiative < 1) stats += 'crashed ';
+		stats += 'playerBubble">';
+
+		stats += '<td name="' + current.name + '" id="' + current.id + '" class="player">';			
+
+		if (current.initiative != undefined) stats += '<span class="initiative">' + current.initiative + '</span>';
+				
+		stats += '<span class="name">' + current.name;
+		if (wound === 'dead') stats += ' (DEAD) ';
+		if (wound === 'incapacitated') stats += ' (Incapacitated) ';
+		stats += '</span><br>';
 		
-		if (wound === 'dead') name.append(' (DEAD) ');
-		else if (wound === 'incapacitated') name.append(' (Incapacitated) ');
+		stats += '<span class="stats">';
+		if (!isNaN(wound)) {
+			stats += 'Join Battle: ' + current.getJoinBattlePool() +
+					' &bull; Withering: ' + current.getWitheringPool() +
+					' &bull; Decisive: ' + current.getDecisivePool() +
+					' &bull; Defense: ' + current.getDefense() +
+					' &bull; Rush: ' + current.getRushPool() +
+					' &bull; Disengage: ' + current.getDisengagePool() +
+					' &bull; Soak: ' + current.getSoak() +
+					' &bull; Hardness: ' + (inCrash ? '0' : current.hardness) +
+					'<br>';
+		}
+		stats += '<b>Health:</b> ' + current.getHealthTrackHTML();
+		stats += '</span><br>';
 		
-		player.append(initiative, name, '<br>', stats, current.getControlPanel());
-		playerBubble.append(player);
-		$('#combatants').append(playerBubble);
+		if (current.initiative != undefined) {
+			stats += '<input type="button" class="attack" value="Attack"';
+			if (current.getMinRange() != 0) stats += ' disabled';
+			stats += '>' +
+					 '<input type="button" class="rangedAttack" value="Ranged Attack">' +
+					 '<input type="button" class="aim" value="Aim">' +
+					 '<input type="button" class="fullDefense" value="Full Defense"' + (inCrash ? ' disabled' : '') +'>' +
+					 '<input type="button" class="move" value="Move"';
+			if (current.hasMoved === true) stats += ' disabled';
+			stats += '>' +
+					 '<input type="button" class="flurry" value="Flurry">' +
+					 '<br>';
+		}
+
+		stats += current.getRangeHTML();
+
+		stats +=
+			'<input type="button" class="edit" value="Edit">' +
+			'<input type="button" class="debug" value="ST">' +
+			'<input type="button" class="remove" value="&#10006;">';
+			
+		stats += '</td></tr>';
+
+		$("#combatants > tbody:last").append(stats);
 	}
 
 	console.log("done printing CombatantsList");

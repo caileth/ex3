@@ -1,7 +1,6 @@
 function dialogAddCombatant() {
 	var edit = ($(this).attr("class") === "edit"),
-		source = $(this).parent.data('combatant'),
-		id = source.id;
+		id = $(this).parent().attr("id");
 
 	DIALOG_FORM.html(STATS_WINDOW);
 
