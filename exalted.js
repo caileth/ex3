@@ -37,7 +37,7 @@ $(function() {
 		lookup[id].active = false;
 		doRound();
 
-		RESULTS_WINDOW.append(lookup[id].name + " goes Full Defense!\n");
+		printResult(lookup[id].name + ' goes Full Defense!');
 	});
 
 	$('body').on('click', '.remove', function() {

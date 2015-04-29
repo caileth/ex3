@@ -16,85 +16,21 @@ Scene.prototype.iterateCrashCounter = function() {
 			current.initiative = INITIATIVE_RESET_VALUE;
 			current.crashRecovery = ROUND;
 			current.turnsInCrash = 0;
-			RESULTS_WINDOW.append(current.name + " achieves Initiative Reset!\n");
+			printResult(current.name,'achieves Initiative Reset!');
 		}
 	}
 };
 
 Scene.prototype.printCombatants = function() {
-	console.groupCollapsed("printCombatantsList");
+	console.groupCollapsed('printCombatants');
 
-	$("tr.playerBubble").remove();
-		console.log("deleting existing player list");
+	$('tr.playerBubble').remove();
 
 	this.combatants.sort(sortByInitiative);
 
-	for (i in this.combatants) {
-		var current = this.combatants[i],
-			inCrash = current.initiative < 1,
-			stats = '',
-			wound = current.getWoundPenalty();
-
-		console.log("printing",current.name);
-
-		stats += '<tr class="';
-		if (wound === 'dead') stats += 'dead ';
-		else if (wound === 'incapacitated') stats += 'incapacitated ';
-		else if (!current.active) stats += 'inactive ';
-		else if (current.initiative < 1) stats += 'crashed ';
-		stats += 'playerBubble">';
-
-		stats += '<td name="' + current.name + '" id="' + current.id + '" class="player">';			
-
-		if (current.initiative != undefined) stats += '<span class="initiative">' + current.initiative + '</span>';
-				
-		stats += '<span class="name">' + current.name;
-		if (wound === 'dead') stats += ' (DEAD) ';
-		if (wound === 'incapacitated') stats += ' (Incapacitated) ';
-		stats += '</span><br>';
-		
-		stats += '<span class="stats">';
-		if (!isNaN(wound)) {
-			stats += 'Join Battle: ' + current.getJoinBattlePool() +
-					' &bull; Withering: ' + current.getWitheringPool() +
-					' &bull; Decisive: ' + current.getDecisivePool() +
-					' &bull; Defense: ' + current.getDefense() +
-					' &bull; Rush: ' + current.getRushPool() +
-					' &bull; Disengage: ' + current.getDisengagePool() +
-					' &bull; Soak: ' + current.getSoak() +
-					' &bull; Hardness: ' + (inCrash ? '0' : current.hardness) +
-					'<br>';
-		}
-		stats += '<b>Health:</b> ' + current.getHealthTrackHTML();
-		stats += '</span><br>';
-		
-		if (current.initiative != undefined) {
-			stats += '<input type="button" class="attack" value="Attack"';
-			if (current.getMinRange() != 0) stats += ' disabled';
-			stats += '>' +
-					 '<input type="button" class="rangedAttack" value="Ranged Attack">' +
-					 '<input type="button" class="aim" value="Aim">' +
-					 '<input type="button" class="fullDefense" value="Full Defense"' + (inCrash ? ' disabled' : '') +'>' +
-					 '<input type="button" class="move" value="Move"';
-			if (current.hasMoved === true) stats += ' disabled';
-			stats += '>' +
-					 '<input type="button" class="flurry" value="Flurry">' +
-					 '<br>';
-		}
-
-		stats += current.getRangeHTML();
-
-		stats +=
-			'<input type="button" class="edit" value="Edit">' +
-			'<input type="button" class="debug" value="ST">' +
-			'<input type="button" class="remove" value="&#10006;">';
-			
-		stats += '</td></tr>';
-
-		$("#combatants > tbody:last").append(stats);
+	for (i = 0; i < this.combatants.length; i++) {
+		$('#combatants > tbody:last').append(this.combatants[i].printRow());
 	}
-
-	console.log("done printing CombatantsList");
 
 	console.groupEnd();
 };
@@ -156,7 +92,7 @@ Scene.prototype.resolve = function(tick) {
 	for (var i = 0; i < this.pendingAttacks.length; i++) {
 		var attack = this.pendingAttacks[i];
 		if (attack.tick > tick || tick === null) {
-			console.log(attack.attacker.name + "'s attack vs. " + attack.defender.name + " is up for resolution\n");
+			console.log(attack.attacker.name + '\'s attack vs. ' + attack.defender.name + ' is up for resolution:');
 
 			var j = this.clashAttackCheck(attack.tick, attack.attacker);
 

@@ -13,10 +13,10 @@
 		@font-face{font-family:Goudy;src:url(assets/GoudyStd.otf);}
 
 		h1,h2,h3{display:inline;}
-		h1{font:500% Albertus;text-transform:uppercase;}
-		h2,h3,.name{font-family:Missive;}
+		h1{font:300% Albertus;text-transform:uppercase;}
+		h2,h3,th,.name{font-family:Missive;}
 		h2,.name{font-size:200%;}
-		h3{font-size:150%;}
+		h3,th{font-size:150%;}
 		html{height:100%;}
 		body{border-left:solid crimson 50px;margin:0;}
 		body,textarea,input[type=button]{font-family:Goudy;}
@@ -26,7 +26,9 @@
 		body > div{margin:1em;}
 		body > div.ui-widget-overlay.ui-front {margin:0em;}
 
-		#combatants{width:71em;}
+		#combatants{width:100%;}
+		#combatantsDiv{width:71em;float:left;}
+		#controlPanel > div {display:inline;}
 		#name {width:25em;}
 		
 		.inactive{font-style:italic;background-color:#444;width:75%;height:75%;}
@@ -57,27 +59,31 @@
 <body>
 	<h1>Exalted 3rd Combat Simulator</h1><br>
 
+	<table id="controlPanel">
+		<tr><th>Combatants</th><th>Basic Die Roller</th></tr>
+		<tbody><tr>
+			<td>
+				<input type="button" id="addCombatant" value="Add Combatant">
+				<input type="button" id="joinBattle" value="Join Battle!">
+			</td>
+			<td>
+				<input type="number" id="numDice" value="10" min="1" max="25">
+				<input type="button" id="roll" value="d10">@
+				<input type="number" id="targetNumber" value="7" min="1" max="10">,
+				Difficulty <input type="number" id="difficulty" value="1" min="0" max="5"><br>
+				Double Rule: <input type="radio" name="doubleRule" value="10" checked>10s
+				<input type="radio" name="doubleRule" value="9">9s
+				<input type="radio" name="doubleRule" value="8">8s
+				<input type="radio" name="doubleRule" value="false">None
+			</td>
+		</tr></tbody>
+	</table>
+
+	<table id="combatants"><tbody></tbody></table>
+
 	<div>
 		<h2>Results</h2><br>
-		<textarea id="results" readonly tabindex="-1"></textarea>
-	</div>
-
-	<div id="roller">	
-		<h3>Basic Die Roller</h3><br>
-		<input type="number" id="numDice" value="10" min="1" max="25">
-		<input type="button" id="roll" value="d10">@ <input type="number" id="targetNumber" value="7" min="1" max="10">,
-		Difficulty <input type="number" id="difficulty" value="1" min="0" max="5"><br>		
-		Double Rule: <input type="radio" name="doubleRule" value="10" checked>10s
-		<input type="radio" name="doubleRule" value="9">9s
-		<input type="radio" name="doubleRule" value="8">8s
-		<input type="radio" name="doubleRule" value="false">None
-	</div>
-
-	<div id="combatants">
-		<h3>Combatants</h3><br>
-			<input type="button" id="addCombatant" value="Add Combatant">
-			<input type="button" id="joinBattle" value="Join Battle!">
-		<table id="combatants"><tbody></tbody></table>
+		<div id="results"></div>
 	</div>
 
 	<div id="dialog"><form id="dialog-form"></form></div>

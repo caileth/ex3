@@ -27,17 +27,6 @@ function Combatant() {
 	this.vectors = [];
 }
 
-Combatant.prototype.getHealthTrackHTML = function() {
-	var result = '';
-	for (var i = 0; i < this.healthTrack.length; i++) {
-		var track = this.healthTrack[i];
-		result += DEFAULT_HEALTH_TRACK[i]+':';
-		for (var j = 0; j < track.length; j++) result += GLYPHS_HEALTH[track[j]];
-		result += ' ';
-	}
-	return result;
-};
-
 Combatant.prototype.getDamage = function() {
 	return this.strength + this.damage;
 };
@@ -140,8 +129,8 @@ Combatant.prototype.recordDamage = function() {
 		this.initiative = undefined;
 	}
 
-	if (wound === 'incapacitated') RESULTS_WINDOW.append(this.name + " is Incapacitated!\n");
-	if (wound === 'dead') RESULTS_WINDOW.append(this.name + " is DEAD!\n");
+	if (wound === 'incapacitated') printResult(this.name,'is Incapacitated!');
+	if (wound === 'dead') printResult(this.name,'is DEAD!');
 
 	console.groupEnd();
 
@@ -202,21 +191,6 @@ Combatant.prototype.getRange = function(a) {
 		}
 	} console.log("getRange: no match"); return undefined;
 }
-
-Combatant.prototype.getRangeHTML = function() {
-	var result = '';
-	if (this.vectors.length > 0) {
-		result += '<b>Ranges:</b> ';
-		for (var i = 0; i < this.vectors.length; i++) {
-			result += this.vectors[i].target.name;
-			result += ': ';
-			result += this.vectors[i].range.value;
-			result += (i + 1 < this.vectors.length ? '; ' : '');
-		}
-		result += '<br>';
-	}
-	return result;
-};
 
 Combatant.prototype.setRange = function(target, range) {
 	console.group("setRange target:",target.name,"range:",range);
@@ -310,3 +284,123 @@ Combatant.prototype.getMaxRange = function() {
 Combatant.prototype.getMinRange = function() {
 	return this.getRangeMinMax('<');
 }
+
+Combatant.prototype.printRow = function() {
+	var playerBubble = $('<tr class="playerBubble"></tr>'),
+		wound = this.getWoundPenalty();
+
+	if (wound === 'dead') playerBubble.addClass('dead');
+	else if (wound === 'incapacitated') playerBubble.addClass('incapacitated');
+	else if (!this.active) playerBubble.addClass('inactive');
+	else if (this.initiative < 1) playerBubble.addClass('crashed');
+
+	playerBubble.append(this.printTD());
+
+	return playerBubble;
+};
+
+Combatant.prototype.printTD = function() {
+	var playerTD = $('<td class="player" name="' + this.name + '"></td>');
+
+	playerTD.append(this.printInitiative());
+	playerTD.append(this.printName());
+	playerTD.append('<br>');
+	playerTD.append(this.printStats());
+	playerTD.append('<br>');
+	playerTD.append(this.printControls());
+	playerTD.append('<br>');
+	playerTD.append(this.printRange());
+
+	return playerTD;
+};
+
+Combatant.prototype.printInitiative = function() {
+	var init = this.initiative || '-';
+
+	return $('<span class="initiative">' + init + '</span>');
+};
+
+Combatant.prototype.printName = function() {
+	var span = $('<span class="name">' + this.name + '</span>');
+
+	if (this.getWoundPenalty() === 'dead') span.append(' (DEAD)');
+	if (this.getWoundPenalty() === 'incapacitated') span.append(' (Incapacitated)');
+
+	return span;
+};
+
+Combatant.prototype.printStats = function() {
+	var span = $('<span class="stats"></span>');
+
+	if (!isNaN(this.getWoundPenalty())) {
+		span.append(
+			'<abbr title="Join Battle">JB</abbr>: ' + this.getJoinBattlePool() + ' &bull; ' +
+			'<abbr title="Withering">Wi</abbr>: ' + this.getWitheringPool() + ' &bull; ' +
+			'<abbr title="Decisive">Dc</abbr>: ' + this.getDecisivePool() + ' &bull; ' +
+			'<abbr title="Defense">Df</abbr>: ' + this.getDefense() + ' &bull; ' +
+			'<abbr title="Rush">Ru</abbr>: ' + this.getRushPool() + ' &bull; ' +
+			'<abbr title="Disengage">Ds</abbr>: ' + this.getDisengagePool() + ' &bull; ' +
+			'<abbr title="Soak">So</abbr>: ' + this.getSoak() + ' &bull; ' +
+			'<abbr title="Hardness">Ha</abbr>: ' + (this.initiative < 1 ? '0' : this.hardness) + '<br>');
+	} span.append('<b>Health:</b> ' + this.printHealth());
+
+	return span;
+};
+
+Combatant.prototype.printHealth = function() {
+	var result = '',
+		trackLabels = [
+			'<abbr title="Bruised">-0</abbr>',
+			'<abbr title="Injured">-1</abbr>',
+			'<abbr title="Maimed">-2</abbr>',
+			'<abbr title="Crippled">-4</abbr>',
+			'<abbr title="Incapacitated">Inc</abbr>'];
+
+	for (var i = 0; i < this.healthTrack.length; i++) {
+		var track = this.healthTrack[i];
+		result += trackLabels[i]+':';
+		for (var j = 0; j < track.length; j++) result += GLYPHS_HEALTH[track[j]];
+		result += ' ';
+	}
+	return result;
+};
+
+Combatant.prototype.printControls = function() {
+	var span = $('<span></span>'),
+		init = this.initiative;
+
+	span.attr('id', this.id);
+
+	if (init != undefined) {
+		span.append(
+			'<input type="button" class="attack" value="Attack"' + (this.getMinRange() != 0 ? ' disabled' : '') + '>' +
+			'<input type="button" class="rangedAttack" value="Ranged Attack">' +
+			'<input type="button" class="aim" value="Aim">' +
+			'<input type="button" class="fullDefense" value="Full Defense"' + (init < 1 ? ' disabled' : '') +'>' +
+			'<input type="button" class="move" value="Move"' + (this.hasMoved === true ? ' disabled' : '') +'>' +
+			'<input type="button" class="flurry" value="Flurry">' +
+			'<br>');
+	}
+
+	span.append(
+		'<input type="button" class="edit" value="Edit">' +
+		'<input type="button" class="debug" value="ST">' +
+		'<input type="button" class="remove" value="&#10006;">');
+
+	return span;
+};
+
+Combatant.prototype.printRange = function() {
+	var result = '';
+	if (this.vectors.length > 0) {
+		result += '<b>Ranges:</b> ';
+		for (var i = 0; i < this.vectors.length; i++) {
+			result += this.vectors[i].target.name;
+			result += ': ';
+			result += this.vectors[i].range.value;
+			result += (i + 1 < this.vectors.length ? '; ' : '');
+		}
+		result += '<br>';
+	}
+	return result;
+};

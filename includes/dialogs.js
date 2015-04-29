@@ -97,7 +97,7 @@ function addCombatant() {
 	if (ROUND > 0) {		
 		SCENE.combatants[x].initiative = SCENE.combatants[x].joinBattle();
 
-		RESULTS_WINDOW.append(SCENE.combatants[x].name + " joins battle at tick " + SCENE.combatants[x].initiative + "\n");
+		printResult(SCENE.combatants[x].name + " joins battle at tick " + SCENE.combatants[x].initiative + "\n");
 		scrollToBottom();
 	}
 
@@ -426,7 +426,7 @@ function joinBattle() {
 	console.log(SCENE.combatants.length,"combatants");
 	if (SCENE.combatants.length > 0) {
 		ROUND = 1;
-		RESULTS_WINDOW.append("\n--- ROUND 1 ---\n");
+		printResult('--- ROUND 1 ---');
 		for (i in SCENE.combatants) {
 			var current = SCENE.combatants[i],
 				joinBattlePool = current.getJoinBattlePool(),
@@ -446,11 +446,11 @@ function joinBattle() {
 			current.crashRecovery = undefined;
 			current.recordDamage();
 
-			RESULTS_WINDOW.append(current.name + " joins battle at initiative " + current.initiative + "\n");
+			printResult(current.name,'joins battle at initiative',current.initiative);
 		}
 		doRound();
 	} else {
-		RESULTS_WINDOW.append("\nNot enough combatants!");
+		printResult('Not enough combatants!');
 	}
 	scrollToBottom();
 	console.groupEnd();

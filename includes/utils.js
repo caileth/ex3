@@ -5,19 +5,19 @@ function printRoll(numDice, sides, targetNumber, doubleRule, difficulty) {
 		successes = successChecker(result, targetNumber, doubleRule),
 		threshold = successes - difficulty;
 
-	RESULTS_WINDOW.append("Rolled: ");
-	for (var roll in result) RESULTS_WINDOW.append(result[roll] + " ");
+	printResult("Rolled: ");
+	for (var roll in result) printResult(result[roll] + " ");
 	if (successes < 0) {
-		RESULTS_WINDOW.append("\n" + "BOTCH!" + "\n");
+		printResult("\n" + "BOTCH!" + "\n");
 		console.log('BOTCH at threshold',threshold);
 	} else if (threshold < 0) {
-		RESULTS_WINDOW.append("\nFailure! (" + threshold + " success[es].)\n");
+		printResult("\nFailure! (" + threshold + " success[es].)\n");
 		console.log('Failure at threshold',threshold);
 	} else if (threshold === 0) {
-		RESULTS_WINDOW.append("\nSuccess! (no threshold successes.)\n");
+		printResult("\nSuccess! (no threshold successes.)\n");
 		console.log('Success at threshold',threshold);
 	} else {
-		RESULTS_WINDOW.append("\nSuccess at threshold " + threshold + "!\n");
+		printResult("\nSuccess at threshold " + threshold + "!\n");
 		console.log('Success at threshold',threshold);
 	}
 
@@ -127,4 +127,25 @@ function stunt(level) {
 		case 3: return {"level": 3, "dice": 2, "successes": 2, "willpower": 2, "static": 3};
 		default: return {"level": 0, "dice": 0, "successes": 0, "willpower": 0, "static": 0};
 	}
+}
+
+
+
+
+
+
+
+
+
+function printResult() {
+	var result = '';
+
+	for (var i = 0; i < arguments.length; i++) {
+		result += arguments[i];
+
+		if (i + 1 != arguments.length) result += ' ';
+	}
+
+	console.log(result);
+	RESULTS_WINDOW.prepend(result + '<br>\n');
 }
