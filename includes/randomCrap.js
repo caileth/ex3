@@ -20,36 +20,36 @@ function randomStatsGenerator() {
 }
 
 function randomNameGenerator(data) {
-	console.groupCollapsed("Name generator");
+	console.groupCollapsed('Name generator');
 	var localeCount = Object.keys(data).length,
 		localeID = ~~(Math.random() * localeCount),
 		locale = Object.keys(data)[localeID],
-		templateGroupCount = eval("Object.keys(data." + locale + ".templates).length"),
+		templateGroupCount = Object.keys(data[locale].templates).length,
 		templateGroupID = ~~(Math.random() * templateGroupCount),
-		templateGroup = eval("Object.keys(data." + locale + ".templates)[templateGroupID]"),
-		wordGroupsCount = eval("Object.keys(data." + locale + ".words).length"),
-		templateCount = eval("Object.keys(data." + locale + ".templates." + templateGroup + ").length"),
+		templateGroup = Object.keys(data[locale].templates)[templateGroupID],
+		wordGroupsCount = Object.keys(data[locale].words).length,
+		templateCount = Object.keys(data[locale].templates[templateGroup]).length,
 		templateID = ~~(Math.random() * templateCount),
-		template = eval("data." + locale + ".templates."+templateGroup+"["+templateID+"]"),
-		output = "";
+		template = data[locale].templates[templateGroup][templateID],
+		output = '';
 
-	console.log("Locale:",locale);
-	console.log("# Template groups:",templateGroupCount);
-	console.log("# Word groups:",wordGroupsCount);
-	console.log("Template group: #" + templateGroupID + " " + templateGroup);
-	console.log("Template:",templateID,template);
+	console.log('Locale:',locale);
+	console.log('# Template groups:',templateGroupCount);
+	console.log('# Word groups:',wordGroupsCount);
+	console.log('Template group: #' + templateGroupID + ' ' + templateGroup);
+	console.log('Template:',templateID,template);
 
 	for (var i in template) {
-		var wordGroup = eval("data." + locale + ".words."+template[i]),
+		var wordGroup = data[locale].words[template[i]],
 			numWords = wordGroup.length,
 			word = ~~(Math.random() * numWords);
+
 		output += wordGroup[word];
-	}
-	console.log("Result:",output);
+	} console.log('Result:',output);
 
 	output = output.trim();
 
-	$("#name").val(output);
+	$('#name').val(output);
 
 	console.groupEnd();
 }
@@ -81,36 +81,37 @@ function twinkStatsGenerator() {
 }
 
 function doPickerStats() {
-	console.groupCollapsed("gear picker");
-	var armorVal = $("#armorPicker").val(),
-		armorStats = eval("GEAR_DATABASE." + armorVal),
-		weaponVal = $("#weaponPicker").val(),
-		weaponStats = eval("GEAR_DATABASE." + weaponVal);
+	console.groupCollapsed('gear picker');
 
-	$("#armor").val(armorStats[0]);
-	$("#hardness").val(armorStats[1]);
-	$("#mobility").val(armorStats[2]);
-	$("#accuracy").val(weaponStats[0]);
-	$("#damage").val(weaponStats[1]);
-	$("#doesLethal").prop('checked', weaponStats[4]);
-	$("#overwhelming").val(weaponStats[2]);
-	$("#defense").val(weaponStats[3]);
+	var armorVal = $('#armorPicker').val(),
+		armorStats = GEAR_DATABASE[armorVal],
+		weaponVal = $('#weaponPicker').val(),
+		weaponStats = GEAR_DATABASE[weaponVal];
 
-	console.log("new value for #weaponPicker is",weaponVal,":",weaponStats);
-	console.log("new value for #armorPicker is",armorVal,":",armorStats);
+	$('#armor').val(armorStats[0]);
+	$('#hardness').val(armorStats[1]);
+	$('#mobility').val(armorStats[2]);
+	$('#accuracy').val(weaponStats[0]);
+	$('#damage').val(weaponStats[1]);
+	$('#doesLethal').prop('checked', weaponStats[4]);
+	$('#overwhelming').val(weaponStats[2]);
+	$('#defense').val(weaponStats[3]);
+
+	console.log('new value for #weaponPicker is',weaponVal + ':',weaponStats);
+	console.log('new value for #armorPicker is',armorVal + ':',armorStats);
 	console.groupEnd();
 }
 
 function randomStats(thing) {
-	var min = parseInt(thing.attr("min")),
-		max = parseInt(thing.attr("max")),
+	var min = parseInt(thing.attr('min')),
+		max = parseInt(thing.attr('max')),
 		diff = max - min,
 		randomVal = ~~(Math.random() * diff) + min;
 
-	console.log("min:",min);
-	console.log("max:",max);
-	console.log("diff:",diff);
-	console.log("new value:",randomVal);
+	console.log('min:',min);
+	console.log('max:',max);
+	console.log('diff:',diff);
+	console.log('new value:',randomVal);
 
 	return randomVal;
 }

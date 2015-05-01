@@ -35,9 +35,10 @@ $(function() {
 		lookup[id].onslaught -= FULL_DEFENSE_BONUS;
 		lookup[id].initiative -= 1;
 		lookup[id].active = false;
-		doRound();
 
-		printResult(lookup[id].name + ' goes Full Defense!');
+		printResult(lookup[id].name,'goes Full Defense!');
+		
+		doRound();
 	});
 
 	$('body').on('click', '.remove', function() {
@@ -68,6 +69,16 @@ $(function() {
 		console.groupEnd();
 	});
 });
+
+
+
+
+
+
+
+
+
+$.extend($.ui.dialog.prototype.options, { autoOpen: false, height: "auto", width: "auto", modal: true });
 
 
 
@@ -125,13 +136,12 @@ $.extend({alert: function(message, title) {
 			this.empty();
 				console.log('clearing out existing entries');
 
-			if (x === undefined) this.append('<option value="undefined">None</option>');
+			if (x === undefined) this.append('<option value="undefined">None');
 
 			if (lookup[id].shiftTarget != undefined && this.attr('id') === 'opponents') {
 				console.log('adding shift target id',lookup[id].shiftTarget.id);
 
-				this.append('<option value="' + lookup[id].shiftTarget.id + '">&raquo; ' +
-					lookup[id].shiftTarget.name + '</option>');
+				this.append('<option value="' + lookup[id].shiftTarget.id + '">&raquo; ' + lookup[id].shiftTarget.name);
 			} else for (var h = minRange; h <= maxRange; h++) {
 				console.log("populating target list; minRange is",minRange,"maxRange is",maxRange);
 				
@@ -153,8 +163,7 @@ $.extend({alert: function(message, title) {
 							(lookup[id].crashedBy	=== lookup[i] ? '~ ' : '') +
 							(lookup[id].shiftTarget	=== lookup[i] ? '&raquo; ' : '') +
 							lookup[i].name +
-							(range != undefined && x === 'rangedAttack' ? ' (' + range + ')' : '') +
-							'</option>');
+							(range != undefined && x === 'rangedAttack' ? ' (' + range + ')' : ''));
 					} else {
 						console.log("skipping",i);
 					}
@@ -167,8 +176,7 @@ $.extend({alert: function(message, title) {
 		if (action === 'getStats') {
 			console.groupCollapsed('getStats');
 			this.each(function() {
-				var evalStr,
-					stat = $(this).attr('id'),
+				var stat = $(this).attr('id'),
 					type = $(this).attr('type');
 
 				if (type === undefined) type = $(this).prop('tagName').toLowerCase();
@@ -180,15 +188,21 @@ $.extend({alert: function(message, title) {
 					$(this).val(range);
 					
 					$('.range').trigger('change');
+				} else if (String(stat).match('^hostile-')) {
+					var target = String(stat).replace('hostile-', ''),
+						hostile = lookup[id].getHostility(lookup[target]);
+
+					$(this).val(hostile);
+					
+					$('.range').trigger('change');
 				} else if (stat) {
 					if (type === 'checkbox')
-						evalStr = "$(this).prop('checked', lookup['"+id+"']."+stat+")";
+						$(this).prop('checked', lookup[id][stat]);
 					else if (type != "select")
-						evalStr = "$(this).val(lookup['"+id+"']."+stat+")";
+						$(this).val(lookup[id][stat]);
 				}
 				
-				console.log('stat/type/evalStr:',stat,type,evalStr);
-				eval(evalStr);
+				console.log('stat/type:',stat,type);
 			});
 			console.groupEnd();
 		}
@@ -209,7 +223,7 @@ $.extend({alert: function(message, title) {
 			this.empty();
 				console.log('clearing out existing entries');
 
-			for (var k in ticks) this.append('<option value="'+ticks[k]+'">'+ticks[k]+'</option>');
+			for (var k in ticks) this.append('<option value="'+ticks[k]+'">'+ticks[k]+'');
 
 			console.groupEnd();
 			return this;

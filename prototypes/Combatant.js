@@ -1,14 +1,15 @@
 function Combatant() {
 	// from stack overflow @ http://goo.gl/imz8Cf
 	this.id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {var r = Math.random()*16|0,v=c=='x'?r:r&0x3|0x8;return v.toString(16);});
+
 	this.active = true;
 
 	this.crashedAndWithered = false;
 	this.turnsInCrash = 0;
 	this.onslaught = 0;
 
-	this.bashing	= 0;
-	this.lethal		= 0;
+	this.bashing = 0;
+	this.lethal = 0;
 	this.aggravated = 0;
 
 	this.healthTrack = [
@@ -24,8 +25,19 @@ function Combatant() {
 	this.healthTrack[-4] = this.healthTrack[3];
 	this.healthTrack.inc = this.healthTrack[4];
 
+	this.relations = [];
 	this.vectors = [];
 }
+
+
+
+
+
+
+
+
+
+// various stat and pool getters
 
 Combatant.prototype.getDamage = function() {
 	return this.strength + this.damage;
@@ -59,7 +71,7 @@ Combatant.prototype.getEvasionPool = function(specialty) {
 Combatant.prototype.getDefense = function(specialty) {
 	if (isNaN(this.getWoundPenalty())) return 0;
 	else return Math.max(this.getParryPool(specialty), this.getEvasionPool(specialty), 0) - this.onslaught;
-}
+};
 
 Combatant.prototype.getRushPool = function() {
 	return this.dexterity + this.athletics;
@@ -87,6 +99,16 @@ Combatant.prototype.joinBattle = function() {
 
 	return initiative;
 };
+
+
+
+
+
+
+
+
+
+// health and damage
 
 Combatant.prototype.resetHealthTrack = function() {
 	console.log("resetting health track");
@@ -183,6 +205,15 @@ Combatant.prototype.getWoundPenalty = function() {
 	}
 };
 
+
+
+
+
+
+
+
+
+// range stuff
 Combatant.prototype.getRange = function(a) {
 	for (var i in this.vectors) {
 		if (this.vectors[i].target === a) {
@@ -190,7 +221,7 @@ Combatant.prototype.getRange = function(a) {
 			return this.vectors[i].range.value;
 		}
 	} console.log("getRange: no match"); return undefined;
-}
+};
 
 Combatant.prototype.setRange = function(target, range) {
 	console.group("setRange target:",target.name,"range:",range);
@@ -217,7 +248,7 @@ Combatant.prototype.setRange = function(target, range) {
 		this.mergeRangeBands(target);
 
 	console.groupEnd();
-}
+};
 
 Combatant.prototype.refreshRangeBands = function() {
 	console.group("moving out of zero range:");
@@ -236,7 +267,7 @@ Combatant.prototype.refreshRangeBands = function() {
 			}
 		}
 	} console.groupEnd();
-}
+};
 
 Combatant.prototype.mergeRangeBands = function(a) {
 	console.group("moving into zero range");
@@ -255,7 +286,7 @@ Combatant.prototype.mergeRangeBands = function(a) {
 			}
 		}
 	} console.groupEnd();
-}
+};
 
 Combatant.prototype.getRangeMinMax = function(operator) {	
 	var result;
@@ -275,16 +306,62 @@ Combatant.prototype.getRangeMinMax = function(operator) {
 	console.groupEnd();
 
 	return result;
-}
+};
 
 Combatant.prototype.getMaxRange = function() {
 	return this.getRangeMinMax('>');
-}
+};
 
 Combatant.prototype.getMinRange = function() {
 	return this.getRangeMinMax('<');
-}
+};
 
+
+
+
+
+
+
+
+
+// hostile vs. friendly
+Combatant.prototype.getHostility = function(a) {
+	for (var i in this.relations) {
+		if (this.relations[i].target === a) {
+			console.log('getHostility: match! relation to',this.relations[i].target.name,'is',this.relations[i].hostile.value);
+			return this.relations[i].hostile.value;
+		}
+	} console.log('getHostility: no match'); return undefined;
+};
+
+Combatant.prototype.setHostility = function(target, value) {
+	console.group('setHostility target:',target.name,'value:',value);
+
+	var newHostile = {value: value},
+		oldHostile = this.getHostility(target);
+
+	if (oldHostile === undefined) {
+		this.relations.push({target: target, hostile: newHostile});
+		target.relations.push({target: this, hostile: newHostile});
+		console.log('hostile is undefined; pushing new relations for both combatants');
+	} else for (var i in this.relations) {
+		console.log('hostile exists; setting to',value);
+		if (this.relations[i].target === target)
+			this.relations[i].hostile.value = value;
+	}
+
+	console.groupEnd();
+};
+
+
+
+
+
+
+
+
+
+// printing things
 Combatant.prototype.printRow = function() {
 	var playerBubble = $('<tr class="playerBubble"></tr>'),
 		wound = this.getWoundPenalty();
@@ -370,6 +447,7 @@ Combatant.prototype.printControls = function() {
 		init = this.initiative;
 
 	span.attr('id', this.id);
+	span.data('combatant', this);
 
 	if (init != undefined) {
 		span.append(

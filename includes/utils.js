@@ -1,27 +1,13 @@
 function printRoll(numDice, sides, targetNumber, doubleRule, difficulty) {
-	console.groupCollapsed(numDice + "d" + sides + "@" + targetNumber + "; double rule: " + doubleRule);
-
 	var result = diceRoller(numDice, sides),
 		successes = successChecker(result, targetNumber, doubleRule),
 		threshold = successes - difficulty;
 
-	printResult("Rolled: ");
-	for (var roll in result) printResult(result[roll] + " ");
-	if (successes < 0) {
-		printResult("\n" + "BOTCH!" + "\n");
-		console.log('BOTCH at threshold',threshold);
-	} else if (threshold < 0) {
-		printResult("\nFailure! (" + threshold + " success[es].)\n");
-		console.log('Failure at threshold',threshold);
-	} else if (threshold === 0) {
-		printResult("\nSuccess! (no threshold successes.)\n");
-		console.log('Success at threshold',threshold);
-	} else {
-		printResult("\nSuccess at threshold " + threshold + "!\n");
-		console.log('Success at threshold',threshold);
-	}
-
-	scrollToBottom();
+	printResult('Rolled',numDice + 'd10 @',targetNumber,'vs.',difficulty + ':',result.join(', ')+'.');
+	
+	if (successes < 0) printResult('BOTCH!');
+	else if (threshold < 0) printResult('Failure!');
+	else printResult('SUCCESS with',threshold,'threshold successes!');
 
 	console.groupEnd();
 }
@@ -114,10 +100,6 @@ function opposedRoll(first, second) {
 
 function sanitize(str) {
 	return (str + '').replace(/[\\"']/g, '\\$&').replace(/\u0000/g, '\\0');
-}
-
-function scrollToBottom() {
-	RESULTS_WINDOW.scrollTop(RESULTS_WINDOW[0].scrollHeight - RESULTS_WINDOW.height());
 }
 
 function stunt(level) {
