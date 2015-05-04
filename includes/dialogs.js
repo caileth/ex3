@@ -9,7 +9,7 @@ function dialogAddCombatant() {
 		close: (edit ? function(){closeEdit(id);} : function(){closeAdd();})});
 
 	if (edit === true) {
-		console.groupCollapsed('Editing');
+		console.log('Editing');
 		$('#dialog-form :input').Ex3('getStats', id);
 		DIALOG.dialog('option', 'buttons', [
 			{ text: 'Edit combatant', click: function() {
@@ -21,7 +21,7 @@ function dialogAddCombatant() {
 				DIALOG.dialog('close');
 			}}]);
 	} else {
-		console.groupCollapsed('Adding');
+		console.log('Adding');
 		
 		dialogVectors(id);
 		
@@ -36,8 +36,6 @@ function dialogAddCombatant() {
 	}
 
 	DIALOG.dialog('open');
-
-	console.groupEnd();
 }
 
 function dialogDebug() {
@@ -67,8 +65,8 @@ function dialogDebug() {
 	});
 
 	$('#dialog-form :input').Ex3('getStats', id);
-	$('#crashedBy').Ex3('populate', id, undefined);
-	$('#shiftTarget').Ex3('populate', id, undefined);
+	$('#crashedBy').Ex3('populateHostile', id, undefined);
+	$('#shiftTarget').Ex3('populateHostile', id, undefined);
 
 	DIALOG.dialog('open');
 }
@@ -197,7 +195,7 @@ function dialogAim() {
 			}
 		});
 
-		$('#aimTargets').Ex3('populate', id, 0);
+		$('#aimTargets').Ex3('populateHostile', id, 0);
 
 		DIALOG.dialog('open');
 	} else {
@@ -244,7 +242,7 @@ function dialogAttack() {
 			attackForm[0].reset();
 		}
 	});
-	$('#opponents').Ex3('populate', id, 0, maxRange);
+	$('#opponents').Ex3('populateHostile', id, 0, maxRange);
 	$('#attackTick').Ex3('getDelayTicks', id);
 
 	if (lookup[id].initiative < 1) $('#decisive').prop('disabled', true);
@@ -345,10 +343,9 @@ function dialogMoveType() {
 
 
 function dialogRandom() {
-	console.groupCollapsed('Random Button');
+	console.log('Random Button');
 	randomNameGenerator(NAMES_DATABASE);
 	randomStatsGenerator();
-	console.groupEnd();
 }
 
 

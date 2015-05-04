@@ -125,7 +125,7 @@ $.extend({alert: function(message, title) {
 	$.fn.Ex3 = function(action, id, x, y) {
 		var lookup = lookupByID(SCENE.combatants);
 
-		if (action === 'populate') {
+		if (action === 'populate' || action === 'populateHostile') {
 			console.groupCollapsed('populate: x =',x,'and y =',y);
 
 			var minRange = (x != undefined ? x : lookup[id].getMinRange()),
@@ -143,18 +143,20 @@ $.extend({alert: function(message, title) {
 
 				this.append('<option value="' + lookup[id].shiftTarget.id + '">&raquo; ' + lookup[id].shiftTarget.name);
 			} else for (var h = minRange; h <= maxRange; h++) {
-				console.log("populating target list; minRange is",minRange,"maxRange is",maxRange);
+				console.log('populating target list; minRange is',minRange,'maxRange is',maxRange);
 				
 				// using for in because lookup isn't an array lol
 				for (var i in lookup) {
 					var range = lookup[id].getRange(lookup[i]),
+						targetIsHostile = lookup[id].getHostility(lookup[i]),
+						targetQualifies = (action === 'populate' || targetIsHostile),
 						sourceIsNotTarget = (i != id),
 						targetInitiativeIsSet = (lookup[i].initiative != undefined),
 						targetRangeIsCorrect = (range === h);
 
 					console.log('looking for range',h,'target range is',range);
 					
-					if (sourceIsNotTarget && targetInitiativeIsSet && targetRangeIsCorrect) {
+					if (sourceIsNotTarget && targetInitiativeIsSet && targetRangeIsCorrect && targetQualifies) {
 						console.log('adding',lookup[i].name);
 
 						this.append(

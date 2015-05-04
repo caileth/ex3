@@ -1,22 +1,21 @@
 function randomStatsGenerator() {
-	var armorOptions = $("#armorPicker option"),
-		weaponOptions = $("#weaponPicker option"),
+	var armorOptions = $('#armorPicker option'),
+		weaponOptions = $('#weaponPicker option'),
 		randomArmor = ~~(Math.random() * armorOptions.length),
 		randomWeapon = ~~(Math.random() * weaponOptions.length);
 
-	console.groupCollapsed("Stats generator");
+	console.groupCollapsed('Stats generator');
 	DIALOG_FORM_NUMBERS.refresh();
 	DIALOG_FORM_NUMBERS.each(function(){
 		$(this).val(randomStats($(this)));
 	});
+	console.groupEnd();
 
 	armorOptions.eq(randomArmor).prop('selected', true);
 	weaponOptions.eq(randomWeapon).prop('selected', true);
 	doPickerStats();
 
-	$(".range").trigger("change"); // update range display
-
-	console.groupEnd();
+	$('.range').trigger('change'); // update range display
 }
 
 function randomNameGenerator(data) {
@@ -81,12 +80,12 @@ function twinkStatsGenerator() {
 }
 
 function doPickerStats() {
-	console.groupCollapsed('gear picker');
-
-	var armorVal = $('#armorPicker').val(),
-		armorStats = GEAR_DATABASE[armorVal],
-		weaponVal = $('#weaponPicker').val(),
-		weaponStats = GEAR_DATABASE[weaponVal];
+	var armorVal = $('#armorPicker option:selected').val().split('.'),
+		armorStats = GEAR_DATABASE[armorVal[0]][armorVal[1]][armorVal[2]],
+		weaponVal = $('#weaponPicker option:selected').val().split('.'),
+		weaponStats = GEAR_DATABASE[weaponVal[0]][weaponVal[1]][weaponVal[2]];
+	
+	console.log('gear picker',armorVal,weaponVal,armorStats,weaponStats);
 
 	$('#armor').val(armorStats[0]);
 	$('#hardness').val(armorStats[1]);
@@ -96,10 +95,6 @@ function doPickerStats() {
 	$('#doesLethal').prop('checked', weaponStats[4]);
 	$('#overwhelming').val(weaponStats[2]);
 	$('#defense').val(weaponStats[3]);
-
-	console.log('new value for #weaponPicker is',weaponVal + ':',weaponStats);
-	console.log('new value for #armorPicker is',armorVal + ':',armorStats);
-	console.groupEnd();
 }
 
 function randomStats(thing) {

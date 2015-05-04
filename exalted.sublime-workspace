@@ -564,17 +564,21 @@
 	],
 	"file_history":
 	[
-		"/C/Users/Justin/Documents/GitHub/ex3/prototypes/Scene.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/README.md",
+		"/C/Users/Justin/Documents/GitHub/ex3/index.html",
 		"/C/Users/Justin/Documents/GitHub/ex3/exalted.js",
 		"/C/Users/Justin/Documents/GitHub/ex3/includes/defines.js",
-		"/C/Users/Justin/Documents/GitHub/ex3/prototypes/Combatant.js",
 		"/C/Users/Justin/Documents/GitHub/ex3/includes/dialogs.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/includes/randomCrap.js",
 		"/C/Users/Justin/Documents/GitHub/ex3/includes/utils.js",
-		"/C/Users/Justin/Documents/GitHub/ex3/index.html",
-		"/C/Users/Justin/Documents/GitHub/ex3/README.md",
+		"/C/Users/Justin/Documents/GitHub/ex3/json/gear.json",
+		"/C/Users/Justin/Documents/GitHub/ex3/json/names.json",
+		"/C/Users/Justin/Documents/GitHub/ex3/prototypes/Combatant.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/prototypes/prototypes.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/prototypes/Scene.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/.gitignore",
 		"/C/Users/Justin/Documents/GitHub/ex3/includes/combat.js",
 		"/C/Users/Justin/Documents/GitHub/ex3/index.php",
-		"/C/Users/Justin/Documents/GitHub/ex3/includes/randomCrap.js",
 		"/C/Users/Justin/Documents/GitHub/ex3/includes/prototypes.js",
 		"/D/Documents/GitHub/ex3/includes/prototypes.js",
 		"/D/Documents/GitHub/ex3/README.md",
@@ -687,11 +691,7 @@
 		"/C/Users/Justin/AppData/Local/Temp/scp49676/home/calith/hw.caletges.com/index.php",
 		"/C/Users/Justin/AppData/Local/Temp/scp54993/home/calith/hw.caletges.com/index.php",
 		"/C/Users/Justin/AppData/Local/Temp/scp33175/home/calith/hw.caletges.com/index.php",
-		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/common/landed_titles/landed_titles.txt",
-		"/D/Documents/Paradox Interactive/Crusader Kings II/save games/Bengal_Empire1005_03_06.ck2",
-		"/D/Documents/Paradox Interactive/Crusader Kings II/save games/Bengal_Empire1005_03_06_2.ck2",
-		"/C/Users/Justin/AppData/Local/Temp/scp10040/home/calith/hw.caletges.com/index.php",
-		"/C/Program Files (x86)/Steam/skins/skins_readme.txt"
+		"/C/Program Files (x86)/Steam/SteamApps/common/Crusader Kings II/common/landed_titles/landed_titles.txt"
 	],
 	"find":
 	{
