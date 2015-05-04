@@ -10,7 +10,6 @@ Minor:
 - Misc Action
 
 Major:
-- Hostile vs. Nonhostile
 - Combat Movement & Range
   - Rush
   - Disengage
