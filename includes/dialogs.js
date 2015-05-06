@@ -1,39 +1,50 @@
 function dialogAddCombatant() {
-	var edit = ($(this).attr('class') === 'edit'),
-		id = $(this).parent().attr('id');
+	DIALOG_FORM.html(STATS_WINDOW);
+
+	DIALOG.dialog({
+		title: 'Add combatant',
+		close: function() {
+			closeAdd();}
+		});
+
+	console.log('Adding');
+	
+	dialogVectors();
+	
+	DIALOG.dialog('option', 'buttons', [
+		{ text: 'Add combatant', click: function() {
+			addCombatant();
+			SCENE.printCombatants();
+		}},
+		{ text: 'Cancel', click: function() {
+			DIALOG.dialog('close');
+		}}]);
+
+	DIALOG.dialog('open');
+}
+
+function dialogEditCombatant() {
+	var id = $(this).parent().data('combatant').id;
 
 	DIALOG_FORM.html(STATS_WINDOW);
 
 	DIALOG.dialog({
-		title: (edit ? 'Edit combatant' : 'Add combatant'),
-		close: (edit ? function(){closeEdit(id);} : function(){closeAdd();})});
+		title: 'Edit combatant',
+		close: function(){closeEdit(id);}
+	});
 
-	if (edit === true) {
-		console.log('Editing');
-		$('#dialog-form :input').Ex3('getStats', id);
-		DIALOG.dialog('option', 'buttons', [
-			{ text: 'Edit combatant', click: function() {
-				recordStats(id);
-				SCENE.printCombatants();
-				DIALOG.dialog('close');
-			}},
-			{ text: 'Cancel', click: function() {
-				DIALOG.dialog('close');
-			}}]);
-	} else {
-		console.log('Adding');
-		
-		dialogVectors(id);
-		
-		DIALOG.dialog('option', 'buttons', [
-			{ text: 'Add combatant', click: function() {
-				addCombatant();
-				SCENE.printCombatants();
-			}},
-			{ text: 'Cancel', click: function() {
-				DIALOG.dialog('close');
-			}}]);
-	}
+	console.log('Editing');
+	$('#dialog-form :input').Ex3('getStats', id);
+
+	DIALOG.dialog('option', 'buttons', [
+		{ text: 'Edit combatant', click: function() {
+			recordStats(id);
+			SCENE.printCombatants();
+			DIALOG.dialog('close');
+		}},
+		{ text: 'Cancel', click: function() {
+			DIALOG.dialog('close');
+		}}]);
 
 	DIALOG.dialog('open');
 }

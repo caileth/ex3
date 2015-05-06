@@ -45,7 +45,7 @@ Combatant.prototype.getDamage = function() {
 
 Combatant.prototype.getJoinBattlePool = function() {
 	var pool = this.awareness + this.wits;
-		console.log("Join Battle pool:",pool);
+		console.log('Join Battle pool:',pool);
 
 	return pool;
 };
@@ -363,7 +363,7 @@ Combatant.prototype.setHostility = function(target, value) {
 
 // printing things
 Combatant.prototype.printRow = function() {
-	var playerBubble = $('<tr class="playerBubble"></tr>'),
+	var playerBubble = $('<div class="player"></div>'),
 		wound = this.getWoundPenalty();
 
 	if (wound === 'dead') playerBubble.addClass('dead');
@@ -371,34 +371,22 @@ Combatant.prototype.printRow = function() {
 	else if (!this.active) playerBubble.addClass('inactive');
 	else if (this.initiative < 1) playerBubble.addClass('crashed');
 
-	playerBubble.append(this.printTD());
+	playerBubble.append(this.printInitiative());
+	playerBubble.append(this.printName());
+	playerBubble.append(this.printStats());
+	playerBubble.append(this.printControls());
 
 	return playerBubble;
-};
-
-Combatant.prototype.printTD = function() {
-	var playerTD = $('<td class="player" name="' + this.name + '"></td>');
-
-	playerTD.append(this.printInitiative());
-	playerTD.append(this.printName());
-	playerTD.append('<br>');
-	playerTD.append(this.printStats());
-	playerTD.append('<br>');
-	playerTD.append(this.printControls());
-	playerTD.append('<br>');
-	playerTD.append(this.printRange());
-
-	return playerTD;
 };
 
 Combatant.prototype.printInitiative = function() {
 	var init = this.initiative || '-';
 
-	return $('<span class="initiative">' + init + '</span>');
+	return $('<div class="initiative">' + init + '</div>');
 };
 
 Combatant.prototype.printName = function() {
-	var span = $('<span class="name">' + this.name + '</span>');
+	var span = $('<div class="name">' + this.name + '</div>');
 
 	if (this.getWoundPenalty() === 'dead') span.append(' (DEAD)');
 	if (this.getWoundPenalty() === 'incapacitated') span.append(' (Incapacitated)');
@@ -407,7 +395,7 @@ Combatant.prototype.printName = function() {
 };
 
 Combatant.prototype.printStats = function() {
-	var span = $('<span class="stats"></span>');
+	var span = $('<div class="stats"></div>');
 
 	if (!isNaN(this.getWoundPenalty())) {
 		span.append(
@@ -418,8 +406,10 @@ Combatant.prototype.printStats = function() {
 			'<abbr title="Rush">Ru</abbr>: ' + this.getRushPool() + ' &bull; ' +
 			'<abbr title="Disengage">Ds</abbr>: ' + this.getDisengagePool() + ' &bull; ' +
 			'<abbr title="Soak">So</abbr>: ' + this.getSoak() + ' &bull; ' +
-			'<abbr title="Hardness">Ha</abbr>: ' + (this.initiative < 1 ? '0' : this.hardness) + '<br>');
-	} span.append('<b>Health:</b> ' + this.printHealth());
+			'<abbr title="Hardness">Ha</abbr>: ' + (this.initiative < 1 ? '0' : this.hardness));
+	} span.append(' &bull; <b>Health:</b> ' + this.printHealth());
+
+	span.append(this.printRange());
 
 	return span;
 };
@@ -443,7 +433,7 @@ Combatant.prototype.printHealth = function() {
 };
 
 Combatant.prototype.printControls = function() {
-	var span = $('<span></span>'),
+	var span = $('<div></div>'),
 		init = this.initiative;
 
 	span.attr('id', this.id);
@@ -456,14 +446,13 @@ Combatant.prototype.printControls = function() {
 			'<input type="button" class="aim" value="Aim">' +
 			'<input type="button" class="fullDefense" value="Full Defense"' + (init < 1 ? ' disabled' : '') +'>' +
 			'<input type="button" class="move" value="Move"' + (this.hasMoved === true ? ' disabled' : '') +'>' +
-			'<input type="button" class="flurry" value="Flurry">' +
-			'<br>');
+			'<input type="button" class="flurry" value="Flurry">');
 	}
 
 	span.append(
 		'<input type="button" class="edit" value="Edit">' +
 		'<input type="button" class="debug" value="ST">' +
-		'<input type="button" class="remove" value="&#10006;">');
+		'<input type="button" class="remove" value="&times;">');
 
 	return span;
 };
@@ -471,7 +460,7 @@ Combatant.prototype.printControls = function() {
 Combatant.prototype.printRange = function() {
 	var result = '';
 	if (this.vectors.length > 0) {
-		result += '<b>Ranges:</b> ';
+		result += '&bull; <b>Ranges:</b> ';
 		for (var i = 0; i < this.vectors.length; i++) {
 			result += this.vectors[i].target.name;
 			result += ': ';

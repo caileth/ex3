@@ -12,7 +12,7 @@ $(function() {
 	$('body').on('click', '.aim', dialogAim);
 	$('body').on('click', '.attack', dialogAttack);
 	$('body').on('click', '.debug', dialogDebug);
-	$('body').on('click', '.edit', dialogAddCombatant);
+	$('body').on('click', '.edit', dialogEditCombatant);
 	$('body').on('click', '.flurry', dialogFlurry);
 	$('body').on('click', '.move', dialogMove);
 	$('body').on('click', '.randomize', dialogRandom);
@@ -29,14 +29,13 @@ $(function() {
 	});
 
 	$('body').on('click', '.fullDefense', function() {
-		var id = $(this).parent().attr("id"),
-			lookup = lookupByID(SCENE.combatants);
+		var combatant = $(this).parent().data('combatant');
 
-		lookup[id].onslaught -= FULL_DEFENSE_BONUS;
-		lookup[id].initiative -= 1;
-		lookup[id].active = false;
+		combatant.onslaught -= FULL_DEFENSE_BONUS;
+		combatant.initiative -= 1;
+		combatant.active = false;
 
-		printResult(lookup[id].name,'goes Full Defense!');
+		printResult(combatant.name,'goes Full Defense!');
 		
 		doRound();
 	});

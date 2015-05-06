@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"weap",
+				"weaponStats"
+			],
+			[
 				"pro",
 				"prop"
 			],
@@ -102,10 +106,6 @@
 			[
 				"secon",
 				"second"
-			],
-			[
-				"weap",
-				"weaponPicker"
 			],
 			[
 				"armor",
@@ -564,20 +564,20 @@
 	],
 	"file_history":
 	[
-		"/C/Users/Justin/Documents/GitHub/ex3/README.md",
-		"/C/Users/Justin/Documents/GitHub/ex3/index.html",
-		"/C/Users/Justin/Documents/GitHub/ex3/exalted.js",
-		"/C/Users/Justin/Documents/GitHub/ex3/includes/defines.js",
 		"/C/Users/Justin/Documents/GitHub/ex3/includes/dialogs.js",
-		"/C/Users/Justin/Documents/GitHub/ex3/includes/randomCrap.js",
-		"/C/Users/Justin/Documents/GitHub/ex3/includes/utils.js",
-		"/C/Users/Justin/Documents/GitHub/ex3/json/gear.json",
-		"/C/Users/Justin/Documents/GitHub/ex3/json/names.json",
-		"/C/Users/Justin/Documents/GitHub/ex3/prototypes/Combatant.js",
-		"/C/Users/Justin/Documents/GitHub/ex3/prototypes/prototypes.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/includes/defines.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/index.html",
 		"/C/Users/Justin/Documents/GitHub/ex3/prototypes/Scene.js",
-		"/C/Users/Justin/Documents/GitHub/ex3/.gitignore",
+		"/C/Users/Justin/Documents/GitHub/ex3/exalted.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/prototypes/Combatant.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/README.md",
+		"/C/Users/Justin/Documents/GitHub/ex3/includes/randomCrap.js",
 		"/C/Users/Justin/Documents/GitHub/ex3/includes/combat.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/json/names.json",
+		"/C/Users/Justin/Documents/GitHub/ex3/json/gear.json",
+		"/C/Users/Justin/Documents/GitHub/ex3/includes/utils.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/prototypes/prototypes.js",
+		"/C/Users/Justin/Documents/GitHub/ex3/.gitignore",
 		"/C/Users/Justin/Documents/GitHub/ex3/index.php",
 		"/C/Users/Justin/Documents/GitHub/ex3/includes/prototypes.js",
 		"/D/Documents/GitHub/ex3/includes/prototypes.js",
@@ -712,6 +712,32 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"span",
+			"td",
+			"tr",
+			"remove",
+			"\"",
+			"vectors",
+			"id",
+			"vmin",
+			"vmax",
+			"vmin",
+			"5vmin",
+			"vw",
+			"5vw",
+			"vh",
+			"vw",
+			"lookup[id]",
+			"lookup",
+			"Combatant.prototype.",
+			"this.",
+			"option:selected",
+			"selected",
+			"\"",
+			"randomStats",
+			"min:",
+			"Random Button",
+			"\"",
 			"Init",
 			"getWoundPenalty",
 			"getRangeHTML",
@@ -813,33 +839,7 @@
 			"shift",
 			"resetActiveStatus",
 			"reset",
-			"crashedBy",
-			"shift",
-			"shiftTarget",
-			"Attack Button",
-			"opponents",
-			"ATTACK_WINDOW",
-			"attack",
-			"shift",
-			"doRound",
-			"generateID",
-			"health",
-			"scene",
-			"reset",
-			"url(",
-			"includes",
-			"json",
-			"./exalted-",
-			"doRound",
-			"round",
-			"print",
-			"damage",
-			"disabled",
-			"join",
-			"doRound",
-			"addCombatant",
-			"printCombatants",
-			"doRound"
+			"crashedBy"
 		],
 		"highlight": false,
 		"in_selection": false,
@@ -847,6 +847,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"Ex3.Combatant.prototype.",
 			">",
 			"ROUND",
 			"\\1[\\2\\3],",
@@ -977,7 +978,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 186.0,
+	"side_bar_width": 209.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

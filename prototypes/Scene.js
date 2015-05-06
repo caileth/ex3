@@ -24,12 +24,12 @@ Scene.prototype.iterateCrashCounter = function() {
 Scene.prototype.printCombatants = function() {
 	console.groupCollapsed('printCombatants');
 
-	$('tr.playerBubble').remove();
+	$('.player').remove();
 
 	this.combatants.sort(sortByInitiative);
 
-	for (i = 0; i < this.combatants.length; i++) {
-		$('#combatants > tbody:last').append(this.combatants[i].printRow());
+	for (var i = 0; i < this.combatants.length; i++) {
+		$('#combatants').append(this.combatants[i].printRow());
 	}
 
 	console.groupEnd();
