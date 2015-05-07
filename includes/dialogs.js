@@ -24,21 +24,21 @@ function dialogAddCombatant() {
 }
 
 function dialogEditCombatant() {
-	var id = $(this).parent().data('combatant').id;
+	var combatant = $(this).parent().data('combatant');
 
 	DIALOG_FORM.html(STATS_WINDOW);
 
 	DIALOG.dialog({
 		title: 'Edit combatant',
-		close: function(){closeEdit(id);}
+		close: function(){closeEdit(combatant);}
 	});
 
 	console.log('Editing');
-	$('#dialog-form :input').Ex3('getStats', id);
+	$('#dialog-form :input').Ex3('getStats', combatant);
 
 	DIALOG.dialog('option', 'buttons', [
 		{ text: 'Edit combatant', click: function() {
-			recordStats(id);
+			recordStats(combatant);
 			SCENE.printCombatants();
 			DIALOG.dialog('close');
 		}},
@@ -50,8 +50,7 @@ function dialogEditCombatant() {
 }
 
 function dialogDebug() {
-	var id = $(this).parent().attr('id'),
-		lookup = lookupByID(SCENE.combatants);
+	var combatant = $(this).parent().data('combatant');
 
 	DIALOG_FORM.html(DEBUG_WINDOW);
 
@@ -61,8 +60,8 @@ function dialogDebug() {
 		title: 'Debug',
 		buttons: {
 			Edit: function() {
-				recordStats(id);
-				lookup[id].recordDamage();
+				recordStats(combatant);
+				combatant.recordDamage();
 				doRound();
 				DIALOG.dialog('close');
 			},
@@ -71,7 +70,7 @@ function dialogDebug() {
 			}
 		},
 		close: function() {
-			closeEdit(id);
+			closeEdit(combatant);
 		}
 	});
 
@@ -109,60 +108,49 @@ function closeAdd() {
 	addCombatantForm[0].reset();
 }
 
-function closeEdit(id) {
+function closeEdit(combatant) {
 	var editCombatantForm = DIALOG_FORM.on('submit', function(event) {
 		event.preventDefault();
-		recordStats(id);
+		recordStats(combatant);
 		DIALOG.dialog('close');
 	});
 
 	editCombatantForm[0].reset();
 }
 
-function recordStats(id) {
-	console.groupCollapsed('record stats',id);
+function recordStats(combatant) {
+	console.groupCollapsed('record stats');
 
 	DIALOG_FORM_INPUTS.refresh();
-
-	var lookup = lookupByID(SCENE.combatants);
-		console.log(lookup);
 
 	console.log('refreshing dialog form inputs selector');
 	console.log(DIALOG_FORM_INPUTS);
 
 	DIALOG_FORM_INPUTS.each(function() {
-		var stat = $(this).attr('id'),
+		var checked = $(this).prop('checked'),
+			stat = $(this).attr('id'),
+			target = $(this).data('combatant'),
 			type = $(this).attr('type'),
 			value = $(this).val();
 
 		if (type === undefined) type = $(this).prop('tagName').toLowerCase();
 
 		if (String(stat).match('^range-')) {
-			var target = String(stat).replace('range-', ''),
-				range = {value: value};
-				
-			lookup[id].setRange(lookup[target], value);
+			combatant.setRange(target, value);
 		} else if (String(stat).match('^hostile-')) {
-			// uhh I'll figure this out later
-			var target = String(stat).replace('hostile-', ''),
-				hostile = $(this).prop('checked');
-
-			lookup[id].setHostility(lookup[target], hostile);
+			combatant.setHostility(target, checked);
 		} else if (stat === 'crashedBy')
-			lookup[id].crashedBy = lookup[value];
+			combatant.crashedBy = target;
 		else if (stat === 'shiftTarget')
-			lookup[id].shiftTarget = lookup[value];
+			combatant.shiftTarget = target;
 		else if (stat) {
 			if (type === 'text') {
-				lookup[id][stat] = sanitize(value);
+				combatant[stat] = sanitize(value);
 			} else if (type === 'checkbox') {
-				value = $(this).prop('checked');
-				lookup[id][stat] = value;
+				combatant[stat] = checked;
 			} else if (type != 'select') {
-				lookup[id][stat] = parseInt(value);
+				combatant[stat] = parseInt(value);
 			}
-
-			console.log(stat,type,value);
 		}
 	});
 
