@@ -127,8 +127,8 @@ $.extend({alert: function(message, title) {
 		if (action === 'populate' || action === 'populateHostile') {
 			console.groupCollapsed('populate: x =',x,'and y =',y);
 
-			var minRange = (x != undefined ? x : lookup[id].getMinRange()),
-				maxRange = (y != undefined ? y : lookup[id].getMaxRange());
+			var minRange = (x !== undefined ? x : lookup[id].getMinRange()),
+				maxRange = (y !== undefined ? y : lookup[id].getMaxRange());
 			
 			console.log('maxRange:',maxRange);
 
@@ -137,7 +137,7 @@ $.extend({alert: function(message, title) {
 
 			if (x === undefined) this.append('<option value="undefined">None');
 
-			if (lookup[id].shiftTarget != undefined && this.attr('id') === 'opponents') {
+			if (lookup[id].shiftTarget !== undefined && this.attr('id') === 'opponents') {
 				console.log('adding shift target id',lookup[id].shiftTarget.id);
 
 				this.append('<option value="' + lookup[id].shiftTarget.id + '">&raquo; ' + lookup[id].shiftTarget.name);
@@ -149,8 +149,8 @@ $.extend({alert: function(message, title) {
 					var range = lookup[id].getRange(lookup[i]),
 						targetIsHostile = lookup[id].getHostility(lookup[i]),
 						targetQualifies = (action === 'populate' || targetIsHostile),
-						sourceIsNotTarget = (i != id),
-						targetInitiativeIsSet = (lookup[i].initiative != undefined),
+						sourceIsNotTarget = (i !== id),
+						targetInitiativeIsSet = (lookup[i].initiative !== undefined),
 						targetRangeIsCorrect = (range === h);
 
 					console.log('looking for range',h,'target range is',range);
@@ -158,15 +158,20 @@ $.extend({alert: function(message, title) {
 					if (sourceIsNotTarget && targetInitiativeIsSet && targetRangeIsCorrect && targetQualifies) {
 						console.log('adding',lookup[i].name);
 
-						this.append(
-							'<option value="' + i +'">' +
-							(lookup[id].aimTarget	=== lookup[i] ? '* ' : '') +
-							(lookup[id].crashedBy	=== lookup[i] ? '~ ' : '') +
+						var option = $('<option value="' + i +'">');
+
+						option.append(
+							(lookup[id].aimTarget === lookup[i] ? '* ' : '') +
+							(lookup[id].crashedBy === lookup[i] ? '~ ' : '') +
 							(lookup[id].shiftTarget	=== lookup[i] ? '&raquo; ' : '') +
 							lookup[i].name +
-							(range != undefined && x === 'rangedAttack' ? ' (' + range + ')' : ''));
+							(range !== undefined && x === 'rangedAttack' ? ' (' + range + ')' : ''));
+
+						option.data('combatant', lookup[i]);
+
+						this.append(option);
 					} else {
-						console.log("skipping",i);
+						console.log('skipping',i);
 					}
 				}
 			}
@@ -199,7 +204,7 @@ $.extend({alert: function(message, title) {
 				} else if (stat) {
 					if (type === 'checkbox')
 						$(this).prop('checked', lookup[id][stat]);
-					else if (type != "select")
+					else if (type !== "select")
 						$(this).val(lookup[id][stat]);
 				}
 				
@@ -216,7 +221,7 @@ $.extend({alert: function(message, title) {
 			ticks.push(lookup[id].initiative);
 
 			for (var j in lookup) {
-				if (lookup[j].initiative < lookup[id].initiative && lookup[j].initiative != ticks[ticks.length - 1]) {
+				if (lookup[j].initiative < lookup[id].initiative && lookup[j].initiative !== ticks[ticks.length - 1]) {
 					ticks.push(lookup[j].initiative);
 				}
 			}

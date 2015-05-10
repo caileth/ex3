@@ -158,7 +158,7 @@ function recordStats(id) {
 			} else if (type === 'checkbox') {
 				value = $(this).prop('checked');
 				lookup[id][stat] = value;
-			} else if (type != 'select') {
+			} else if (type !== 'select') {
 				lookup[id][stat] = parseInt(value);
 			}
 
@@ -331,7 +331,7 @@ function dialogMove() {
 		}
 	});
 
-	if (lookup[id].getMinRange() < 1) $('#move, label[for=move]').hide(); // can't Move normally if Engaged
+	if (lookup[id].getMinRange({hostile: true}) < 1) $('#move, label[for=move]').hide(); // can't Move normally if Engaged
 	else $('#disengage, label[for=disengage]').hide();
 
 	$('#moveTargets').Ex3('populate', id, 1); // can't move to a target at range 0, you're already there
@@ -392,7 +392,7 @@ function dialogVectors(id) {
 			them = SCENE.combatants[i],
 			us = lookup[id];
 
-		if (us != them) {
+		if (us !== them) {
 			DIALOG_FORM.append(
 				'<br>\n' + them.name + ': ' + '<br>\n' +
 				'&bull; Range: <input type="number" class="range" id="range-' + them.id + '" value="1" min="0" max="4">' +

@@ -44,10 +44,7 @@ Combatant.prototype.getDamage = function() {
 };
 
 Combatant.prototype.getJoinBattlePool = function() {
-	var pool = this.awareness + this.wits;
-		console.log('Join Battle pool:',pool);
-
-	return pool;
+	return this.awareness + this.wits;
 };
 
 Combatant.prototype.getWitheringPool = function() {
@@ -85,17 +82,42 @@ Combatant.prototype.getSoak = function() {
 	return this.stamina + this.armor;
 };
 
-Combatant.prototype.joinBattle = function() {
-	console.groupCollapsed(this.name,"joins battle");
 
-	var pool = this.getJoinBattlePool(),
-		roll = diceRoller(pool, DEFAULT_DIE_SIDE),
+
+
+
+
+
+
+
+// combat stuff
+
+Combatant.prototype.disengage = function() {
+	var opposed = -1,
+		thoseInOpposition = [];
+
+	this.initiative += DISENGAGE_COST;
+
+	for (var i = 0; i < this.relations.length; i++) {
+		if (this.relations[i].hostile && this.getRange(relations[i]) === 0) {
+			thoseInOpposition.push({target: this.relations[i], round: ROUND});
+			opposed = Math.max(opposed, diceRoller(this.relations[i].getRushPool()));
+		}
+	}
+
+	var result = diceRoller(this.getDisengagePool()) - opposed;
+
+	if (result > 0) {
+		this.disengaging = thoseInOpposition;
+	}
+
+	return result;
+};
+
+Combatant.prototype.joinBattle = function() {
+	var roll = diceRoller(this.getJoinBattlePool()),
 		suxx = Math.max(successChecker(roll, JB_TARGET, JB_DOUBLES), 0),
 		initiative = suxx + JB_EXTRA_SUX;
-	
-	console.log("JB sux:",suxx);
-	console.log("JB initiative:",initiative);
-	console.groupEnd();
 
 	return initiative;
 };
@@ -173,7 +195,7 @@ Combatant.prototype.recordDamage = function() {
 		}
 		console.groupEnd();
 	}
-}
+};
 
 Combatant.prototype.getWoundPenalty = function() {
 	var lastNonEmpty = findLastGreaterThan(this.healthTrack, 0),
@@ -214,6 +236,7 @@ Combatant.prototype.getWoundPenalty = function() {
 
 
 // range stuff
+
 Combatant.prototype.getRange = function(a) {
 	for (var i in this.vectors) {
 		if (this.vectors[i].target === a) {
@@ -230,7 +253,7 @@ Combatant.prototype.setRange = function(target, range) {
 	var newRange = {value: range},
 		oldRange = this.getRange(target);
 
-	if (oldRange === 0 && range != 0)
+	if (oldRange === 0 && range !== 0)
 		this.refreshRangeBands();
 
 	console.group("normal range behavior:");
@@ -244,7 +267,7 @@ Combatant.prototype.setRange = function(target, range) {
 			this.vectors[i].range.value = range;
 	} console.groupEnd();
 	
-	if (oldRange != 0 && range === 0)
+	if (oldRange !== 0 && range === 0)
 		this.mergeRangeBands(target);
 
 	console.groupEnd();
@@ -254,7 +277,7 @@ Combatant.prototype.refreshRangeBands = function() {
 	console.group("moving out of zero range:");
 	for (var i in this.vectors) {
 		var currentRange = this.vectors[i];
-		if (currentRange.range.value != 0) {
+		if (currentRange.range.value !== 0) {
 			var refresh = {value: currentRange.range.value};
 			console.log("refreshing current range");
 			currentRange.range = refresh;
@@ -294,9 +317,10 @@ Combatant.prototype.getRangeMinMax = function(operator) {
 	console.groupCollapsed("getRangeMinMax",operator);
 
 	for (var i in this.vectors) {
-		var curVal = this.vectors[i].range.value;
-		console.log("curVal",curVal,"— result",result);
-		if (result === undefined || (operator === '>' && curVal > result) || (operator === '<' && curVal < result)) {
+		var curVal = this.vectors[i].range.value,
+			curHos = this.relations[i].hostile.value;
+
+		if ((result === undefined || (operator === '>' && curVal > result) || (operator === '<' && curVal < result)) && (!arguments.hostile || curHos)) {
 			result = curVal;
 			console.log("new result is",result);
 		}
@@ -309,11 +333,11 @@ Combatant.prototype.getRangeMinMax = function(operator) {
 };
 
 Combatant.prototype.getMaxRange = function() {
-	return this.getRangeMinMax('>');
+	return this.getRangeMinMax('>', arguments);
 };
 
 Combatant.prototype.getMinRange = function() {
-	return this.getRangeMinMax('<');
+	return this.getRangeMinMax('<', arguments);
 };
 
 
@@ -325,6 +349,7 @@ Combatant.prototype.getMinRange = function() {
 
 
 // hostile vs. friendly
+
 Combatant.prototype.getHostility = function(a) {
 	for (var i in this.relations) {
 		if (this.relations[i].target === a) {
@@ -362,6 +387,7 @@ Combatant.prototype.setHostility = function(target, value) {
 
 
 // printing things
+
 Combatant.prototype.printRow = function() {
 	var playerBubble = $('<div class="player"></div>'),
 		wound = this.getWoundPenalty();
@@ -439,9 +465,9 @@ Combatant.prototype.printControls = function() {
 	span.attr('id', this.id);
 	span.data('combatant', this);
 
-	if (init != undefined) {
+	if (init !== undefined) {
 		span.append(
-			'<input type="button" class="attack" value="Attack"' + (this.getMinRange() != 0 ? ' disabled' : '') + '>' +
+			'<input type="button" class="attack" value="Attack"' + (this.getMinRange() !== 0 ? ' disabled' : '') + '>' +
 			'<input type="button" class="rangedAttack" value="Ranged Attack">' +
 			'<input type="button" class="aim" value="Aim">' +
 			'<input type="button" class="fullDefense" value="Full Defense"' + (init < 1 ? ' disabled' : '') +'>' +

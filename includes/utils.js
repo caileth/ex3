@@ -125,7 +125,7 @@ function printResult() {
 	for (var i = 0; i < arguments.length; i++) {
 		result += arguments[i];
 
-		if (i + 1 != arguments.length) result += ' ';
+		if (i + 1 !== arguments.length) result += ' ';
 	}
 
 	console.log(result);

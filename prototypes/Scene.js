@@ -12,7 +12,7 @@ Scene.prototype.iterateCrashCounter = function() {
 
 	for (j in this.combatants) {
 		var current = this.combatants[j];
-		if (current.turnsInCrash >= INITIATIVE_RESET_TURNS && current.initiative != undefined) {
+		if (current.turnsInCrash >= INITIATIVE_RESET_TURNS && current.initiative !== undefined) {
 			current.initiative = INITIATIVE_RESET_VALUE;
 			current.crashRecovery = ROUND;
 			current.turnsInCrash = 0;
@@ -142,11 +142,11 @@ Scene.prototype.clashAttackCheck = function(tick, attacker) {
 
 
 function sortByInitiative(a, b) {
-	if (a.getWoundPenalty() != 'dead' && b.getWoundPenalty() === 'dead') return -1;
-	else if (a.getWoundPenalty() === 'dead' && b.getWoundPenalty() != 'dead') return 1;
+	if (a.getWoundPenalty() !== 'dead' && b.getWoundPenalty() === 'dead') return -1;
+	else if (a.getWoundPenalty() === 'dead' && b.getWoundPenalty() !== 'dead') return 1;
 	else {
-		if (a.getWoundPenalty() != 'incapacitated' && b.getWoundPenalty() === 'incapacitated') return -1;
-		else if (a.getWoundPenalty() === 'incapacitated' && b.getWoundPenalty() != 'incapacitated') return 1;
+		if (a.getWoundPenalty() !== 'incapacitated' && b.getWoundPenalty() === 'incapacitated') return -1;
+		else if (a.getWoundPenalty() === 'incapacitated' && b.getWoundPenalty() !== 'incapacitated') return 1;
 		else {
 			if (a.active && !b.active) return -1;
 			else if (!a.active && b.active) return 1;
