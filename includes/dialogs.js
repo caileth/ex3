@@ -331,7 +331,7 @@ function dialogMove() {
 		}
 	});
 
-	if (lookup[id].getMinRange({hostile: true}) < 1) $('#move, label[for=move]').hide(); // can't Move normally if Engaged
+	if (lookup[id].getMinHostileRange() < 1) $('#move, label[for=move]').hide(); // can't Move normally if Engaged
 	else $('#disengage, label[for=disengage]').hide();
 
 	$('#moveTargets').Ex3('populate', id, 1); // can't move to a target at range 0, you're already there

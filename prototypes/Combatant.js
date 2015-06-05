@@ -93,22 +93,37 @@ Combatant.prototype.getSoak = function() {
 // combat stuff
 
 Combatant.prototype.disengage = function() {
-	var opposed = -1,
+	var disengage = successChecker(diceRoller(this.getDisengagePool())),
+		opposed = -1,
+		opposingRoll,
+		result,
 		thoseInOpposition = [];
 
 	this.initiative += DISENGAGE_COST;
 
+	printResult(this.name,'attempts to Disengage, losing',DISENGAGE_COST,'Initiative.');
+
+	disengage = successChecker(disengage);
+
 	for (var i = 0; i < this.relations.length; i++) {
-		if (this.relations[i].hostile && this.getRange(relations[i]) === 0) {
-			thoseInOpposition.push({target: this.relations[i], round: ROUND});
-			opposed = Math.max(opposed, diceRoller(this.relations[i].getRushPool()));
+		if (this.relations[i].hostile && this.getRange(this.relations[i].target) === 0) {
+			thoseInOpposition.push({target: this.relations[i].target, round: ROUND});
+
+			opposingRoll = successChecker(diceRoller(this.relations[i].target.getRushPool()));
+
+			printResult(this.relations[i].target.name,'rolls',opposingRoll,'successes versus Disengage.');
+
+			opposed = Math.max(opposed, opposingRoll);
 		}
 	}
 
-	var result = diceRoller(this.getDisengagePool()) - opposed;
+	result = disengage - opposed;
 
 	if (result > 0) {
 		this.disengaging = thoseInOpposition;
+		printResult(this.name,'successfully Disengages!');
+	} else {
+		printResult(this.name,'fails to Disengage.');
 	}
 
 	return result;
@@ -311,16 +326,16 @@ Combatant.prototype.mergeRangeBands = function(a) {
 	} console.groupEnd();
 };
 
-Combatant.prototype.getRangeMinMax = function(operator) {	
+Combatant.prototype.getRangeMinMax = function(operator, hostile) {	
 	var result;
 
-	console.groupCollapsed("getRangeMinMax",operator);
+	console.groupCollapsed('getRangeMinMax',operator,arguments);
 
 	for (var i in this.vectors) {
 		var curVal = this.vectors[i].range.value,
 			curHos = this.relations[i].hostile.value;
 
-		if ((result === undefined || (operator === '>' && curVal > result) || (operator === '<' && curVal < result)) && (!arguments.hostile || curHos)) {
+		if ((result === undefined || (operator === '>' && curVal > result) || (operator === '<' && curVal < result)) && (!hostile || curHos)) {
 			result = curVal;
 			console.log("new result is",result);
 		}
@@ -332,12 +347,20 @@ Combatant.prototype.getRangeMinMax = function(operator) {
 	return result;
 };
 
-Combatant.prototype.getMaxRange = function() {
-	return this.getRangeMinMax('>', arguments);
+Combatant.prototype.getMinRange = function() {
+	return this.getRangeMinMax('<', false);
 };
 
-Combatant.prototype.getMinRange = function() {
-	return this.getRangeMinMax('<', arguments);
+Combatant.prototype.getMaxRange = function() {
+	return this.getRangeMinMax('>', false);
+};
+
+Combatant.prototype.getMinHostileRange = function() {
+	return this.getRangeMinMax('<', true);
+};
+
+Combatant.prototype.getMaxHostileRange = function() {
+	return this.getRangeMinMax('>', true);
 };
 
 
